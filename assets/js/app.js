@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162033";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162033";
-import { playGame } from "./game.js?v=202611162033";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162033";
+import * as fb from "./fb.js?v=202611162046";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162046";
+import { playGame } from "./game.js?v=202611162046";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162046";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -466,7 +466,6 @@ function voteCard(guessOnly) {
       <label class="lbl">${S.v_birth}${dateField("birth", v?.birth, { min: ymd(new Date()), max: maxB, ph: S.v_birth_ph })}</label>
       <label class="lbl">${S.v_weight}<input type="number" name="weight" min="500" max="7000" step="10" inputmode="numeric" placeholder="3250" value="${esc(v?.weight || "")}"></label>
       <label class="lbl">${S.v_letter}<input name="letter" maxlength="1" value="${esc(v?.letter || "")}" autocapitalize="characters"></label>
-      <label class="lbl">💡 ${S.v_name}<input name="nm" maxlength="24" autocapitalize="words" placeholder="${S.v_name_ph}" value="${esc(v?.nm || "")}"></label>
       <button class="btn" data-act="saveg">${S.v_save}</button>
     </details>
   </section>`;
@@ -549,8 +548,7 @@ function bindLobby() {
     const next = Object.assign({}, R.mine || {});
     if (!next.pick && !isRevealer()) return toast(S.v_pick_first);
     const bv = box.querySelector("[name=birth]").value, wRaw = box.querySelector("[name=weight]").value.trim(), l = box.querySelector("[name=letter]").value.trim();
-    const nmEl = box.querySelector("[name=nm]"), nm = nmEl ? titleCase(nmEl.value).slice(0, 24) : "";
-    if (nm) next.nm = nm; else delete next.nm;
+    delete next.nm;
     const w = parseInt(wRaw, 10);
     if (wRaw && !(w >= 500 && w <= 7000)) return toast(S.v_err_weight);
     if (bv && !parseYmd(bv)) return toast(S.v_err_birth);
@@ -775,7 +773,8 @@ function renderResult() {
       <h2>💌 ${S.w_h}</h2><p class="muted small">${S.w_p}</p>
       ${me() ? "" : `<input name="wname" maxlength="40" autocapitalize="words" placeholder="${S.j_name_ph}">`}
       <textarea name="wmsg" rows="3" maxlength="280" placeholder="${fmt(S.w_msg_ph, babyOf(m))}"></textarea>
-      <div class="wrow"><input name="wnm" maxlength="24" autocapitalize="words" placeholder="💡 ${fmt(girl ? S.w_nm_ph_girl : S.w_nm_ph_boy)}"><button class="btn btn-gold" data-act="wsend">${S.w_send}</button></div>
+      <label class="lbl wnm-lbl">💡 ${S.w_nm_label}<input name="wnm" maxlength="24" autocapitalize="words" placeholder="${girl ? S.w_nm_ph_girl : S.w_nm_ph_boy}"></label>
+      <button class="btn btn-gold btn-big" data-act="wsend">${S.w_send}</button>
     </section>
     <div id="wall-names"></div>
     <section class="res-card wall-card" id="wall"></section>
@@ -827,7 +826,7 @@ function paintWall() {
   el.innerHTML = msgs.length ? `<h2>💌 ${S.w_title} <small class="muted">(${msgs.length})</small></h2><div class="wall-grid">${msgs.map((w, i) => {
     const h = hash(w.k), rot = ((h % 7) - 3) * .6;
     return `<figure class="note" style="--bg:${WALL_COLS[h % WALL_COLS.length]};--rot:${rot}deg;--d:${Math.min(i, 8) * 60}ms">
-      <blockquote>${esc(w.msg)}</blockquote>${w.nm ? `<p class="note-nm">💡 ${esc(w.nm)}</p>` : ""}
+      <blockquote>${esc(w.msg)}</blockquote>
       <figcaption><span class="av" style="background:${PALETTE[hash(w.name) % PALETTE.length]}">${esc(initials(w.name))}</span>${esc(w.name)}</figcaption>
       ${canDel(w) ? `<button class="note-del" data-k="${w.k}" aria-label="${S.w_del}">✕</button>` : ""}</figure>`;
   }).join("")}</div>` : "";
@@ -926,7 +925,7 @@ function printGuesses(R, guesses, girl) {
   const m = R.meta;
   const all = [...guesses];
   Object.entries(R.votes || {}).forEach(([u, v]) => { if (u !== m.revealerUid && !all.some(x => x.uid === u)) all.push({ uid: u, name: R.guests[u]?.name || "?", ...v }); });
-  const rows = all.map(v => `<tr class="${v.parent ? "p" : ""}"><td>${v.parent ? "👑 " : ""}${esc(v.name)}</td><td>${v.pick ? (v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : "–"}</td><td>${v.birth ? esc(shortDate(v.birth)) : "–"}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td><td>${esc(v.nm || "–")}</td></tr>`).join("");
+  const rows = all.map(v => `<tr class="${v.parent ? "p" : ""}"><td>${v.parent ? "👑 " : ""}${esc(v.name)}</td><td>${v.pick ? (v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : "–"}</td><td>${v.birth ? esc(shortDate(v.birth)) : "–"}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td></tr>`).join("");
   const title = (m.parents ? m.parents + " · " : "") + fmt(S.lobby_title, babyOf(m));
   const html = `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><title>${esc(title)}</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@600;800&display=swap&subset=latin-ext" rel="stylesheet">
@@ -936,8 +935,9 @@ function printGuesses(R, guesses, girl) {
   td{padding:9px 6px;border-bottom:1px solid #F1E8DA}tr.p td{background:#FFF7DD;font-weight:800}.f{margin-top:22px;font-size:12px;color:#6E6380}
   @media print{body{margin:14mm}button{display:none}}</style></head><body>
   <h1>${esc(title)}</h1><div class="r">${girl ? S.girl_big : S.boy_big} · ${esc(fmtDate(m.partyAt))}</div>
-  <table><thead><tr><th>${S.pdf_name}</th><th>${S.pdf_pick}</th><th>${S.v_birth}</th><th>${S.v_weight}</th><th>${S.v_letter}</th><th>${S.v_name}</th></tr></thead><tbody>${rows}</tbody></table>
-  ${Object.values(R.wall || {}).filter(w => w.msg).length ? `<h2 style="font:800 22px 'Baloo 2',system-ui;margin:26px 0 8px">💌 ${S.w_title}</h2>` + Object.values(R.wall).filter(w => w.msg).sort((a, b) => a.at - b.at).map(w => `<p style="margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#FFF8EE"><b>${esc(w.name)}</b>${w.nm ? ` · 💡 ${esc(w.nm)}` : ""}<br>${esc(w.msg)}</p>`).join("") : ""}
+  <table><thead><tr><th>${S.pdf_name}</th><th>${S.pdf_pick}</th><th>${S.v_birth}</th><th>${S.v_weight}</th><th>${S.v_letter}</th></tr></thead><tbody>${rows}</tbody></table>
+  ${Object.values(R.wall || {}).filter(w => w.msg).length ? `<h2 style="font:800 22px 'Baloo 2',system-ui;margin:26px 0 8px">💌 ${S.w_title}</h2>` + Object.values(R.wall).filter(w => w.msg).sort((a, b) => a.at - b.at).map(w => `<p style="margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#FFF8EE"><b>${esc(w.name)}</b><br>${esc(w.msg)}</p>`).join("") : ""}
+  ${Object.values(R.wall || {}).filter(w => w.nm).length ? `<h2 style="font:800 22px 'Baloo 2',system-ui;margin:26px 0 8px">💡 ${S.r_names}</h2><p>` + Object.values(R.wall).filter(w => w.nm).map(w => `<b>${esc(w.nm)}</b> (${esc(w.name)})`).join(" · ") + `</p>` : ""}
   <p class="f">PinkOrBlue · anbertech.github.io/PinkOrBlue</p>
   <button onclick="print()" style="margin-top:16px;padding:12px 18px;border-radius:12px;border:0;background:#F2B93B;font-weight:800">📄 ${S.r_pdf}</button>
   <script>window.onload=function(){setTimeout(function(){print()},400)}<\/script></body></html>`;

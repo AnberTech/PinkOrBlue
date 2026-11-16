@@ -193,8 +193,6 @@
  "c_err_who": "Odayı kuran kişinin adını yazmadın.",
  "c_err_other": "Odayı kuran kişi olarak adını yaz.",
  "r_keeper_tag": "sırrı tutan",
- "v_name": "İsim önerin",
- "v_name_ph": "ör. Defne",
  "r_names": "İsim önerileri",
  "r_congrats": "Tebrikler %s!",
  "r_congrats_np": "Tebrikler!",
@@ -215,5 +213,6 @@
  "w_sent": "Gönderildi 💌",
  "w_title": "Mesajlar",
  "w_del": "Sil",
- "w_del_confirm": "Bu mesaj silinsin mi?"
+ "w_del_confirm": "Bu mesaj silinsin mi?",
+ "w_nm_label": "İsim önerisi"
 }

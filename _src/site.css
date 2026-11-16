@@ -451,3 +451,4 @@ footer.mini nav a:hover{text-decoration:underline}
 .note-del{position:absolute;top:6px;right:6px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.7);color:#6E6380;cursor:pointer;font-size:12px}
 @keyframes noteIn{from{opacity:0;transform:translateY(16px) rotate(calc(var(--rot) * 4)) scale(.9)}to{opacity:1;transform:rotate(var(--rot))}}
 @media(max-width:380px){.wall-grid{grid-template-columns:1fr 1fr;gap:10px}.note blockquote{font-size:.92rem}}
+.wnm-lbl{margin:12px 0 10px}

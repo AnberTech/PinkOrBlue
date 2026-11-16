@@ -1,5 +1,5 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611162033";
+import { sfx, vib, unlock } from "./sfx.js?v=202611162046";
 
 const DUR = 30;
 export function playGame({ root, S, onEnd, names = [], baby = "" }) {
@@ -27,7 +27,7 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
   const cols = ["#FF8FB8", "#7EC8FF", "#FFB3CF", "#A6D9FF"];
   function spawn(el) {
     const r = Math.random();
-    const speed = (2.6 + el / DUR * 2.8) * (H / 700);
+    const speed = (3.4 + el / DUR * 2.8) * (H / 700);
     let o;
     if (r < .04) o = { k: "stork", x: -60, y: H * (.2 + Math.random() * .4), vx: 1.6 * (W / 400), vy: 0, r: 30 };
     else if (r < .10) o = { k: "gold", label: baby, x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * 1.6, r: 24 };
@@ -97,7 +97,7 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
     const el = (now - t0) / 1000;
     const dt = Math.min(50, now - last) / 16.7; last = now;
     elTime.textContent = Math.max(0, Math.ceil(DUR - el));
-    spawnAcc += (1.6 + el / DUR * 3.2) * dt / 60;
+    spawnAcc += (2.6 + el / DUR * 2.8) * dt / 60;
     while (spawnAcc >= 1) { spawnAcc--; spawn(el); }
     g.save();
     if (shake > 0) { g.translate((Math.random() - .5) * 10 * shake, 0); shake -= .1; }

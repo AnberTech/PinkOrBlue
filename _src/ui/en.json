@@ -193,8 +193,6 @@
  "c_err_who": "Enter the name of the person setting up the room.",
  "c_err_other": "Enter your name as the host.",
  "r_keeper_tag": "secret keeper",
- "v_name": "Suggest a name",
- "v_name_ph": "e.g. Lily",
  "r_names": "Name ideas",
  "r_congrats": "Congratulations %s!",
  "r_congrats_np": "Congratulations!",
@@ -215,5 +213,6 @@
  "w_sent": "Sent 💌",
  "w_title": "Messages",
  "w_del": "Delete",
- "w_del_confirm": "Delete this message?"
+ "w_del_confirm": "Delete this message?",
+ "w_nm_label": "Name suggestion"
 }
