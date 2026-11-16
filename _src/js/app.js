@@ -397,7 +397,6 @@ function renderCountdown() {
     <p class="cd-open">${S.cd_opens}</p>
     <p class="muted small">${S.cd_hint}</p>
     <button class="btn btn-gold" data-act="ics">📅 ${S.cd_cal}</button>
-    <p class="cd-brand"><img src="${ASSET}img/balloon-icon-180.png" alt="" width="22" height="22"><span><b>Pink</b>Or<i>Blue</i></span> · by <img class="am-d" src="${ASSET}img/anbertech.png" alt="" width="18" height="16"><img class="am-l" src="${ASSET}img/anbertech-ink.png" alt="" width="18" height="16"><span>Anber<em>Tech</em></span></p>
   </section>`;
   const tick = () => {
     if (room !== R || !document.querySelector(".cdwrap")) return clearInterval(R.cdTimer);

@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611170025";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611170025";
-import { playGame } from "./game.js?v=202611170025";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg, bgDuration, bgState } from "./sfx.js?v=202611170025";
+import * as fb from "./fb.js?v=202611170026";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611170026";
+import { playGame } from "./game.js?v=202611170026";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg, bgDuration, bgState } from "./sfx.js?v=202611170026";
 window.__pob = { level, audioState, revealReady, bgState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -397,7 +397,6 @@ function renderCountdown() {
     <p class="cd-open">${S.cd_opens}</p>
     <p class="muted small">${S.cd_hint}</p>
     <button class="btn btn-gold" data-act="ics">📅 ${S.cd_cal}</button>
-    <p class="cd-brand"><img src="${ASSET}img/balloon-icon-180.png" alt="" width="22" height="22"><span><b>Pink</b>Or<i>Blue</i></span> · by <img class="am-d" src="${ASSET}img/anbertech.png" alt="" width="18" height="16"><img class="am-l" src="${ASSET}img/anbertech-ink.png" alt="" width="18" height="16"><span>Anber<em>Tech</em></span></p>
   </section>`;
   const tick = () => {
     if (room !== R || !document.querySelector(".cdwrap")) return clearInterval(R.cdTimer);
