@@ -184,5 +184,13 @@
  "r_pdf": "Save guesses as PDF",
  "pdf_name": "Name",
  "pdf_pick": "Guess",
- "pdf_blocked": "Pop-up blocked. Please allow pop-ups for this site."
+ "pdf_blocked": "Pop-up blocked. Please allow pop-ups for this site.",
+ "c_who": "Who's setting up the room?",
+ "c_who_mom": "Mom",
+ "c_who_dad": "Dad",
+ "c_who_other": "Someone else",
+ "c_other_ph": "Your name (e.g. Aunt Zoe)",
+ "c_err_who": "Enter the name of the person setting up the room.",
+ "c_err_other": "Enter your name as the host.",
+ "r_keeper_tag": "secret keeper"
 }

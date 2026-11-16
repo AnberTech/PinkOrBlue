@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611161939";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611161939";
-import { playGame } from "./game.js?v=202611161939";
-import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161939";
+import * as fb from "./fb.js?v=202611161946";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611161946";
+import { playGame } from "./game.js?v=202611161946";
+import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161946";
 window.__pob = { level, audioState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -184,6 +184,14 @@ function viewCreate() {
       <label>${S.c_mom}<input name="mom" maxlength="40" autocapitalize="words" placeholder="${S.c_mom_ph}"></label>
       <label>${S.c_dad}<input name="dad" maxlength="40" autocapitalize="words" placeholder="${S.c_dad_ph}"></label>
     </div>
+    <div class="lbl">${S.c_who}
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="who" value="mom"><span>${S.c_who_mom}</span></label>
+        <label><input type="radio" name="who" value="dad"><span>${S.c_who_dad}</span></label>
+        <label><input type="radio" name="who" value="other" checked><span>${S.c_who_other}</span></label>
+      </div>
+      <input name="other" maxlength="40" autocapitalize="words" placeholder="${S.c_other_ph}">
+    </div>
     <label>${S.c_baby} <em>${S.optional}</em><input name="baby" maxlength="40" autocapitalize="words" placeholder="${S.c_baby_ph}"></label>
     <div class="lbl">${S.c_date}
       <div class="dt">${dateField("date", ymd(def), { min: today, max: maxD })}
@@ -198,14 +206,17 @@ function viewCreate() {
   </form>`;
   const f = $("#cf");
   bindDates(f);
-  ["mom", "dad", "baby"].forEach(n => f[n].addEventListener("blur", () => { f[n].value = titleCase(f[n].value); }));
+  ["mom", "dad", "baby", "other"].forEach(n => f[n].addEventListener("blur", () => { f[n].value = titleCase(f[n].value); }));
+  const other = f.querySelector("[name=other]");
+  f.querySelectorAll("[name=who]").forEach(r => r.onchange = () => { other.hidden = f.who.value !== "other"; if (!other.hidden) other.focus(); });
   f.onsubmit = async (ev) => {
     ev.preventDefault();
     unlock();
     const mom = titleCase(f.mom.value), dad = titleCase(f.dad.value);
     const parents = [mom, dad].filter(Boolean).join(" & ");
-    const host = parents.slice(0, 40);            // kurucu odada anne-baba adıyla görünür
-    const err = !mom && !dad ? S.c_err_parent : null;
+    const who = f.who.value;
+    const host = (who === "mom" ? mom : who === "dad" ? dad : titleCase(other.value)).slice(0, 40);
+    const err = !mom && !dad ? S.c_err_parent : !host ? (who === "other" ? S.c_err_other : S.c_err_who) : null;
     if (err) return toast(err);
     const pw = f.pw.value.trim();
     if (pw && pw.length < 4) return toast(S.c_err_pw);
@@ -706,7 +717,9 @@ function renderResult() {
   const tapTotal = taps.reduce((s, [, n]) => s + n, 0);
   const rounds = Object.keys(R.show?.r || {}).length || 1;
   const pv = R.votes?.[m.revealerUid];   // sır tutucunun (anne-baba) ek tahmini
-  const parentsRow = pv && (pv.birth || pv.weight || pv.letter) ? [{ uid: m.revealerUid, name: m.parents || R.guests[m.revealerUid]?.name || S.default_host, parent: true, ...pv }] : [];
+  const keeperName = R.guests[m.revealerUid]?.name || m.parents || S.default_host;
+  const keeperIsParent = !!m.parents && m.parents.split(" & ").some(n => lower(n) === lower(keeperName) || lower(m.parents) === lower(keeperName));
+  const parentsRow = pv && (pv.birth || pv.weight || pv.letter) ? [{ uid: m.revealerUid, name: keeperName, parent: true, tag: keeperIsParent ? S.r_parents_tag : S.r_keeper_tag, ...pv }] : [];
   const guesses = [...parentsRow, ...list.filter(v => v.birth || v.weight || v.letter).map(v => ({ ...v, parent: v.uid === m.hostUid }))];
   const mine = m.revealerUid === R.uid ? null : R.mine?.pick;
   const conf = Array.from({ length: 26 }, (_, i) => `<i style="--x:${(i * 37) % 100}%;--d:${(i * 0.37) % 6}s;--t:${5 + (i % 5)}s;--c:${["#fff", "#F2B93B", girl ? "#D6336C" : "#1C6FB8", "#FFE08A"][i % 4]};--r:${(i * 47) % 360}deg"></i>`).join("");
@@ -737,7 +750,7 @@ function renderResult() {
       ${right.length ? `<div class="res-people">${right.map(v => `<span class="rp">${av(v.name)}<b>${esc(v.name)}</b></span>`).join("")}</div>` : `<p class="muted">${S.r_nobody}</p>`}
     </section>
     ${guesses.length ? `<section class="res-card"><h2>${S.r_guesses}</h2><div class="res-guess">
-      ${guesses.map(v => `<div class="rg ${v.parent ? "parent" : ""}">${v.parent ? `<span class="av crown">👑</span>` : av(v.name)}<div><b>${esc(v.name)}${v.parent ? ` <em>${S.r_parents_tag}</em>` : ""}</b><span>${[v.birth ? "📅 " + esc(shortDate(v.birth)) : "", v.weight ? "⚖️ " + v.weight + " g" : "", v.letter ? "🔤 " + esc(v.letter) : ""].filter(Boolean).join(" · ")}</span></div>${v.pick ? `<i class="${v.pick}">${v.pick === "girl" ? "🎀" : "🎩"}</i>` : ""}</div>`).join("")}</div>
+      ${guesses.map(v => `<div class="rg ${v.parent ? "parent" : ""}">${v.parent ? `<span class="av crown">👑</span>` : av(v.name)}<div><b>${esc(v.name)}${v.parent ? ` <em>${v.tag || S.r_parents_tag}</em>` : ""}</b><span>${[v.birth ? "📅 " + esc(shortDate(v.birth)) : "", v.weight ? "⚖️ " + v.weight + " g" : "", v.letter ? "🔤 " + esc(v.letter) : ""].filter(Boolean).join(" · ")}</span></div>${v.pick ? `<i class="${v.pick}">${v.pick === "girl" ? "🎀" : "🎩"}</i>` : ""}</div>`).join("")}</div>
       <button class="btn pdf-btn" data-act="pdf">📄 ${S.r_pdf}</button></section>` : ""}
   </article>
   <div class="r-actions">

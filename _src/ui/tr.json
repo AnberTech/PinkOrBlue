@@ -184,5 +184,13 @@
  "r_pdf": "Tahminleri PDF olarak kaydet",
  "pdf_name": "Ad",
  "pdf_pick": "Tahmin",
- "pdf_blocked": "Açılır pencere engellendi. Tarayıcının izin vermesine izin ver."
+ "pdf_blocked": "Açılır pencere engellendi. Tarayıcının izin vermesine izin ver.",
+ "c_who": "Odayı kim kuruyor?",
+ "c_who_mom": "Anne",
+ "c_who_dad": "Baba",
+ "c_who_other": "Başka biri",
+ "c_other_ph": "Senin adın (ör. Zeynep Teyze)",
+ "c_err_who": "Odayı kuran kişinin adını yazmadın.",
+ "c_err_other": "Odayı kuran kişi olarak adını yaz.",
+ "r_keeper_tag": "sırrı tutan"
 }

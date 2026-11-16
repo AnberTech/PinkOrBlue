@@ -79,10 +79,11 @@ export async function claimHost(id, key, name) {
   try { await set(ref(db, R + "members/" + uid), key); } catch (e) { /* şifresiz odada üyelik gerekmez / zaten üye */ }
   const meta = (await get(ref(db, R + "meta"))).val();
   if (!meta) throw new Error("no-room");
+  const oldName = (await get(ref(db, R + "guests/" + meta.hostUid + "/name"))).val();
   if (meta.hostUid === uid) return meta;
   if (meta.status === "open") {
     const g = (await get(ref(db, R + "guests/" + uid))).val();
-    if (!g) await set(ref(db, R + "guests/" + uid), { name: (meta.parents || name).slice(0, 40), joinedAt: serverTimestamp() });
+    if (!g) await set(ref(db, R + "guests/" + uid), { name: (oldName || meta.parents || name).slice(0, 40), joinedAt: serverTimestamp() });
   }
   const wasRevealer = meta.revealerUid === meta.hostUid;
   await set(ref(db, R + "meta/hostUid"), uid);

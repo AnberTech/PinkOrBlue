@@ -1,5 +1,5 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611161939";
+import { sfx, vib, unlock } from "./sfx.js?v=202611161946";
 
 const DUR = 30;
 export function playGame({ root, S, onEnd, names = [], baby = "" }) {
