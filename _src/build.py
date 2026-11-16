@@ -118,22 +118,18 @@ def head(c, title, desc, url, base, alts, noindex=False, og_img='og.jpg'):
 def topbar(c, base, T, alts, sound=False):
     lang = ''.join(f'<a href="{e(alts[k])}" hreflang="{k}" lang="{k}"{" aria-current=\"page\"" if k == c else ""}>{k.upper()}</a>' for k, *_ in LANGS if k in alts)
     snd = '<button class="icon-btn" id="sound" type="button">🔊</button>' if sound else ''
-    return f'''<header class="top"><div class="wrap">
-  <a class="logo" href="{base}{ldir(c)}"><img src="{base}assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span class="lw"><span><b>Pink</b>Or<i>Blue</i></span><small class="by">by <img class="am am-d" src="{base}assets/img/anbertech.png" alt="" width="14" height="13" /><img class="am am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="14" height="13" /><span>Anber<em>Tech</em></span></small></span></a>
+    splash = f'''<div id="splash" aria-hidden="true"><div class="sp-in"><img class="sp-b" src="{base}assets/img/balloon-icon-180.png" alt="" width="120" height="120" /><p class="sp-w"><b>Pink</b>Or<i>Blue</i></p><p class="sp-by">by <img class="am-d" src="{base}assets/img/anbertech.png" alt="" width="22" height="20" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="22" height="20" /><span>Anber<em>Tech</em></span></p></div></div>
+<script>(function(){{var s=document.getElementById("splash");try{{if(sessionStorage.getItem("pob_sp")){{s.remove();return}}sessionStorage.setItem("pob_sp","1")}}catch(e){{}}document.documentElement.classList.add("sp-on");setTimeout(function(){{s.classList.add("out");document.documentElement.classList.remove("sp-on")}},1700);setTimeout(function(){{s.remove()}},2300);s.onclick=function(){{s.classList.add("out");document.documentElement.classList.remove("sp-on")}}}})();</script>'''
+    return f'''{splash}<header class="top"><div class="wrap">
+  <a class="logo" href="{base}{ldir(c)}"><img src="{base}assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span><b>Pink</b>Or<i>Blue</i></span></a>
   <span class="sp"></span><nav class="lang" aria-label="Language">{lang}</nav>{snd}
 </div></header>'''
 
 
-def footer(c, base, T, L, compact=False):
-    if compact:
-        return f'''<footer class="mini"><div class="wrap">
-  <a class="mini-maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="{base}assets/img/anbertech.png" alt="" width="18" height="16" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="18" height="16" /><span>PinkOrBlue · {e(T[c]['brand_by'])}</span></a>
+def footer(c, base, T, L, compact=True):
+    return f'''<footer class="mini"><div class="wrap">
+  <a class="foot-brand" href="https://anbertech.github.io/" rel="noopener">© {datetime.date.today().year} <img class="am-d" src="{base}assets/img/anbertech.png" alt="" width="18" height="16" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="18" height="16" /><span>Anber<em>Tech</em></span></a>
   <nav><a href="{base}{ldir(c)}{DOC_SLUGS[c][0]}/">{e(L[c]['pv_title'])}</a><a href="{base}{ldir(c)}{DOC_SLUGS[c][1]}/">{e(L[c]['sp_title'])}</a></nav>
-</div></footer>'''
-    return f'''<footer><div class="wrap">
-  <a class="maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="{base}assets/img/anbertech.png" alt="AnberTech" width="44" height="40" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="AnberTech" width="44" height="40" /><span><b>PinkOrBlue</b> {e(T[c]['brand_by'])}<br><small>{e(T[c]['brand_more'])} →</small></span></a>
-  <span>© {datetime.date.today().year} AnberTech · PinkOrBlue</span>
-  <nav><a href="{base}{ldir(c)}{T[c]['fx_slug']}/">{e(T[c]['fx_name'])}</a><a href="{base}{ldir(c)}{DOC_SLUGS[c][0]}/">{e(L[c]['pv_title'])}</a><a href="{base}{ldir(c)}{DOC_SLUGS[c][1]}/">{e(L[c]['sp_title'])}</a><a href="https://anbertech.github.io/">AnberTech</a></nav>
 </div></footer>'''
 
 

@@ -1,5 +1,5 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611161805";
+import { sfx, vib, unlock } from "./sfx.js?v=202611161856";
 
 const DUR = 30;
 export function playGame({ root, S, onEnd, names = [], baby = "" }) {
@@ -27,12 +27,12 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
   const cols = ["#FF8FB8", "#7EC8FF", "#FFB3CF", "#A6D9FF"];
   function spawn(el) {
     const r = Math.random();
-    const speed = (2 + el / DUR * 2) * (H / 700);
+    const speed = (2.6 + el / DUR * 2.8) * (H / 700);
     let o;
-    if (r < .05) o = { k: "stork", x: -60, y: H * (.2 + Math.random() * .4), vx: 1.6 * (W / 400), vy: 0, r: 30 };
-    else if (r < .13) o = { k: "gold", label: baby, x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * 1.5, r: 28 };
-    else if (r < .23) o = { k: "spike", x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * .9, r: 24 };
-    else o = { k: "b", label: pool[Math.floor(Math.random() * pool.length)], c: cols[Math.floor(Math.random() * 4)], x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * (.85 + Math.random() * .4), r: 28 + Math.random() * 8 };
+    if (r < .04) o = { k: "stork", x: -60, y: H * (.2 + Math.random() * .4), vx: 1.6 * (W / 400), vy: 0, r: 30 };
+    else if (r < .10) o = { k: "gold", label: baby, x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * 1.6, r: 24 };
+    else if (r < .28) o = { k: "spike", x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * .9, r: 24 };
+    else o = { k: "b", label: pool[Math.floor(Math.random() * pool.length)], c: cols[Math.floor(Math.random() * 4)], x: 30 + Math.random() * (W - 60), y: H + 40, vy: -speed * (.85 + Math.random() * .5), r: 22 + Math.random() * 8, vx: (Math.random() - .5) * 1.6 };
     o.ph = Math.random() * 6;
     objs.push(o);
   }
@@ -72,14 +72,14 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
     const rect = cv.getBoundingClientRect(); const x = e.clientX - rect.left, y = e.clientY - rect.top;
     for (let i = objs.length - 1; i >= 0; i--) {
       const o = objs[i];
-      if (Math.hypot(o.x - x, o.y - y) < o.r + 10) {
+      if (Math.hypot(o.x - x, o.y - y) < o.r + 6) {
         objs.splice(i, 1);
         const m = mult > performance.now() ? 2 : 1;
         let pts = 0, label, col = "#2B2140";
         if (o.k === "b") { pts = 1 * m; sfx.pop(); }
         else if (o.k === "gold") { pts = 5 * m; sfx.gold(); col = "#A8740A"; }
         else if (o.k === "stork") { mult = performance.now() + 3000; sfx.ding(); label = "×2!"; col = "#A8740A"; }
-        else { pts = -3; sfx.bonk(); vib(60); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) shake = 1; col = "#E5484D"; }
+        else { pts = -5; sfx.bonk(); vib(60); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) shake = 1; col = "#E5484D"; }
         if (pts > 0) {
           const n = performance.now(); combo = combo.filter(c => n - c < 1000); combo.push(n);
           if (combo.length >= 3) { pts += 1; label = S.game_combo.replace("%d", combo.length); combo = []; }
@@ -97,7 +97,7 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
     const el = (now - t0) / 1000;
     const dt = Math.min(50, now - last) / 16.7; last = now;
     elTime.textContent = Math.max(0, Math.ceil(DUR - el));
-    spawnAcc += (1.4 + el / DUR * 2.6) * dt / 60;
+    spawnAcc += (1.6 + el / DUR * 3.2) * dt / 60;
     while (spawnAcc >= 1) { spawnAcc--; spawn(el); }
     g.save();
     if (shake > 0) { g.translate((Math.random() - .5) * 10 * shake, 0); shake -= .1; }
