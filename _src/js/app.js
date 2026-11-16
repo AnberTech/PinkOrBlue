@@ -901,20 +901,23 @@ async function storyCanvas(R, girl) {
 }
 function roundRectPath(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
 
+let storyBusy = false;
 async function shareStory(R, girl, btn) {
+  if (storyBusy) return; storyBusy = true;
   btn.disabled = true; const old = btn.textContent; btn.textContent = S.wait;
   try {
     const cv = await storyCanvas(R, girl);
     const blob = await new Promise(res => cv.toBlob(res, "image/png"));
     const file = new File([blob], "pinkorblue-" + (girl ? "kiz" : "erkek") + ".png", { type: "image/png" });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], text: "PinkOrBlue 🎈" }); return; } catch (e) { if (e.name === "AbortError") return; }
+      // Yalnız dosya: metin eklenince WhatsApp görseli iki kez ekleyebiliyor
+      try { await navigator.share({ files: [file] }); return; } catch (e) { if (e.name === "AbortError") return; }
     }
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name;
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
     toast(S.st_saved);
   } catch (e) { console.error(e); toast(S.err_generic); }
-  finally { btn.disabled = false; btn.textContent = old; }
+  finally { btn.disabled = false; btn.textContent = old; storyBusy = false; }
 }
 window.__pobStory = async () => { const R = room; return (await storyCanvas(R, R.result === "girl")).toDataURL("image/png"); };   // test için
 
