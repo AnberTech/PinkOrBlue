@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu paneli, şov, sonuç.
-import * as fb from "./fb.js?v=202611161653";
-import { playShow } from "./show.js?v=202611161653";
-import { playGame } from "./game.js?v=202611161653";
-import { unlock, setOn, isOn, running, sfx } from "./sfx.js?v=202611161653";
+import * as fb from "./fb.js?v=202611161720";
+import { playShow } from "./show.js?v=202611161720";
+import { playGame } from "./game.js?v=202611161720";
+import { unlock, setOn, isOn, running, sfx } from "./sfx.js?v=202611161720";
 
 const S = window.POB_S;
 const LANG = document.documentElement.lang;
@@ -11,6 +11,7 @@ const app = $("#app");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmt = (s, ...a) => { let i = 0; return s.replace(/%[sd]/g, () => a[i++]); };
 const SHOW_LEAD = 6000, SHOW_LEN = 22000;
+const ASSET = new URL("../", import.meta.url).href; // .../assets/
 
 // ---------------------------------------------------------------- yardımcılar
 const PALETTE = ["#E9B949", "#7FD1AE", "#FFB38A", "#B9A3E3", "#F08A7E", "#A3B86C", "#7FA7A8", "#D9BF8C"];
@@ -34,7 +35,8 @@ async function share(text, url) {
   copy(url);
 }
 function fmtDate(ms) {
-  return new Intl.DateTimeFormat(LANG, { dateStyle: "long", timeStyle: "short" }).format(new Date(ms));
+  try { return new Intl.DateTimeFormat(LANG, { dateStyle: "long", timeStyle: "short" }).format(new Date(ms)); }
+  catch (e) { return new Date(ms).toLocaleString(LANG); }
 }
 function countdown(ms) {
   const d = ms - fb.serverNow();
@@ -42,6 +44,12 @@ function countdown(ms) {
   const h = Math.floor(d / 3600000), m = Math.floor(d % 3600000 / 60000);
   if (h >= 48) return fmt(S.lobby_in_days, Math.floor(h / 24));
   return fmt(S.lobby_in_hm, h, m);
+}
+function shortDate(s) {
+  if (!s) return "–";
+  const d = new Date(s + "T12:00:00");
+  if (isNaN(d)) return "–";
+  try { return new Intl.DateTimeFormat(LANG, { day: "numeric", month: "short" }).format(d); } catch (e) { return s; }
 }
 const roomUrl = (id) => location.origin + location.pathname + "#r=" + id;
 const roomId = () => (location.hash.match(/r=([a-z0-9]{6,20})/) || [])[1] || null;
@@ -51,7 +59,8 @@ function setRemembered(id, name) { try { localStorage.setItem("pob_name_" + id, 
 const soundBtn = $("#sound");
 function paintSound() { soundBtn.textContent = isOn() ? "🔊" : "🔇"; soundBtn.setAttribute("aria-label", isOn() ? S.sound_off : S.sound_on); soundBtn.classList.toggle("needs", isOn() && !running()); }
 soundBtn.onclick = () => { setOn(!isOn()); if (isOn()) unlock(); paintSound(); };
-document.addEventListener("pointerdown", () => { if (isOn() && !running()) { unlock(); setTimeout(paintSound, 100); } }, { once: false, passive: true });
+// iOS Safari sesi yalnız "dokunma bitti / tıklama" olaylarında açar (pointerdown sayılmaz)
+["pointerdown", "touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (isOn() && !running()) { unlock(); setTimeout(paintSound, 150); } }, { passive: true, capture: true }));
 paintSound();
 
 // ---------------------------------------------------------------- oluştur
@@ -91,29 +100,29 @@ function viewCreate() {
 
 // ---------------------------------------------------------------- oda
 let room = null; // canlı durum
-function cleanupRoom() { if (room) { room.unsubs.forEach(u => u && u()); clearInterval(room.timer); room = null; } }
+function cleanupRoom() { if (room) { room.unsubs.forEach(u => u && u()); clearInterval(room.timer); if (room.showCtl) room.showCtl.stop(); if (room.game) room.game.abort(); room = null; } }
 
 async function viewRoom(id, justCreated) {
   document.body.dataset.view = "room";
   app.innerHTML = `<div class="card center"><p>${S.loading}</p></div>`;
   const uid = await fb.ready;
   cleanupRoom();
-  room = { id, uid, meta: null, guests: {}, invitees: {}, presence: {}, taps: {}, scores: {}, votes: null, mine: null, sealed: null, unsubs: [], showing: false, shown: false, justCreated };
-  room.unsubs.push(fb.watch(id, "meta", (m) => {
-    const prev = room.meta; room.meta = m;
+  const R = room = { id, uid, meta: null, guests: {}, invitees: {}, presence: {}, taps: {}, scores: {}, votes: null, mine: null, sealed: null, unsubs: [], showing: false, shown: false, justCreated, drafts: {} };
+  // Önce kişisel ve liste verileri yüklensin; meta (ve dolayısıyla şov) en son. Böylece şov sırasında
+  // sayfayı yenileyen misafirin tahmini ve dokunma yetkisi eksik kalmaz.
+  const first = (path) => new Promise(res => { let done = false; R.unsubs.push(fb.watch(id, path, v => { R[key(path)] = v || (path.includes("/") ? null : {}); if (!done) { done = true; res(); } else if (room === R) render(); })); });
+  const key = (p) => ({ ["votes/" + uid]: "mine", ["sealed/" + uid]: "sealed" }[p] || p);
+  await Promise.all(["guests", "invitees", "presence", "scores", "votes/" + uid, "sealed/" + uid].map(first));
+  if (room !== R) return;
+  R.unsubs.push(fb.watch(id, "taps", v => { R.taps = v || {}; }));
+  R.unsubs.push(fb.watch(id, "meta", (m) => {
+    if (room !== R) return;
+    const prev = R.meta; R.meta = m;
     if (!m) return renderMissing();
     if (m.status === "reveal" && (!prev || prev.status !== "reveal")) onReveal();
     render();
   }));
-  room.unsubs.push(fb.watch(id, "guests", v => { room.guests = v || {}; render(); }));
-  room.unsubs.push(fb.watch(id, "invitees", v => { room.invitees = v || {}; render(); }));
-  room.unsubs.push(fb.watch(id, "presence", v => { room.presence = v || {}; render(); }));
-  room.unsubs.push(fb.watch(id, "taps", v => { room.taps = v || {}; }));
-  room.unsubs.push(fb.watch(id, "scores", v => { room.scores = v || {}; render(); }));
-  room.timer = setInterval(() => { const el = $("#cd"); if (el && room.meta) el.textContent = countdown(room.meta.partyAt); }, 20000);
-  room.mine = await fb.myVote(id).catch(() => null);
-  room.sealed = await fb.mySeal(id).catch(() => null);
-  render();
+  R.timer = setInterval(() => { const el = $("#cd"); if (el && R.meta) el.textContent = countdown(R.meta.partyAt); }, 20000);
 }
 
 function renderMissing() {
@@ -135,9 +144,15 @@ function render() {
     return;
   }
   const open = [...app.querySelectorAll("details[open]")].map(d => d.className);
+  // Kaydedilmemiş form girişlerini koru (başkası katılınca ekran yeniden çizilir)
+  app.querySelectorAll("input[name], textarea[id], textarea[name]").forEach(el => {
+    const k = el.name || el.id;
+    if (el.value !== el.defaultValue) room.drafts[k] = el.value; else delete room.drafts[k];
+  });
   const y = scrollY;
   renderInner();
   open.forEach(c => { const d = app.querySelector("details." + c.split(" ")[0]); if (d) d.open = true; });
+  Object.entries(room.drafts).forEach(([k, v]) => { const el = app.querySelector(`[name="${k}"],textarea#${k}`); if (el && !el.readOnly) el.value = v; });
   if (Math.abs(scrollY - y) > 2) scrollTo(0, y);
 }
 function renderInner() {
@@ -189,7 +204,7 @@ function renderLobby() {
   const notJoined = Object.values(room.invitees).filter(n => !joinedNames.has(n.toLocaleLowerCase(LANG)));
   const notVoted = voters.filter(p => !p.voted).map(p => p.name);
   const expected = voters.length + notJoined.length;
-  const scores = Object.values(room.scores).sort((a, b) => b.score - a.score).slice(0, 5);
+  const scores = Object.entries(room.scores).map(([u, x]) => ({ name: room.guests[u]?.name || x.name, score: x.score })).sort((a, b) => b.score - a.score).slice(0, 5);
   const myBest = room.scores[room.uid]?.score;
   const url = roomUrl(room.id);
 
@@ -320,7 +335,15 @@ function bindLobby(url) {
   if (st) st.onclick = async () => {
     if (!confirm(S.k_confirm)) return;
     unlock(); st.disabled = true;
-    try { await fb.startReveal(room.id, room.sealed, SHOW_LEAD); } catch (e) { console.error(e); toast(S.err_generic); st.disabled = false; }
+    // Çevrimdışıyken başlatma: yerel şov açılır ama sunucu reddeder, diğerleri görmez
+    if (!fb.isConnected()) { toast(S.k_offline); st.disabled = false; return; }
+    const R = room;
+    try { await fb.startReveal(R.id, R.sealed, SHOW_LEAD); }
+    catch (e) {
+      console.error(e); toast(S.err_generic);
+      if (R.showCtl) { R.showCtl.stop(); R.showCtl = null; }
+      R.showing = false; location.reload();
+    }
   };
   const kp = $("#keeper");
   if (kp) kp.onchange = async () => {
@@ -342,7 +365,7 @@ function bindLobby(url) {
   $("#play").onclick = () => {
     room.game = playGame({ root: document.body, S, onEnd: async (score) => {
       room.game = null;
-      if (score != null) { try { await fb.setScore(room.id, me().name, score); } catch (e) {} toast(fmt(S.game_result, score)); }
+      if (score != null && room) { try { await fb.setScore(room.id, me().name, score); } catch (e) {} toast(fmt(S.game_result, score)); }
     } });
   };
 }
@@ -360,15 +383,15 @@ async function onReveal() {
 }
 
 function runShow(local) {
-  const m = room.meta;
+  const m = room.meta, R = room;
   room.showing = true;
   const localStart = performance.now();
   const getT = local ? () => performance.now() - localStart - 1500 : () => fb.serverNow() - m.revealAt;
   let lastSent = 0, pending = 0, sendT = null;
-  const canTap = !local && !!me();
-  playShow({
+  const canTap = () => !local && room === R && !!R.guests[R.uid];
+  R.showCtl = playShow({
     root: document.body, getT, result: m.result, babyName: m.babyName, S,
-    myPick: room.mine?.pick,
+    get myPick() { return R.mine?.pick; },
     soundWanted: isOn(),
     correctCount: () => Object.values(room.votes || {}).filter(v => v.pick === m.result).length,
     getTaps: () => {
@@ -382,12 +405,12 @@ function runShow(local) {
     },
     onTap: (n) => {
       pending = n;
-      if (!canTap) return;
+      if (!canTap()) return;
       const now = performance.now();
-      const send = () => { lastSent = performance.now(); sendT = null; fb.setTaps(room.id, pending).catch(() => {}); };
-      if (now - lastSent > 250) send(); else if (!sendT) sendT = setTimeout(send, 250 - (now - lastSent));
+      const send = () => { lastSent = performance.now(); sendT = null; if (room === R) fb.setTaps(R.id, pending).catch(() => {}); };
+      if (now - lastSent > 400) send(); else if (!sendT) sendT = setTimeout(send, 400 - (now - lastSent));
     },
-    onEnd: () => { room.showing = false; room.shown = true; render(); },
+    onEnd: () => { R.showing = false; R.shown = true; R.showCtl = null; if (room === R) render(); },
   });
 }
 
@@ -398,7 +421,7 @@ function renderResult() {
   const right = list.filter(v => v.pick === m.result), nG = list.filter(v => v.pick === "girl").length, nB = list.filter(v => v.pick === "boy").length;
   const tot = nG + nB, pct = tot ? Math.round(right.length / tot * 100) : 0;
   const R = 46, Cc = 2 * Math.PI * R, gLen = tot ? Cc * nG / tot : 0;
-  const scores = Object.values(room.scores).sort((a, b) => b.score - a.score);
+  const scores = Object.entries(room.scores).map(([u, x]) => ({ name: room.guests[u]?.name || x.name, score: x.score })).sort((a, b) => b.score - a.score);
   const taps = Object.entries(room.taps).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
   const tapTotal = taps.reduce((s, [, n]) => s + n, 0);
   const guesses = list.filter(v => v.birth || v.weight || v.letter);
@@ -416,12 +439,13 @@ function renderResult() {
     <section><h2>${fmt(S.r_right, right.length)}</h2>
       <div class="chips">${right.map(v => `<span class="chip res">${esc(v.name)}</span>`).join("") || `<span class="muted">${S.r_nobody}</span>`}</div></section>
     ${guesses.length ? `<section><h2>${S.r_guesses}</h2><table class="gtable"><thead><tr><th>${S.r_name}</th><th>${S.v_birth_s}</th><th>${S.v_weight_s}</th><th>${S.v_letter_s}</th></tr></thead><tbody>
-      ${guesses.map(v => `<tr><td>${esc(v.name)}</td><td>${v.birth ? esc(new Intl.DateTimeFormat(LANG, { day: "numeric", month: "short" }).format(new Date(v.birth + "T12:00"))) : "–"}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td></tr>`).join("")}</tbody></table></section>` : ""}
+      ${guesses.map(v => `<tr><td>${esc(v.name)}</td><td>${esc(shortDate(v.birth))}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td></tr>`).join("")}</tbody></table></section>` : ""}
     <section class="r-badges">
       ${scores[0] ? `<span>🏆 ${fmt(S.r_champ, esc(scores[0].name), scores[0].score)}</span>` : ""}
       ${taps[0] ? `<span>👆 ${fmt(S.r_fastest, esc(room.guests[taps[0][0]]?.name || "?"), taps[0][1])}</span>` : ""}
       ${tapTotal ? `<span>🎈 ${fmt(S.r_total_taps, tapTotal)}</span>` : ""}
     </section>
+    <footer class="r-maker"><img src="${ASSET}img/anbertech-ink.png" alt="" width="16" height="15">PinkOrBlue · ${S.brand_short}</footer>
   </article>
   <div class="r-actions">
     <button class="btn btn-gold" id="replay">▶ ${S.r_replay}</button>

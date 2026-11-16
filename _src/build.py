@@ -94,7 +94,9 @@ def head(c, title, desc, url, base, alts, noindex=False):
 {'<meta name="robots" content="noindex" />' if noindex else ''}
 <meta name="theme-color" content="#FFF8EE" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#17121F" media="(prefers-color-scheme: dark)" />
+<link rel="icon" type="image/svg+xml" href="{base}assets/img/favicon.svg" />
 <link rel="icon" type="image/png" sizes="64x64" href="{base}assets/img/favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="{base}assets/img/favicon-32.png" />
 <link rel="apple-touch-icon" href="{base}assets/img/icon-180.png" />
 <link rel="manifest" href="{base}manifest.webmanifest" />
 <link rel="canonical" href="{e(url)}" />
@@ -117,13 +119,14 @@ def topbar(c, base, T, alts, sound=False):
     lang = ''.join(f'<a href="{e(alts[k])}" hreflang="{k}" lang="{k}"{" aria-current=\"page\"" if k == c else ""}>{k.upper()}</a>' for k, *_ in LANGS if k in alts)
     snd = '<button class="icon-btn" id="sound" type="button">🔊</button>' if sound else ''
     return f'''<header class="top"><div class="wrap">
-  <a class="logo" href="{base}{ldir(c)}"><img src="{base}assets/img/icon-180.png" alt="" width="34" height="34" /><span><b>Pink</b>Or<i>Blue</i></span></a>
+  <a class="logo" href="{base}{ldir(c)}"><img src="{base}assets/img/icon-180.png" alt="" width="34" height="34" /><span class="lw"><span><b>Pink</b>Or<i>Blue</i></span><small class="by">by <img class="am am-d" src="{base}assets/img/anbertech.png" alt="" width="14" height="13" /><img class="am am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="14" height="13" /><span>Anber<em>Tech</em></span></small></span></a>
   <span class="sp"></span><nav class="lang" aria-label="Language">{lang}</nav>{snd}
 </div></header>'''
 
 
 def footer(c, base, T, L):
     return f'''<footer><div class="wrap">
+  <a class="maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="{base}assets/img/anbertech.png" alt="AnberTech" width="44" height="40" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="AnberTech" width="44" height="40" /><span><b>PinkOrBlue</b> {e(T[c]['brand_by'])}<br><small>{e(T[c]['brand_more'])} →</small></span></a>
   <span>© {datetime.date.today().year} AnberTech · PinkOrBlue</span>
   <nav><a href="{base}{ldir(c)}{T[c]['fx_slug']}/">{e(T[c]['fx_name'])}</a><a href="{base}{ldir(c)}{DOC_SLUGS[c][0]}/">{e(L[c]['pv_title'])}</a><a href="{base}{ldir(c)}{DOC_SLUGS[c][1]}/">{e(L[c]['sp_title'])}</a><a href="https://anbertech.github.io/">AnberTech</a></nav>
 </div></footer>'''

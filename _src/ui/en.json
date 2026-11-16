@@ -128,5 +128,7 @@
  "r_share_text_boy": "And the answer is… %s is a BOY! 🎩",
  "r_expire": "This party's data deletes itself 7 days after the reveal date.",
  "sound_on": "Turn sound on",
- "sound_off": "Turn sound off"
+ "sound_off": "Turn sound off",
+ "brand_short": "an AnberTech product",
+ "k_offline": "You seem to be offline. Try again once you're connected."
 }

@@ -1,6 +1,6 @@
 // Açılış şovu: 22 sn, tamamen sunucu saatine bağlı (t = serverNow - revealAt).
 // Geç açan kişi şovu kaldığı saniyeden izler. Çizim tek canvas + tek rAF döngüsü.
-import { sfx, vib, unlock, running } from "./sfx.js?v=202611161653";
+import { sfx, vib, unlock, running } from "./sfx.js?v=202611161720";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",
@@ -143,8 +143,9 @@ export function playShow(opts) {
       text(S.show_ready, cx, H * .3, Math.min(34, W * .08), "#fff", 800, 1);
       text(S.show_ready_sub, cx, H * .3 + 40, Math.min(18, W * .045), "rgba(255,255,255,.75)", 600);
       balloon(cx, H * .62, baseR * .35, Math.sin(t * 3) * .3);
-      soundBtn.hidden = running() || !(opts.soundWanted ?? true);
-    } else soundBtn.hidden = true;
+    }
+    // Ses kapalıysa (iOS arka plan, kilitli bağlam) şovun ilk 13 saniyesinde açma düğmesi görünsün
+    soundBtn.hidden = running() || !(opts.soundWanted ?? true) || t >= 13;
 
     // ---- geri sayım 0-3
     if (t >= 0 && t < 3) {

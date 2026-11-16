@@ -67,9 +67,12 @@ export async function join(id, name) {
 
 export async function vote(id, data) {
   const uid = await ready;
-  await set(r(id, "votes/" + uid), data);
-  await set(r(id, "guests/" + uid + "/voted"), true);
+  await update(r(id), { ["votes/" + uid]: data, ["guests/" + uid + "/voted"]: true });
 }
+
+let connected = false;
+onValue(ref(db, ".info/connected"), s => { connected = s.val() === true; });
+export const isConnected = () => connected;
 
 export async function myVote(id) {
   const uid = await ready;
