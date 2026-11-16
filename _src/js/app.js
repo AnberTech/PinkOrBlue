@@ -199,8 +199,6 @@ function viewCreate() {
       <small>${S.c_date_hint}</small></div>
     <details class="inv-box pw-box"><summary>🔒 ${S.c_pw} <em>${S.optional}</em></summary>
       <input name="pw" maxlength="40" autocomplete="off" placeholder="${S.c_pw_ph}"><small>${S.c_pw_hint}</small></details>
-    <details class="inv-box"><summary>${S.c_invitees} <em>${S.optional}</em></summary>
-      <textarea name="inv" rows="5" placeholder="${S.c_invitees_ph}"></textarea><small>${S.c_invitees_hint}</small></details>
     <button class="btn btn-gold btn-big" type="submit">${S.c_submit}</button>
     <p class="muted center small">${S.c_note}</p>
   </form>`;
@@ -226,10 +224,7 @@ function viewCreate() {
     if (!(partyAt > Date.now() - 3600000)) return toast(S.c_err_date);
     const btn = f.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = S.wait;
     try {
-      const seen = new Set([lower(host)]), invitees = [];
-      String(f.inv.value || "").split(/[\n,]/).map(s => titleCase(s).slice(0, 40)).filter(Boolean)
-        .forEach(n => { if (!seen.has(lower(n))) { seen.add(lower(n)); invitees.push(n); } });
-      const { id, hostKey } = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: invitees.slice(0, 80), hostName: host, password: pw || null });
+      const { id, hostKey } = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: [], hostName: host, password: pw || null });
       ls.set("pob_hk_" + id, hostKey); if (pw) ls.set("pob_pw_" + id, pw);
       history.replaceState(null, "", INVITE + "#r=" + id);
       route(true);
@@ -408,10 +403,8 @@ function renderLobby() {
   const m = room.meta, ps = people();
   const voters = ps.filter(p => !p.keeper);
   const votedN = voters.filter(p => p.voted).length;
-  const joinedNames = new Set(ps.flatMap(p => [lower(p.name), lower(p.name.split(" ")[0])]));
-  const notJoined = Object.values(room.invitees).filter(n => !joinedNames.has(lower(n)) && !joinedNames.has(lower(n.split(" ")[0])));
-  const notVoted = voters.filter(p => !p.voted).map(p => p.name);
-  const expected = voters.length + notJoined.length;
+
+  const expected = voters.length;
   const onN = ps.filter(p => p.online).length;
   const sig = ps.map(p => `${p.uid}${+p.voted}${+p.online}${+p.keeper}`).join("|");
   app.innerHTML = `
@@ -423,9 +416,7 @@ function renderLobby() {
   ${gameCard()}
   ${!isHost() ? `<section class="card share-mini"><div class="row"><div><b>${S.share_h}</b><p class="muted small">${S.share_p_guest}</p></div>
     <div class="row gap"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(shareText(m))}">WhatsApp</a><button class="btn" data-act="share">${S.share_more}</button></div></div></section>` : ""}
-  ${(notVoted.length || notJoined.length) ? `<details class="waiting card"><summary>${fmt(S.lobby_waiting_n, notVoted.length + notJoined.length)}</summary>
-    <div class="chips">${notVoted.map(n => `<span class="chip ghost">${esc(n)}</span>`).join("")}${notJoined.map(n => `<span class="chip ghost dashed">${esc(n)}</span>`).join("")}</div>
-    ${notJoined.length ? `<p class="muted small">${S.lobby_dashed}</p>` : ""}</details>` : ""}
+
   <p class="muted small center secret-note">${S.lobby_secret}</p>`;
   bindLobby();
 }
@@ -502,8 +493,6 @@ function hostFlow(votedN, expected, onN) {
       <label class="lbl">${S.h_keeper}<small class="muted">${S.h_keeper_lbl}</small>
         <select name="keeper" data-init="${m.revealerUid}"><option value="${room.uid}">${S.h_keeper_me}</option>
         ${others.map(p => `<option value="${p.uid}" ${p.uid === m.revealerUid ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label>
-      <label class="lbl">${S.h_inv_edit}<textarea name="inv" rows="4">${esc(Object.values(room.invitees).join("\n"))}</textarea></label>
-      <button class="btn" data-act="saveinv">${S.h_inv_save}</button>
       <p class="muted small">${S.h_device}</p>
       <button class="btn btn-danger" data-act="del">${S.h_delete}</button>
     </details>
@@ -582,11 +571,6 @@ function bindLobby() {
     if (kp.value !== R.uid && !confirm(S.h_keeper_confirm)) { kp.value = R.meta.revealerUid; return; }
     try { await fb.delegate(R.id, kp.value); delete R.drafts.keeper; } catch (e) { console.error(e); toast(S.err_generic); }
   };
-  act("saveinv", async () => {
-    const seen = new Set(), names = [];
-    app.querySelector("[name=inv]").value.split(/[\n,]/).map(s => titleCase(s).slice(0, 40)).filter(Boolean).forEach(n => { if (!seen.has(lower(n))) { seen.add(lower(n)); names.push(n); } });
-    try { await fb.setInvitees(R.id, names.slice(0, 80)); delete R.drafts.inv; toast(S.saved); } catch (e) { console.error(e); toast(S.err_generic); }
-  });
   act("del", async () => {
     if (!confirm(S.h_delete_confirm)) return;
     try { await fb.deleteRoom(R.id); cleanupRoom(); location.href = CREATE; } catch (e) { console.error(e); toast(S.err_generic); }
