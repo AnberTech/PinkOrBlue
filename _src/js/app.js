@@ -52,6 +52,7 @@ const dtf = (o) => { try { return new Intl.DateTimeFormat(LANG, o); } catch (e) 
 const DF_LONG = dtf({ dateStyle: "long", timeStyle: "short" }), DF_DAY = dtf({ day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
 const DF_PICK = dtf({ weekday: "short", day: "numeric", month: "short", year: "numeric" }), DF_SHORT = dtf({ day: "numeric", month: "short" });
 const DF_MONTH = dtf({ month: "long", year: "numeric" }), DF_WD = dtf({ weekday: "narrow" });
+const pctFmt = (n) => { try { return new Intl.NumberFormat(LANG, { style: "percent" }).format(n / 100); } catch (e) { return n + "%"; } };
 const fmtDate = (ms) => DF_LONG ? DF_LONG.format(new Date(ms)) : new Date(ms).toLocaleString(LANG);
 function countdown(ms) {
   const d = ms - fb.serverNow();
@@ -734,13 +735,13 @@ function renderResult() {
       <div class="res-rays" aria-hidden="true"></div><div class="res-conf" aria-hidden="true">${conf}</div>
       <img class="res-stork" src="${ASSET}img/stork.png" alt="" width="560" height="560">
       <p class="res-parents">🎉 ${esc(m.parents ? fmt(S.r_congrats, m.parents) : S.r_congrats_np)}</p>
-      <h1 class="res-big">${girl ? S.girl_big : S.boy_big}</h1>
+      <h1 class="res-big" style="--n:${[...(girl ? S.girl_big : S.boy_big)].length}">${girl ? S.girl_big : S.boy_big}</h1>
       <p class="res-line">${esc(fmt(girl ? S.show_girl_line : S.show_boy_line, babyOf(m)))}</p>
       <p class="res-date">${esc(DF_SHORT ? new Intl.DateTimeFormat(LANG, { day: "numeric", month: "long", year: "numeric" }).format(new Date(m.partyAt)) : fmtDate(m.partyAt))}</p>
       ${mine ? `<p class="res-me ${mine === R.result ? "yes" : ""}">${mine === R.result ? S.show_you_right : S.show_you_wrong}</p>` : ""}
     </section>
     <section class="res-stats">
-      <div><b>${fmt(S.r_pct, pct)}</b><span>${fmt(S.r_right_short, right.length, tot)}</span></div>
+      <div><b>${esc(pctFmt(pct))}</b><span>${fmt(S.r_right_short, right.length, tot)}</span></div>
       <div><b>${new Set(Object.values(R.guests).map(g => lower(g.name))).size}</b><span>${S.r_joined}</span></div>
       <div><b>${scores[0] ? scores[0].score : "–"}</b><span>${scores[0] ? "🏆 " + esc(scores[0].name.split(" ")[0]) : S.game_name}</span></div>
     </section>
@@ -833,6 +834,7 @@ async function storyCanvas(R, girl) {
   const [stork, bal, icon, ab] = await Promise.all([loadImg(ASSET + "img/stork.png"), loadImg(ASSET + "img/balloon-" + (girl ? "pink" : "blue") + ".png"), loadImg(ASSET + "img/balloon-icon-180.png"), loadImg(ASSET + "img/anbertech.png")]);
   const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
   const g = cv.getContext("2d");
+  g.direction = document.documentElement.dir === "rtl" ? "rtl" : "ltr";
   const c1 = girl ? "#FFD3E3" : "#D4EDFF", c2 = girl ? "#FF8FB8" : "#6DB9F5", c3 = girl ? "#D94C84" : "#2E7FCF", deep = girl ? "#B0175A" : "#0F4C91";
   const bg = g.createRadialGradient(W / 2, H * .42, 40, W / 2, H * .45, H * .8);
   bg.addColorStop(0, c1); bg.addColorStop(.5, c2); bg.addColorStop(1, c3);
@@ -852,8 +854,9 @@ async function storyCanvas(R, girl) {
   g.globalAlpha = 1;
   if (stork) g.drawImage(stork, W / 2 - 300, 170, 600, 600);
   const T = (txt, y, size, color, weight = 800, font = '"Baloo 2"', shadow = null) => {
-    g.font = `${weight} ${size}px ${font}, system-ui`; g.textAlign = "center"; g.textBaseline = "middle";
-    let sz = size; while (g.measureText(txt).width > W * .88 && sz > 20) { sz -= 4; g.font = `${weight} ${sz}px ${font}, system-ui`; }
+    const ff = `${font}, "Baloo Bhaijaan 2", system-ui`;
+    g.font = `${weight} ${size}px ${ff}`; g.textAlign = "center"; g.textBaseline = "middle";
+    let sz = size; while (g.measureText(txt).width > W * .88 && sz > 20) { sz -= 4; g.font = `${weight} ${sz}px ${ff}`; }
     if (shadow) { g.fillStyle = shadow; g.fillText(txt, W / 2, y + sz * .07); }
     g.fillStyle = color; g.fillText(txt, W / 2, y);
   };
@@ -872,7 +875,8 @@ async function storyCanvas(R, girl) {
   g.font = '800 46px Nunito, system-ui'; const dw = g.measureText(today).width + 80;
   g.fillStyle = "rgba(255,255,255,.92)"; roundRectPath(g, W / 2 - dw / 2, 1335, dw, 84, 42); g.fill();
   g.fillStyle = deep; g.textAlign = "center"; g.fillText(today, W / 2, 1379);
-  // alt marka şeridi
+  // alt marka şeridi (her dilde soldan sağa)
+  g.direction = "ltr";
   g.fillStyle = "rgba(255,255,255,.94)"; roundRectPath(g, 150, 1690, W - 300, 150, 75); g.fill();
   if (icon) g.drawImage(icon, 205, 1712, 106, 106);
   g.textAlign = "left"; g.textBaseline = "middle";
@@ -912,11 +916,11 @@ function printGuesses(R, guesses, girl) {
   Object.entries(R.votes || {}).forEach(([u, v]) => { if (u !== m.revealerUid && !all.some(x => x.uid === u)) all.push({ uid: u, name: R.guests[u]?.name || "?", ...v }); });
   const rows = all.map(v => `<tr class="${v.parent ? "p" : ""}"><td>${v.parent ? "👑 " : ""}${esc(v.name)}</td><td>${v.pick ? (v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : "–"}</td><td>${v.birth ? esc(shortDate(v.birth)) : "–"}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td></tr>`).join("");
   const title = (m.parents ? m.parents + " · " : "") + fmt(S.lobby_title, babyOf(m));
-  const html = `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><title>${esc(title)}</title>
+  const html = `<!doctype html><html lang="${LANG}" dir="${document.documentElement.dir || "ltr"}"><head><meta charset="utf-8"><title>${esc(title)}</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@600;800&display=swap&subset=latin-ext" rel="stylesheet">
   <style>body{font-family:Nunito,system-ui,sans-serif;color:#2B2140;margin:32px}h1{font:800 30px/1.1 "Baloo 2",system-ui;margin:0}
   .r{display:inline-block;margin:10px 0 18px;padding:6px 14px;border-radius:999px;background:${girl ? "#FFE3EE" : "#E2F2FF"};color:${girl ? "#C2185B" : "#1565C0"};font-weight:800}
-  table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;font-size:12px;text-transform:uppercase;color:#6E6380;border-bottom:2px solid #EADFD0;padding:8px 6px}
+  table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:start;font-size:12px;text-transform:uppercase;color:#6E6380;border-bottom:2px solid #EADFD0;padding:8px 6px}
   td{padding:9px 6px;border-bottom:1px solid #F1E8DA}tr.p td{background:#FFF7DD;font-weight:800}.f{margin-top:22px;font-size:12px;color:#6E6380}
   @media print{body{margin:14mm}button{display:none}}</style></head><body>
   <h1>${esc(title)}</h1><div class="r">${girl ? S.girl_big : S.boy_big} · ${esc(fmtDate(m.partyAt))}</div>

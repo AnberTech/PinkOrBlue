@@ -397,7 +397,8 @@ export function playShow(opts) {
         const a = Math.min(1, p.t * 6) * (1 - p.t / .85);
         g.save(); g.globalAlpha = a; g.font = `800 ${p.mine ? 20 : 16}px "Baloo 2", system-ui`; g.textAlign = "center";
         g.lineWidth = 4; g.strokeStyle = "rgba(23,18,31,.55)";
-        const lx = Math.min(W - 40, Math.max(40, p.x0)), ly = Math.min(H - 20, p.y0) - 18 - p.t * 30;
+        const half = g.measureText(p.name).width / 2 + 8;
+        const lx = Math.min(W - half, Math.max(half, p.x0)), ly = Math.min(H - 20, p.y0) - 18 - p.t * 30;
         g.strokeText(p.name, lx, ly); g.fillStyle = p.mine ? C.goldHi : "#fff"; g.fillText(p.name, lx, ly); g.restore();
       }
     }

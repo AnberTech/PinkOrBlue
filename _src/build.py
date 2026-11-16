@@ -343,6 +343,16 @@ def main():
     L = {c: load('legal', c) for c, *_ in LANGS}
     check(T, U, L)
     fbcfg = json.loads(read(os.path.join(SRC, 'firebase-config.json')))
+    if not {'tr', 'en'} <= {c for c, *_ in LANGS}:
+        sys.exit('HATA: tr ve en dil dosyaları zorunlu')
+    for c, *_ in ALL_LANGS:   # kaldırılan dilin eski sayfaları yayında kalmasın
+        d = os.path.join(ROOT, ldir(c))
+        if c != 'tr' and c not in T and os.path.isdir(d) and os.path.exists(os.path.join(d, 'index.html')):
+            shutil.rmtree(d); print('kaldırıldı:', ldir(c))
+    for c, *_ in LANGS:
+        paths = [T[c]['fx_slug'], INVITE_SLUG[c], *DOC_SLUGS[c]]
+        if len(set(paths)) != len(paths):
+            sys.exit(f'HATA: {c} adresleri çakışıyor: {paths}')
     urls = []
     for c, *_ in LANGS:
         write(ldir(c) + 'index.html', page_home(c, T, L)); urls.append(url_home(c))

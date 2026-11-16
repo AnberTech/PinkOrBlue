@@ -3,7 +3,7 @@
 // Zaman: t = ms (revealAt'ten itibaren, sunucu saatine sabitlenmiş). Tur k: S(k) = 3 + 15k sn.
 //   S..S+10 şişirme · S+10..S+11.5 "yetti mi?" · başarısız: S+11.5..S+15 sönme → S(k+1)
 //   başarılı: S+11.5..S+14.5 gerilim · S+14.5..S+15.5 sessizlik · S+15.5 PAT · S+20.5 bitiş
-import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162156";
+import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162204";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",
@@ -397,7 +397,8 @@ export function playShow(opts) {
         const a = Math.min(1, p.t * 6) * (1 - p.t / .85);
         g.save(); g.globalAlpha = a; g.font = `800 ${p.mine ? 20 : 16}px "Baloo 2", system-ui`; g.textAlign = "center";
         g.lineWidth = 4; g.strokeStyle = "rgba(23,18,31,.55)";
-        const lx = Math.min(W - 40, Math.max(40, p.x0)), ly = Math.min(H - 20, p.y0) - 18 - p.t * 30;
+        const half = g.measureText(p.name).width / 2 + 8;
+        const lx = Math.min(W - half, Math.max(half, p.x0)), ly = Math.min(H - 20, p.y0) - 18 - p.t * 30;
         g.strokeText(p.name, lx, ly); g.fillStyle = p.mine ? C.goldHi : "#fff"; g.fillText(p.name, lx, ly); g.restore();
       }
     }

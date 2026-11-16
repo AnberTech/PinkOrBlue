@@ -1,5 +1,5 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611162156";
+import { sfx, vib, unlock } from "./sfx.js?v=202611162204";
 
 const DUR = 30;
 export function playGame({ root, S, onEnd, names = [], baby = "" }) {
@@ -85,7 +85,7 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
           if (combo.length >= 3) { pts += 1; label = S.game_combo.replace("%d", combo.length); combo = []; }
         }
         score = Math.max(0, score + pts);
-        fx.push({ x: o.x, y: o.y, s: label || ((o.label && pts > 0 ? o.label + " " : "") + (pts > 0 ? "+" + pts : String(pts))), c: col, life: 1, parts: Array.from({ length: 6 }, () => ({ vx: (Math.random() - .5) * 6, vy: (Math.random() - .5) * 6 })), pc: o.c || (o.k === "gold" ? "#F2B93B" : "#aaa") });
+        fx.push({ x: Math.min(W - 70, Math.max(70, o.x)), y: o.y, s: label || ((o.label && pts > 0 ? o.label + " " : "") + (pts > 0 ? "+" + pts : String(pts))), c: col, life: 1, parts: Array.from({ length: 6 }, () => ({ vx: (Math.random() - .5) * 6, vy: (Math.random() - .5) * 6 })), pc: o.c || (o.k === "gold" ? "#F2B93B" : "#aaa") });
         elScore.textContent = score;
         return;
       }
