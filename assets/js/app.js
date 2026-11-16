@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu paneli, şov, sonuç.
-import * as fb from "./fb.js?v=202611161720";
-import { playShow } from "./show.js?v=202611161720";
-import { playGame } from "./game.js?v=202611161720";
-import { unlock, setOn, isOn, running, sfx } from "./sfx.js?v=202611161720";
+import * as fb from "./fb.js?v=202611161727";
+import { playShow } from "./show.js?v=202611161727";
+import { playGame } from "./game.js?v=202611161727";
+import { unlock, setOn, isOn, running, sfx } from "./sfx.js?v=202611161727";
 
 const S = window.POB_S;
 const LANG = document.documentElement.lang;

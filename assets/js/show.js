@@ -1,6 +1,6 @@
 // Açılış şovu: 22 sn, tamamen sunucu saatine bağlı (t = serverNow - revealAt).
 // Geç açan kişi şovu kaldığı saniyeden izler. Çizim tek canvas + tek rAF döngüsü.
-import { sfx, vib, unlock, running } from "./sfx.js?v=202611161720";
+import { sfx, vib, unlock, running } from "./sfx.js?v=202611161727";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",
