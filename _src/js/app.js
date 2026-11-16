@@ -214,7 +214,6 @@ function viewCreate() {
       </div>
       <input name="other" maxlength="40" autocapitalize="words" placeholder="${S.c_other_ph}">
     </div>
-    <label>${S.c_baby} <em>${S.optional}</em><input name="baby" maxlength="40" autocapitalize="words" placeholder="${S.c_baby_ph}"></label>
     <div class="lbl">${S.c_date}
       <div class="dt">${dateField("date", ymd(def), { min: today, max: maxD })}
         <span class="tm"><select name="hh" aria-label="${S.c_hour}">${hours}</select><b>:</b><select name="mm" aria-label="${S.c_minute}">${mins}</select></span></div>
@@ -226,7 +225,7 @@ function viewCreate() {
   </form>`;
   const f = $("#cf");
   bindDates(f);
-  ["mom", "dad", "baby", "other"].forEach(n => f[n].addEventListener("blur", () => { f[n].value = titleCase(f[n].value); }));
+  ["mom", "dad", "other"].forEach(n => f[n].addEventListener("blur", () => { f[n].value = titleCase(f[n].value); }));
   const other = f.querySelector("[name=other]");
   f.querySelectorAll("[name=who]").forEach(r => r.onchange = () => { other.hidden = f.who.value !== "other"; if (!other.hidden) other.focus(); });
   f.onsubmit = async (ev) => {
@@ -246,7 +245,7 @@ function viewCreate() {
     if (!(partyAt > Date.now() - 3600000)) return toast(S.c_err_date);
     const btn = f.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = S.wait;
     try {
-      const { id, hostKey } = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: [], hostName: host, password: pw || null });
+      const { id, hostKey } = await fb.createRoom({ babyName: S.default_baby, parents, partyAt, lang: LANG, invitees: [], hostName: host, password: pw || null });
       ls.set("pob_hk_" + id, hostKey); if (pw) ls.set("pob_pw_" + id, pw);
       track(pw ? "oda-acildi-sifreli" : "oda-acildi");
       history.replaceState(null, "", INVITE + "#r=" + id);
@@ -372,7 +371,7 @@ function renderInner() {
   closeCal();
   const m = room.meta;
   if (gated()) { setBg("bg-wait"); return renderCountdown(); }
-  if (!(m.status === "reveal" && room.shown)) setBg(m.status === "reveal" ? null : "bg-party", m.musicAt ? { at: m.musicAt, now: fb.serverNow } : {});
+  if (!(m.status === "reveal" && room.shown)) setBg(m.status === "reveal" || !m.musicAt ? null : "bg-party", m.musicAt ? { at: m.musicAt, now: fb.serverNow } : {});
   if (m.status === "reveal" && room.shown) return renderResult();
   if (m.status === "reveal") {
     app.innerHTML = `<div class="card center"><div class="big-emoji">🎈</div><h2>${S.show_ready}</h2><p class="muted">${S.show_ready_sub}</p></div>`;
@@ -509,7 +508,8 @@ function voteCard(guessOnly) {
   const v = room.mine;
   const maxB = ymd(new Date(Date.now() + 320 * 86400000));
   const extras = v && (v.birth || v.weight || v.letter || v.nm);
-  if (guessOnly) return `<section class="card vote has parents-guess">
+  if (guessOnly) return "";
+  if (0) return `<section class="card vote has parents-guess">
     <h2>👑 ${S.pg_h}</h2><p class="muted small">${S.pg_p}</p>
     <details class="guesses" ${extras ? "" : "open"}><summary>${extras ? S.v_more_saved : S.pg_open}</summary>
       <label class="lbl">${S.v_birth}${dateField("birth", v?.birth, { min: ymd(new Date()), max: maxB, ph: S.v_birth_ph })}</label>
@@ -544,7 +544,17 @@ function stepStart(votedN, expected, onN) {
 }
 function stepSeal() {
   const s = room.sealed;
-  return `<li class="${s ? "done" : ""}"><b>${S.f_step1}</b><p class="muted small">${S.k_p}</p>${pickBtns("seal", s, "s")}${s ? `<p class="ok small">${S.k_sealed}</p>` : ""}</li>`;
+  return `<li class="${s ? "done" : ""}"><b>${S.f_step1}</b><p class="muted small">${S.k_p}</p>${pickBtns("seal", s, "s")}${s ? `<p class="ok small">${S.k_sealed}</p>` : ""}${sealGuesses()}</li>`;
+}
+function sealGuesses() {
+  const v = room.mine, maxB = ymd(new Date(Date.now() + 320 * 86400000));
+  const extras = v && (v.birth || v.weight || v.letter);
+  return `<details class="guesses"><summary>${extras ? S.v_more_saved : S.v_more}</summary>
+      <label class="lbl">${S.v_birth}${dateField("birth", v?.birth, { min: ymd(new Date()), max: maxB, ph: S.v_birth_ph })}</label>
+      <label class="lbl">${S.v_weight}<input type="number" name="weight" min="500" max="7000" step="10" inputmode="numeric" placeholder="3250" value="${esc(v?.weight || "")}"></label>
+      <label class="lbl">${S.v_letter}<input name="letter" maxlength="1" value="${esc(v?.letter || "")}" autocapitalize="characters"></label>
+      <button class="btn" data-act="saveg">${S.v_save}</button>
+    </details>`;
 }
 function hostFlow(votedN, expected, onN) {
   const m = room.meta, others = people().filter(p => !p.me);

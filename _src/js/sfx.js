@@ -187,7 +187,7 @@ export function setBg(name, opt = {}) {
     } else start();
   }, bgEl.paused ? 0 : 450);
 }
-export const bgState = () => bgEl ? { src: (bgEl.src || "").split("/").pop(), paused: bgEl.paused, t: +bgEl.currentTime.toFixed(2), loop: bgEl.loop } : null;
+export const bgState = () => !bgEl ? { want: bgWant.name, enabled, st: ctx && ctx.state } : { src: (bgEl.src || "").split("/").pop(), paused: bgEl.paused, t: +bgEl.currentTime.toFixed(2), loop: bgEl.loop };
 export const refreshBg = () => { const w = bgWant; bgNow = ""; return setBg(w.name, { at: w.at, now: w.now }); };
 // Parça süresi (sn) — kurucunun "son şarkı" sayacı için
 export function bgDuration(name) {
