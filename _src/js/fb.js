@@ -82,7 +82,7 @@ export async function claimHost(id, key, name) {
   if (meta.hostUid === uid) return meta;
   if (meta.status === "open") {
     const g = (await get(ref(db, R + "guests/" + uid))).val();
-    if (!g) await set(ref(db, R + "guests/" + uid), { name, joinedAt: serverTimestamp() });
+    if (!g) await set(ref(db, R + "guests/" + uid), { name: (meta.parents || name).slice(0, 40), joinedAt: serverTimestamp() });
   }
   const wasRevealer = meta.revealerUid === meta.hostUid;
   await set(ref(db, R + "meta/hostUid"), uid);
