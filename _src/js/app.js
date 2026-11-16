@@ -194,7 +194,7 @@ function bindDates(root) {
 // ---------------------------------------------------------------- oluştur
 function viewCreate() {
   document.body.dataset.view = "create";
-  setBg("bg-party");
+  setBg(null);
   closeCal();
   const def = new Date(Date.now() + 86400000);
   const today = ymd(new Date()), maxD = ymd(new Date(Date.now() + 400 * 86400000));

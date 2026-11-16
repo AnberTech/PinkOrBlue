@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611170017";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611170017";
-import { playGame } from "./game.js?v=202611170017";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg, bgDuration, bgState } from "./sfx.js?v=202611170017";
+import * as fb from "./fb.js?v=202611170025";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611170025";
+import { playGame } from "./game.js?v=202611170025";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg, bgDuration, bgState } from "./sfx.js?v=202611170025";
 window.__pob = { level, audioState, revealReady, bgState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -194,7 +194,7 @@ function bindDates(root) {
 // ---------------------------------------------------------------- oluştur
 function viewCreate() {
   document.body.dataset.view = "create";
-  setBg("bg-party");
+  setBg(null);
   closeCal();
   const def = new Date(Date.now() + 86400000);
   const today = ymd(new Date()), maxD = ymd(new Date(Date.now() + 400 * 86400000));
