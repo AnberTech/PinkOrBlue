@@ -3,7 +3,7 @@
 // Zaman: t = ms (revealAt'ten itibaren, sunucu saatine sabitlenmiş). Tur k: S(k) = 3 + 15k sn.
 //   S..S+10 şişirme · S+10..S+11.5 "yetti mi?" · başarısız: S+11.5..S+15 sönme → S(k+1)
 //   başarılı: S+11.5..S+14.5 gerilim · S+14.5..S+15.5 sessizlik · S+15.5 PAT · S+20.5 bitiş
-import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162019";
+import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162024";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",
@@ -50,7 +50,17 @@ export function playShow(opts) {
   // Bir olayı tam zamanında ya da en fazla 0,6 sn gecikmeyle bir kez tetikle (geç gelen, geçmiş olayları duymasın)
   const once = (key, t, at, fn) => { if (fired.has(key)) return; if (t >= at && t < at + 0.6) { fired.add(key); fn(); } else if (t >= at + 0.6) fired.add(key); };
   let tapTimes = [], bounce = 0, lastKick = -1, lastSnare = -1, lastHeart = -1;
-  const sparks = [], plus = [], shards = [], confetti = [], risers = [], stars = [];
+  const sparks = [], plus = [], shards = [], confetti = [], risers = [], stars = [], puffs = [];
+  let grow = .18, nozzle = { x: 0, y: 0 }, lastF = performance.now();
+  const PUFF_COLS = ["#FFE08A", "#FFFFFF", "#FFD1E1", "#CFE9FF"];
+  // Ekranın kenarından balonun ağzına akan, üfleyenin adını taşıyan hava akımı
+  const lastLabel = {};
+  function spawnPuff(x, y, name, mine) {
+    const now = performance.now();
+    if (name && now - (lastLabel[name] || 0) < 600) name = ""; else if (name) lastLabel[name] = now;   // ad üst üste yığılmasın
+    puffs.push({ x0: x, y0: y, t: 0, name, mine, c: PUFF_COLS[(Math.random() * PUFF_COLS.length) | 0], bend: (Math.random() - .5) * 160 });
+    if (puffs.length > 60) puffs.shift();
+  }
   const IM = { stork: img("stork.png"), pink: img("balloon-pink.png"), blue: img("balloon-blue.png") };
   const ok = (i) => i.complete && i.naturalWidth > 0;
   let shown = 0, popAnchor = null;
@@ -72,11 +82,9 @@ export function playShow(opts) {
     if (tapTimes.length >= 15) return;
     tapTimes.push(now);
     opts.onTap && opts.onTap();
-    bounce = 1;
     sfx.pump(); vib(10);
     const x = e.clientX ?? W / 2, y = e.clientY ?? H / 2;
-    for (let i = 0; i < 4; i++) sparks.push({ x, y, vx: (Math.random() - .5) * 5, vy: -Math.random() * 5 - 1, life: 1 });
-    plus.push({ x, y, life: 1 });
+    spawnPuff(x, y, opts.myName || "", true);
   }
   wrap.addEventListener("pointerdown", onPointer);
   wrap.addEventListener("touchend", () => { if (!running()) unlock(); }, { passive: true });   // iOS sesi touchend'de açar
@@ -191,8 +199,19 @@ export function playShow(opts) {
       once("fan" + k, t, roundStart(k), () => { sfx.fanfare(); vib([30, 40, 30]); live.textContent = S.show_tap; });
       const rate = .5 - tl / 10 * .33;
       if (t - lastKick > rate) { lastKick = t; sfx.kick(); }
-      bounce *= .85;
-      balloon(cx, cy, baseR * (.4 + .6 * fill) * (1 + bounce * .03), reduced ? 0 : bounce);
+      bounce *= .88;
+      // uzaktan gelen dokunuşlar: kenardan isimli akım
+      (opts.takeRemote ? opts.takeRemote() : []).forEach(ev => {
+        for (let i = 0; i < Math.min(3, ev.n); i++) {
+          const side = Math.random();
+          const sx = side < .5 ? (Math.random() < .5 ? -10 : W + 10) : Math.random() * W, sy = side < .5 ? H * (.5 + Math.random() * .45) : H + 10;
+          spawnPuff(sx, sy, ev.name, false);
+        }
+      });
+      grow += ((.18 + .82 * fill) - grow) * .08;          // küçükten yumuşakça büyü
+      const Rb = baseR * grow * (1 + bounce * .06);
+      nozzle = { x: cx, y: cy + Rb * 1.12 };
+      balloon(cx, cy, Rb, reduced ? 0 : bounce);
       text(k ? fmt(S.show_round, k + 1) : S.show_tap, cx, H * .09, Math.min(30, FW * .075), C.goldHi);
       if (!opts.hideCount?.(k)) text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff");
       text(tp.people ? fmt(S.show_people_tapping, tp.people, Math.max(0, Math.ceil(10 - tl))) : fmt(S.show_secs, Math.max(0, Math.ceil(10 - tl))), cx, yB(.872), Math.min(15, FW * .04), "rgba(255,255,255,.7)", 700);
@@ -202,14 +221,15 @@ export function playShow(opts) {
       // ---- yetti mi?
       if (tl >= 10.6) opts.decide(k);
       once("yetti" + k, t, roundStart(k) + 10, () => { sfx.snare(.2); live.textContent = S.show_check; });
-      balloon(cx, cy, baseR * (.4 + .6 * fill), reduced ? 0 : Math.sin(t * 20) * .25);
+      grow += ((.18 + .82 * fill) - grow) * .08;
+      balloon(cx, cy, baseR * grow, reduced ? 0 : Math.sin(t * 20) * .25);
       text(S.show_check, cx, H * .12, Math.min(30, FW * .075), "#fff");
       if (!opts.hideCount?.(k)) { text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff"); bar(fill, yB(.9)); }
     } else if (out.o === "fail") {
       // ---- havası söndü, uçup gidiyor
       if (failAnchor[k] == null) {
         failAnchor[k] = Math.max(roundStart(k) + 11.5, t);
-        flyFrom[k] = .4 + .6 * clamp((out.t - (k ? (st.r[k - 1]?.t || 0) : 0)) / need);
+        flyFrom[k] = grow;
       }
       const ft = t - failAnchor[k];
       once("fail" + k, t, failAnchor[k], () => { sfx.deflate(); vib([80, 40, 80]); live.textContent = S.show_fail; });
@@ -223,6 +243,7 @@ export function playShow(opts) {
       text(opts.hideCount?.(k) ? S.show_fail_sub2 : fmt(S.show_fail_sub, Math.round(shown), need), cx, H * .3 + 44, Math.min(18, FW * .045), "rgba(255,255,255,.8)", 700, ft * 3 - .5);
       const left = roundStart(k + 1) - t;
       if (left < 1.6) text(fmt(S.show_again, Math.max(1, Math.ceil(left))), cx, H * .62, Math.min(34, FW * .085), C.goldHi, 800, 1);
+      if (left < .3) grow = .18;                          // yeni tur: balon yine küçücük
     } else if (tp0 == null || t < tp0) {
       // ---- başarılı: gerilim → sessizlik (sonuç bekleniyor)
       once("ok" + k, t, roundStart(k) + 11.5, () => { live.textContent = S.show_enough; sfx.fanfare(); });
@@ -350,7 +371,33 @@ export function playShow(opts) {
     draw();
     raf = requestAnimationFrame(frame);
   }
+  function drawPuffs() {
+    const now = performance.now(), dt = Math.min(50, now - lastF) / 1000; lastF = now;
+    for (let i = puffs.length - 1; i >= 0; i--) {
+      const p = puffs[i]; p.t += dt / .7;
+      if (p.t >= 1) { puffs.splice(i, 1); bounce = Math.min(1.4, bounce + .35); continue; }
+      const mx = (p.x0 + nozzle.x) / 2 + p.bend, my = (p.y0 + nozzle.y) / 2 - 40;
+      const pt = (u) => { const a = 1 - u; return [a * a * p.x0 + 2 * a * u * mx + u * u * nozzle.x, a * a * p.y0 + 2 * a * u * my + u * u * nozzle.y]; };
+      // akım: kuyruklu yumuşak hava kabarcıkları
+      for (let j = 0; j < 7; j++) {
+        const u = Math.max(0, p.t - j * .045); if (u <= 0) break;
+        const [x, y] = pt(u), r = (p.mine ? 9 : 7) * (1 - j / 8) * (1 - p.t * .5);
+        g.globalAlpha = (1 - j / 7) * .85 * (1 - Math.max(0, p.t - .8) * 5);
+        g.fillStyle = p.c; g.beginPath(); g.arc(x, y, Math.max(1, r), 0, 7); g.fill();
+      }
+      g.globalAlpha = 1;
+      // üfleyenin adı: başladığı yerde belirip yukarı süzülür
+      if (p.name && p.t < .85) {
+        const a = Math.min(1, p.t * 6) * (1 - p.t / .85);
+        g.save(); g.globalAlpha = a; g.font = `800 ${p.mine ? 20 : 16}px "Baloo 2", system-ui`; g.textAlign = "center";
+        g.lineWidth = 4; g.strokeStyle = "rgba(23,18,31,.55)";
+        const lx = Math.min(W - 40, Math.max(40, p.x0)), ly = Math.min(H - 20, p.y0) - 18 - p.t * 30;
+        g.strokeText(p.name, lx, ly); g.fillStyle = p.mine ? C.goldHi : "#fff"; g.fillText(p.name, lx, ly); g.restore();
+      }
+    }
+  }
   function draw() {
+    drawPuffs();
     for (let i = sparks.length - 1; i >= 0; i--) {
       const p = sparks[i]; p.x += p.vx; p.y += p.vy; p.vy += p.puff ? -.05 : .25; p.life -= .04;
       if (p.life <= 0) { sparks.splice(i, 1); continue; }

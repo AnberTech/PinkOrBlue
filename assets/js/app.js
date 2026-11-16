@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162019";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162019";
-import { playGame } from "./game.js?v=202611162019";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162019";
+import * as fb from "./fb.js?v=202611162024";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162024";
+import { playGame } from "./game.js?v=202611162024";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162024";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -650,6 +650,7 @@ function fetchResult(R, done) {
 function runShow(local) {
   const R = room, m = R.meta;
   R.showing = true;
+  R.lastTaps = { ...(R.taps || {}) };
   const base = fb.serverNow() - performance.now();               // saati bir kez sabitle (sıçramasın)
   const t0 = performance.now();
   const getT = local ? () => performance.now() - t0 - 1500 : () => base + performance.now() - m.revealAt;
@@ -667,6 +668,18 @@ function runShow(local) {
     getShow: () => R.show,
     getResult: () => R.result,
     need: (k) => needFor(R, k),
+    myName: (R.guests[R.uid]?.name || "").split(" ")[0],
+    takeRemote: () => {
+      if (local) return [];
+      const ev = [], last = R.lastTaps || {};
+      for (const [u, n] of Object.entries(R.taps || {})) {
+        if (u === R.uid) continue;
+        const d = (+n || 0) - (+last[u] || 0);
+        if (d > 0) ev.push({ name: (R.guests[u]?.name || "").split(" ")[0], n: d });
+      }
+      R.lastTaps = { ...R.taps };
+      return ev;
+    },
     hideCount: (k) => k < SCRIPTED_FAILS,
     // 3. turdan itibaren sır tutucu "bu turda patlat" diyebilir
     canForce: (k) => !local && k >= 2 && room === R && R.meta?.revealerUid === R.uid && R.forceFrom == null,
