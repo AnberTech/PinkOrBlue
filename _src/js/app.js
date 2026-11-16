@@ -2,8 +2,8 @@
 import * as fb from "./fb.js";
 import { playShow, roundStart, showEnd } from "./show.js";
 import { playGame } from "./game.js";
-import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js";
-window.__pob = { level, audioState };   // teşhis/test için (ses gerçekten üretiliyor mu)
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js";
+window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
 const LANG = document.documentElement.lang;

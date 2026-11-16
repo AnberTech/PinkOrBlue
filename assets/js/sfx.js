@@ -80,6 +80,7 @@ function noise(dur, peak = 0.3, when = 0, filter = "bandpass", f1 = 1000, f2 = n
 // ---- Açılış müziği: assets/audio/reveal-girl.mp3 / reveal-boy.mp3 / reveal.mp3 varsa onu çal, yoksa sentez
 const AUDIO_BASE = new URL("../audio/", import.meta.url).href;
 const revealBuf = {};
+const REVEAL_OFFSET = 0.40;
 export async function preloadReveal() {
   if (!ctx) return;
   for (const name of (window.POB_AUDIO || []).filter(n => /^reveal(-girl|-boy)?$/.test(n))) {
@@ -135,10 +136,12 @@ function revealSynth(girl) {
   // alkış ve neşe
   for (let i = 0; i < 40; i++) noise(0.03 + Math.random() * 0.03, 0.05 + Math.random() * 0.07, 0.4 + Math.random() * 3.2, "bandpass", 1800 + Math.random() * 2500, null, 0.9);
 }
+export const revealReady = () => Object.values(revealBuf).some(Boolean);
 export function playReveal(girl) {
   if (!ok()) return;
   const buf = revealBuf[girl ? "reveal-girl" : "reveal-boy"] || revealBuf["reveal"];
-  if (buf) { const s = ctx.createBufferSource(); s.buffer = buf; const g = ctx.createGain(); g.gain.value = 1.4; s.connect(g); g.connect(master); s.start(); return; }
+  // Müzik dosyasının ilk vuruşu ~0,43 sn'de; 0,40'tan başlat ki vuruş patlamayla aynı anda gelsin
+  if (buf) { const s = ctx.createBufferSource(); s.buffer = buf; const g = ctx.createGain(); g.gain.value = 1.0; s.connect(g); g.connect(master); s.start(0, Math.min(REVEAL_OFFSET, buf.duration / 2)); return; }
   revealSynth(girl);
 }
 
