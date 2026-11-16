@@ -3,7 +3,7 @@
 // Zaman: t = ms (revealAt'ten itibaren, sunucu saatine sabitlenmiş). Tur k: S(k) = 3 + 15k sn.
 //   S..S+10 şişirme · S+10..S+11.5 "yetti mi?" · başarısız: S+11.5..S+15 sönme → S(k+1)
 //   başarılı: S+11.5..S+14.5 gerilim · S+14.5..S+15.5 sessizlik · S+15.5 PAT · S+20.5 bitiş
-import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162009";
+import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162014";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",

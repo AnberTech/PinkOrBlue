@@ -80,7 +80,6 @@ function noise(dur, peak = 0.3, when = 0, filter = "bandpass", f1 = 1000, f2 = n
 // ---- Açılış müziği: assets/audio/reveal-girl.mp3 / reveal-boy.mp3 / reveal.mp3 varsa onu çal, yoksa sentez
 const AUDIO_BASE = new URL("../audio/", import.meta.url).href;
 const revealBuf = {};
-const REVEAL_OFFSET = 0.40;
 export async function preloadReveal() {
   if (!ctx) return;
   for (const name of (window.POB_AUDIO || []).filter(n => /^reveal(-girl|-boy)?$/.test(n))) {
@@ -90,7 +89,13 @@ export async function preloadReveal() {
       const r = await fetch(AUDIO_BASE + name + ".mp3", { cache: "force-cache" });
       if (!r.ok) continue;
       const data = await r.arrayBuffer();
-      revealBuf[name] = await new Promise((res, rej) => ctx.decodeAudioData(data, res, rej));
+      const buf = await new Promise((res, rej) => ctx.decodeAudioData(data, res, rej));
+      // İlk güçlü vuruşu bul (tepe değerin %15'i), 30 ms önceden başlat: vuruş patlamayla aynı anda gelsin
+      const ch = buf.getChannelData(0); let peak = 0;
+      for (let i = 0; i < ch.length; i += 4) peak = Math.max(peak, Math.abs(ch[i]));
+      let on = 0; for (let i = 0; i < ch.length; i++) if (Math.abs(ch[i]) > peak * 0.15) { on = i; break; }
+      buf.__start = Math.max(0, on / buf.sampleRate - 0.03);
+      revealBuf[name] = buf;
     } catch (e) { revealBuf[name] = null; }
   }
 }
@@ -140,8 +145,7 @@ export const revealReady = () => Object.values(revealBuf).some(Boolean);
 export function playReveal(girl) {
   if (!ok()) return;
   const buf = revealBuf[girl ? "reveal-girl" : "reveal-boy"] || revealBuf["reveal"];
-  // Müzik dosyasının ilk vuruşu ~0,43 sn'de; 0,40'tan başlat ki vuruş patlamayla aynı anda gelsin
-  if (buf) { const s = ctx.createBufferSource(); s.buffer = buf; const g = ctx.createGain(); g.gain.value = 1.0; s.connect(g); g.connect(master); s.start(0, Math.min(REVEAL_OFFSET, buf.duration / 2)); return; }
+  if (buf) { const s = ctx.createBufferSource(); s.buffer = buf; const g = ctx.createGain(); g.gain.value = 1.0; s.connect(g); g.connect(master); s.start(0, Math.min(buf.__start || 0, buf.duration / 2)); return; }
   revealSynth(girl);
 }
 
