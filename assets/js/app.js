@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162204";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162204";
-import { playGame } from "./game.js?v=202611162204";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162204";
+import * as fb from "./fb.js?v=202611162213";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162213";
+import { playGame } from "./game.js?v=202611162213";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162213";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -18,7 +18,10 @@ const PER_PERSON = 33;                                    // kişi başı ortala
 const ASSET = new URL("../", import.meta.url).href;
 const lower = (s) => String(s).trim().toLocaleLowerCase(LANG);
 // "ayşe nur", "MEHMET" → "Ayşe Nur", "Mehmet" (Türkçe i/İ doğru)
-const titleCase = (s) => String(s).trim().replace(/\s+/g, " ").split(" ").map(w => w ? w[0].toLocaleUpperCase(LANG) + w.slice(1).toLocaleLowerCase(LANG) : w).join(" ");
+const capWord = (w) => w ? w[0].toLocaleUpperCase(LANG) + w.slice(1).toLocaleLowerCase(LANG) : w;
+const titleCase = (s) => String(s).trim().replace(/\s+/g, " ").split(" ").map(w => w.split("-").map(capWord).join("-")).join(" ");
+// Kısa adlar olduğu gibi; uzun adlarda ilk kelime ("Tante Anna" → "Tante Anna", "Ayşe Nur Yılmaz Kaya" → "Ayşe")
+const shortName = (n) => { n = String(n || "").trim(); return n.length <= 14 ? n : n.split(" ")[0]; };
 
 // ---------------------------------------------------------------- yardımcılar
 const PALETTE = ["#E9B949", "#7FD1AE", "#FFB38A", "#B9A3E3", "#F08A7E", "#A3B86C", "#7FA7A8", "#D9BF8C"];
@@ -48,7 +51,22 @@ async function share(text) {
   if (navigator.share) { try { await navigator.share({ text }); return; } catch (e) { if (e.name === "AbortError") return; } }
   copy(text);
 }
-const dtf = (o) => { try { return new Intl.DateTimeFormat(LANG, o); } catch (e) { return null; } };
+const KU_M = ["Rêbendan", "Reşemî", "Adar", "Nîsan", "Gulan", "Pûşper", "Tîrmeh", "Gelawêj", "Rezber", "Kewçêr", "Sermawez", "Berfanbar"];
+const KU_D = ["Yekşem", "Duşem", "Sêşem", "Çarşem", "Pêncşem", "În", "Şemî"];
+// Tarayıcılarda Kurmancî tarih verisi yok (cihaz diline düşüyor): ay/gün adlarını kendimiz yazarız
+function kuFormatter(o) {
+  return { format(d) {
+    const p = [];
+    if (o.dateStyle || o.weekday) { if (o.weekday) p.push((o.weekday === "narrow" ? KU_D[d.getDay()][0] : o.weekday === "short" ? KU_D[d.getDay()].slice(0, 3) : KU_D[d.getDay()]) + ","); }
+    if (o.dateStyle || o.day) p.push(d.getDate());
+    if (o.dateStyle || o.month) p.push(o.month === "short" ? KU_M[d.getMonth()].slice(0, 3) : KU_M[d.getMonth()]);
+    if (o.dateStyle || o.year) p.push(d.getFullYear());
+    if (o.timeStyle || o.hour) p.push(String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"));
+    if (o.month === "long" && !o.day && !o.weekday) return KU_M[d.getMonth()] + " " + d.getFullYear();
+    return p.join(" ");
+  } };
+}
+const dtf = (o) => { if (LANG === "ku") return kuFormatter(o); try { return new Intl.DateTimeFormat(LANG, o); } catch (e) { return null; } };
 const DF_LONG = dtf({ dateStyle: "long", timeStyle: "short" }), DF_DAY = dtf({ day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
 const DF_PICK = dtf({ weekday: "short", day: "numeric", month: "short", year: "numeric" }), DF_SHORT = dtf({ day: "numeric", month: "short" });
 const DF_MONTH = dtf({ month: "long", year: "numeric" }), DF_WD = dtf({ weekday: "narrow" });
@@ -652,14 +670,14 @@ function runShow(local) {
     getShow: () => R.show,
     getResult: () => R.result,
     need: (k) => needFor(R, k),
-    myName: (R.guests[R.uid]?.name || "").split(" ")[0],
+    myName: shortName(R.guests[R.uid]?.name),
     takeRemote: () => {
       if (local) return [];
       const ev = [], last = R.lastTaps || {};
       for (const [u, n] of Object.entries(R.taps || {})) {
         if (u === R.uid) continue;
         const d = (+n || 0) - (+last[u] || 0);
-        if (d > 0) ev.push({ name: (R.guests[u]?.name || "").split(" ")[0], n: d });
+        if (d > 0) ev.push({ name: shortName(R.guests[u]?.name), n: d });
       }
       R.lastTaps = { ...R.taps };
       return ev;
@@ -681,7 +699,7 @@ function runShow(local) {
       const total = sumTaps(R) - mineDb + mine;
       const entries = Object.entries(R.taps).map(([u, n]) => [u, u === R.uid ? mine : +n]);
       if (!R.taps[R.uid] && mine) entries.push([R.uid, mine]);
-      const top = entries.filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([u, n]) => [R.guests[u]?.name?.split(" ")[0] || "?", n]);
+      const top = entries.filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([u, n]) => [shortName(R.guests[u]?.name) || "?", n]);
       return { round: Math.max(0, total - baseK), people: top.length, top };
     },
     decide: (k) => {
@@ -737,7 +755,7 @@ function renderResult() {
       <p class="res-parents">🎉 ${esc(m.parents ? fmt(S.r_congrats, m.parents) : S.r_congrats_np)}</p>
       <h1 class="res-big" style="--n:${[...(girl ? S.girl_big : S.boy_big)].length}">${girl ? S.girl_big : S.boy_big}</h1>
       <p class="res-line">${esc(fmt(girl ? S.show_girl_line : S.show_boy_line, babyOf(m)))}</p>
-      <p class="res-date">${esc(DF_SHORT ? new Intl.DateTimeFormat(LANG, { day: "numeric", month: "long", year: "numeric" }).format(new Date(m.partyAt)) : fmtDate(m.partyAt))}</p>
+      <p class="res-date">${esc(dtf({ day: "numeric", month: "long", year: "numeric" })?.format(new Date(m.partyAt)) || fmtDate(m.partyAt))}</p>
       ${mine ? `<p class="res-me ${mine === R.result ? "yes" : ""}">${mine === R.result ? S.show_you_right : S.show_you_wrong}</p>` : ""}
     </section>
     <section class="res-stats">
@@ -806,7 +824,7 @@ function paintWall() {
   const list = Object.entries(R.votes || {}).filter(([u]) => u !== m.revealerUid).map(([u, v]) => ({ nm: v.nm, name: R.guests[u]?.name || "?" })).filter(v => v.nm);
   const names = [...list, ...all.filter(w => w.nm).map(w => ({ nm: w.nm, name: w.name }))];
   const canDel = (w) => w.uid === R.uid || m.hostUid === R.uid;
-  if (ne) ne.innerHTML = names.length ? `<section class="res-card"><h2>💡 ${S.r_names}</h2><div class="res-names">${names.map(v => `<span class="nmchip"><b>${esc(v.nm)}</b><small>${esc(v.name.split(" ")[0])}</small></span>`).join("")}</div></section>` : "";
+  if (ne) ne.innerHTML = names.length ? `<section class="res-card"><h2>💡 ${S.r_names}</h2><div class="res-names">${names.map(v => `<span class="nmchip"><b>${esc(v.nm)}</b><small>${esc(shortName(v.name))}</small></span>`).join("")}</div></section>` : "";
   el.hidden = !msgs.length;
   el.innerHTML = msgs.length ? `<h2>💌 ${S.w_title} <small class="muted">(${msgs.length})</small></h2><div class="wall-grid">${msgs.map((w, i) => {
     const h = hash(w.k), rot = ((h % 7) - 3) * .6;
@@ -870,7 +888,7 @@ async function storyCanvas(R, girl) {
   g.shadowBlur = 20; g.shadowOffsetY = 6;
   T(fmt(girl ? S.st_coming_girl : S.st_coming_boy, babyOf(m)), 1250, 70, "#fff");
   g.shadowBlur = 0; g.shadowOffsetY = 0;
-  const today = new Intl.DateTimeFormat(LANG, { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+  const today = dtf({ day: "numeric", month: "long", year: "numeric" }).format(new Date());
   // tarih rozeti
   g.font = '800 46px Nunito, system-ui'; const dw = g.measureText(today).width + 80;
   g.fillStyle = "rgba(255,255,255,.92)"; roundRectPath(g, W / 2 - dw / 2, 1335, dw, 84, 42); g.fill();

@@ -475,3 +475,5 @@ html[lang=ar] body,html[lang=ar] input,html[lang=ar] textarea{font-family:"Baloo
 [dir=rtl] select{background-position:left 10px center;padding-right:14px;padding-left:34px}
 .rp{padding:6px;padding-inline-end:14px}
 .rg b em{margin-left:0;margin-inline-start:4px}
+
+.note{padding-inline-end:36px}

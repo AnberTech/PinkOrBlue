@@ -118,7 +118,7 @@
  "v_yours_is": "Ton pronostic : %s",
  "v_change": "Tu peux le changer jusqu'à la révélation. Toi seul(e) vois ton vote.",
  "v_more_saved": "✓ Pronostics bonus enregistrés (modifier)",
- "v_birth_ph": "Date de naissance pronostiquée",
+ "v_birth_ph": "Ton pronostic",
  "v_err_weight": "Le poids doit être compris entre 500 et 7000 grammes.",
  "v_err_birth": "Choisis une date valide.",
  "f_step1": "1. Saisis le résultat en secret",
