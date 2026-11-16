@@ -340,6 +340,7 @@ let deferred = false;
 function render() {
   if (!room || !room.meta) return;
   if (room.showing) return;
+  if (room.game) { room.gamePending = true; return; }
   if (pointerDown) { pendingRender = true; return; }
   if (openCal) { pendingRender = true; return; }
   const ae = document.activeElement;
@@ -607,6 +608,7 @@ function bindLobby() {
     const names = [...new Set([...Object.values(R.guests).map(g => g.name), ...Object.values(R.invitees)].map(n => n.trim().split(/\s+/)[0]).filter(Boolean))];
     R.game = playGame({ root: document.body, S, names, baby: babyOf(R.meta), onEnd: async (score) => {
       R.game = null;
+      if (R.gamePending) { R.gamePending = false; setTimeout(render, 50); }
       if (score != null && room === R && me()) { try { await fb.setScore(R.id, me().name, score); } catch (e) {} toast(fmt(S.game_result, score)); }
     } });
   });

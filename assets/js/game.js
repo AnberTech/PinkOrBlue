@@ -1,5 +1,5 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611162257";
+import { sfx, vib, unlock } from "./sfx.js?v=202611162304";
 
 const DUR = 30;
 export function playGame({ root, S, onEnd, names = [], baby = "" }) {
@@ -14,11 +14,12 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
       <button class="btn btn-gold g-go">${S.game_start}</button></div></div>`;
   root.appendChild(wrap);
   document.body.classList.add("noscroll");
-  const cv = wrap.querySelector("canvas"), g = cv.getContext("2d");
+  const cv = wrap.querySelector("canvas"), g = cv.getContext("2d", { desynchronized: true });
   const elScore = wrap.querySelector(".g-score"), elTime = wrap.querySelector(".g-time");
   let W, H, dpr;
+  const sprites = new Map();
   function resize() {
-    dpr = Math.min(2, devicePixelRatio || 1); W = wrap.clientWidth; H = wrap.clientHeight;
+    dpr = Math.min(1.75, devicePixelRatio || 1); W = wrap.clientWidth; H = wrap.clientHeight; sprites.clear();
     cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   resize(); addEventListener("resize", resize);
@@ -36,33 +37,57 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
     o.ph = Math.random() * 6;
     objs.push(o);
   }
-  function drawBalloon(x, y, r, c, ph) {
-    g.save(); g.translate(x + Math.sin(ph) * 3, y);
-    g.strokeStyle = "rgba(43,33,64,.3)"; g.lineWidth = 1.5;
-    g.beginPath(); g.moveTo(0, r * 1.1); g.quadraticCurveTo(6, r * 1.6, 0, r * 2.1); g.stroke();
-    const gr = g.createRadialGradient(-r * .3, -r * .4, 2, 0, 0, r * 1.2);
-    gr.addColorStop(0, "#fff"); gr.addColorStop(.25, c); gr.addColorStop(1, shade(c));
-    g.fillStyle = gr; g.beginPath(); g.ellipse(0, 0, r * .9, r * 1.1, 0, 0, 7); g.fill();
-    g.restore();
+  // ---- Performans: balon, kirpi ve etiketler bir kez önceden çizilir (sprite), her karede yalnız drawImage
+  const IMG = new URL("../img/", import.meta.url).href;
+  const storkImg = new Image(); storkImg.src = IMG + "stork.png";
+  function sprite(key, w, h, draw) {
+    let c = sprites.get(key);
+    if (!c) {
+      c = document.createElement("canvas"); c.width = Math.ceil(w * dpr); c.height = Math.ceil(h * dpr);
+      const x = c.getContext("2d"); x.scale(dpr, dpr); draw(x); sprites.set(key, c);
+    }
+    return c;
   }
   function shade(c) { return { "#FF8FB8": "#D6336C", "#7EC8FF": "#1C6FB8", "#FFB3CF": "#E05A8A", "#A6D9FF": "#3D8CD0", "#F2B93B": "#A8740A" }[c] || c; }
+  const rb = (r) => Math.round(r / 2) * 2;      // yarıçapı 2 px'lik basamaklara yuvarla (az sayıda sprite)
+  function balloonSprite(c, r) {
+    r = rb(r);
+    return sprite("b" + c + r, r * 2 + 12, r * 3.4, (x) => {
+      x.translate(r + 6, r * 1.2);
+      x.strokeStyle = "rgba(43,33,64,.3)"; x.lineWidth = 1.5;
+      x.beginPath(); x.moveTo(0, r * 1.1); x.quadraticCurveTo(6, r * 1.6, 0, r * 2.1); x.stroke();
+      const gr = x.createRadialGradient(-r * .3, -r * .4, 2, 0, 0, r * 1.2);
+      gr.addColorStop(0, "#fff"); gr.addColorStop(.25, c); gr.addColorStop(1, shade(c));
+      x.fillStyle = gr; x.beginPath(); x.ellipse(0, 0, r * .9, r * 1.1, 0, 0, 7); x.fill();
+    });
+  }
+  function drawBalloon(x, y, r, c, ph) {
+    const sp = balloonSprite(c, r), R = rb(r);
+    g.drawImage(sp, x + Math.sin(ph) * 3 - R - 6, y - R * 1.2, sp.width / dpr, sp.height / dpr);
+  }
   function drawSpike(x, y, r) {
-    g.save(); g.translate(x, y); g.fillStyle = "#8A8299";
-    g.beginPath();
-    for (let i = 0; i < 24; i++) { const a = i / 24 * Math.PI * 2, rr = i % 2 ? r * .7 : r * 1.15; g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
-    g.fill(); g.fillStyle = "#2B2140"; g.beginPath(); g.arc(-r * .25, -r * .1, 3, 0, 7); g.arc(r * .25, -r * .1, 3, 0, 7); g.fill(); g.restore();
+    const R = rb(r), sp = sprite("s" + R, R * 2.6, R * 2.6, (c) => {
+      c.translate(R * 1.3, R * 1.3); c.fillStyle = "#8A8299"; c.beginPath();
+      for (let i = 0; i < 24; i++) { const a = i / 24 * Math.PI * 2, rr = i % 2 ? R * .7 : R * 1.15; c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
+      c.fill(); c.fillStyle = "#2B2140"; c.beginPath(); c.arc(-R * .25, -R * .1, 3, 0, 7); c.arc(R * .25, -R * .1, 3, 0, 7); c.fill();
+    });
+    g.drawImage(sp, x - R * 1.3, y - R * 1.3, R * 2.6, R * 2.6);
   }
   function drawStork(x, y, r) {
-    g.save(); g.translate(x, y); g.font = `${r * 1.6}px system-ui`; g.textAlign = "center"; g.textBaseline = "middle";
-    g.fillText("🕊️", 0, -r * .2);
-    g.fillStyle = "#FFF8EE"; g.strokeStyle = "#F2B93B"; g.lineWidth = 2;
-    g.beginPath(); g.arc(0, r * .9, r * .45, 0, 7); g.fill(); g.stroke(); g.restore();
+    const s = r * 2.6;
+    if (storkImg.complete && storkImg.naturalWidth) g.drawImage(storkImg, x - s / 2, y - s / 2, s, s);
+    else { g.fillStyle = "#FFF8EE"; g.beginPath(); g.arc(x, y, r * .6, 0, 7); g.fill(); }
   }
   function label(s, x, y, r) {
-    const t = s.length > 7 ? s.slice(0, 6) + "…" : s;
-    g.save(); g.font = `800 ${Math.max(10, r * .42)}px "Baloo 2", system-ui`; g.textAlign = "center"; g.textBaseline = "middle";
-    g.fillStyle = "rgba(255,255,255,.95)"; g.strokeStyle = "rgba(43,33,64,.25)"; g.lineWidth = 3;
-    g.strokeText(t, x, y + 2); g.fillText(t, x, y + 2); g.restore();
+    const t = s.length > 7 ? s.slice(0, 6) + "…" : s, fs = Math.max(10, Math.round(r * .42));
+    const sp = sprite("l" + fs + t, fs * t.length * .7 + 10, fs * 1.6, (c) => {
+      c.font = `800 ${fs}px "Baloo 2", system-ui`; c.textAlign = "center"; c.textBaseline = "middle";
+      const w = fs * t.length * .7 + 10;
+      c.fillStyle = "rgba(255,255,255,.95)"; c.strokeStyle = "rgba(43,33,64,.25)"; c.lineWidth = 3;
+      c.strokeText(t, w / 2, fs * .8); c.fillText(t, w / 2, fs * .8);
+    });
+    const w = sp.width / dpr, h = sp.height / dpr;
+    g.drawImage(sp, x - w / 2, y + 2 - h / 2, w, h);
   }
   function text(s, x, y, size, color, a = 1) {
     g.save(); g.globalAlpha = a; g.font = `800 ${size}px "Baloo 2", system-ui`; g.textAlign = "center"; g.fillStyle = color; g.fillText(s, x, y); g.restore();
@@ -109,14 +134,15 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
       if (o.y < -80 || o.x > W + 80) { objs.splice(i, 1); continue; }
       if (o.k === "b") drawBalloon(o.x, o.y, o.r, o.c, o.ph);
       else if (o.k === "gold") drawBalloon(o.x, o.y, o.r, "#F2B93B", o.ph);
-      if (o.label) label(o.label, o.x + Math.sin(o.ph) * 3, o.y, o.r);
       else if (o.k === "spike") drawSpike(o.x, o.y, o.r);
       else drawStork(o.x, o.y + Math.sin(o.ph) * 10, o.r);
+      if (o.label && (o.k === "b" || o.k === "gold")) label(o.label, o.x + Math.sin(o.ph) * 3, o.y, o.r);
     }
     for (let i = fx.length - 1; i >= 0; i--) {
       const f = fx[i]; f.life -= .025 * dt;
       if (f.life <= 0) { fx.splice(i, 1); continue; }
-      f.parts.forEach(p => { g.fillStyle = f.pc; g.globalAlpha = f.life; g.beginPath(); g.arc(f.x + p.vx * (1 - f.life) * 12, f.y + p.vy * (1 - f.life) * 12, 4, 0, 7); g.fill(); });
+      g.fillStyle = f.pc; g.globalAlpha = f.life; const q = (1 - f.life) * 12;
+      for (const p of f.parts) g.fillRect(f.x + p.vx * q - 3, f.y + p.vy * q - 3, 6, 6);
       g.globalAlpha = 1;
       text(f.s, f.x, f.y - (1 - f.life) * 40, 24, f.c, f.life);
     }
