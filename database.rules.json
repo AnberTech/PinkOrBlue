@@ -210,6 +210,31 @@
             ".write": "auth != null && auth.uid == $uid && root.child('rooms/' + $roomId + '/meta/expiresAt').val() > now",
             ".validate": "newData.isString() && root.child('rooms/' + $roomId + '/hostkeys/' + newData.val()).exists()"
           }
+        },
+        "wall": {
+          ".read": "auth != null && root.child('rooms/' + $roomId + '/meta/expiresAt').val() > now && (!root.child('rooms/' + $roomId + '/locked').exists() || root.child('rooms/' + $roomId + '/members/' + auth.uid).exists())",
+          "$mid": {
+            ".write": "auth != null && root.child('rooms/' + $roomId + '/meta/expiresAt').val() > now && (!root.child('rooms/' + $roomId + '/locked').exists() || root.child('rooms/' + $roomId + '/members/' + auth.uid).exists()) && ((!data.exists() && newData.exists() && root.child('rooms/' + $roomId + '/meta/status').val() == 'reveal') || (data.exists() && !newData.exists() && (data.child('uid').val() == auth.uid || root.child('rooms/' + $roomId + '/meta/hostUid').val() == auth.uid)))",
+            ".validate": "newData.hasChildren(['uid', 'name', 'at']) && (newData.hasChildren(['msg']) || newData.hasChildren(['nm'])) && newData.getPriority() == null",
+            "uid": {
+              ".validate": "newData.val() == auth.uid"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40"
+            },
+            "msg": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 280"
+            },
+            "nm": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 24"
+            },
+            "at": {
+              ".validate": "newData.val() == now"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
         }
       }
     }

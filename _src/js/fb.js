@@ -177,6 +177,14 @@ export async function setScore(id, name, score) {
   await runTransaction(r(id, "scores/" + uid), cur => (!cur || score > cur.score) ? { name, score } : undefined);
 }
 
+// Açılış sonrası mesaj duvarı
+export async function postWall(id, data) {
+  const uid = await ready;
+  const key = Date.now().toString(36) + newId(4);
+  await set(r(id, "wall/" + key), { uid, ...data, at: serverTimestamp() });
+}
+export const deleteWall = (id, key) => remove(r(id, "wall/" + key));
+
 export async function deleteRoom(id) {
   await update(ref(db), { ["rooms/" + id]: null, ["expiry/" + id]: null });
 }

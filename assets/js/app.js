@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162024";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162024";
-import { playGame } from "./game.js?v=202611162024";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162024";
+import * as fb from "./fb.js?v=202611162028";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162028";
+import { playGame } from "./game.js?v=202611162028";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162028";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -617,6 +617,7 @@ function onReveal() {
   if (R.game) R.game.abort();
   closeCal();
   R.unsubs.push(fb.watch(R.id, "votes", v => { R.votes = v || {}; if (room === R && R.shown && !R.showing) render(); }));
+  R.unsubs.push(fb.watch(R.id, "wall", v => { R.wall = v || {}; if (room === R && R.shown && !R.showing) paintWall(); }));
   const t = (fb.serverNow() - m.revealAt) / 1000;
   const pop = R.show?.pop;
   // Eski sürümde açılmış oda (sonuç meta'da, tur bilgisi yok): şov oynatılamaz, doğrudan sonuç
@@ -741,7 +742,8 @@ function renderResult() {
   const parentsRow = pv && (pv.birth || pv.weight || pv.letter) ? [{ uid: m.revealerUid, name: keeperName, parent: true, tag: keeperIsParent ? S.r_parents_tag : S.r_keeper_tag, ...pv }] : [];
   const guesses = [...parentsRow, ...list.filter(v => v.birth || v.weight || v.letter).map(v => ({ ...v, parent: v.uid === m.hostUid }))];
   const mine = m.revealerUid === R.uid ? null : R.mine?.pick;
-  const names = list.filter(v => v.nm);
+  const names = [...list.filter(v => v.nm).map(v => ({ nm: v.nm, name: v.name })),
+    ...Object.values(R.wall || {}).filter(w => w.nm).map(w => ({ nm: w.nm, name: w.name, after: true }))];
   const conf = Array.from({ length: 26 }, (_, i) => `<i style="--x:${(i * 37) % 100}%;--d:${(i * 0.37) % 6}s;--t:${5 + (i % 5)}s;--c:${["#fff", "#F2B93B", girl ? "#D6336C" : "#1C6FB8", "#FFE08A"][i % 4]};--r:${(i * 47) % 360}deg"></i>`).join("");
   const av = (n) => { const h = hash(n); return `<span class="av" style="background:${PALETTE[h % PALETTE.length]}">${esc(initials(n))}</span>`; };
   app.innerHTML = `
@@ -769,7 +771,14 @@ function renderResult() {
       <h2>${fmt(S.r_right, right.length)}</h2>
       ${right.length ? `<div class="res-people">${right.map(v => `<span class="rp">${av(v.name)}<b>${esc(v.name)}</b></span>`).join("")}</div>` : `<p class="muted">${S.r_nobody}</p>`}
     </section>
-    ${names.length ? `<section class="res-card"><h2>💡 ${S.r_names}</h2><div class="res-names">${names.map(v => `<span class="nmchip"><b>${esc(v.nm)}</b><small>${esc(v.name.split(" ")[0])}</small></span>`).join("")}</div></section>` : ""}
+    <section class="res-card wall-compose">
+      <h2>💌 ${S.w_h}</h2><p class="muted small">${S.w_p}</p>
+      ${me() ? "" : `<input name="wname" maxlength="40" autocapitalize="words" placeholder="${S.j_name_ph}">`}
+      <textarea name="wmsg" rows="3" maxlength="280" placeholder="${fmt(S.w_msg_ph, babyOf(m))}"></textarea>
+      <div class="wrow"><input name="wnm" maxlength="24" autocapitalize="words" placeholder="💡 ${fmt(girl ? S.w_nm_ph_girl : S.w_nm_ph_boy)}"><button class="btn btn-gold" data-act="wsend">${S.w_send}</button></div>
+    </section>
+    <div id="wall-names"></div>
+    <section class="res-card wall-card" id="wall"></section>
     ${guesses.length ? `<section class="res-card"><h2>${S.r_guesses}</h2><div class="res-guess">
       ${guesses.map(v => `<div class="rg ${v.parent ? "parent" : ""}">${v.parent ? `<span class="av crown">👑</span>` : av(v.name)}<div><b>${esc(v.name)}${v.parent ? ` <em>${v.tag || S.r_parents_tag}</em>` : ""}</b><span>${[v.birth ? "📅 " + esc(shortDate(v.birth)) : "", v.weight ? "⚖️ " + v.weight + " g" : "", v.letter ? "🔤 " + esc(v.letter) : ""].filter(Boolean).join(" · ")}</span></div>${v.pick ? `<i class="${v.pick}">${v.pick === "girl" ? "🎀" : "🎩"}</i>` : ""}</div>`).join("")}</div>
       <button class="btn pdf-btn" data-act="pdf">📄 ${S.r_pdf}</button></section>` : ""}
@@ -781,11 +790,48 @@ function renderResult() {
     <a class="btn" href="${CREATE}">${S.r_new}</a>
   </div>
   <p class="muted small center">${S.r_expire}</p>`;
+  paintWall();
+  app.querySelector('[data-act="wsend"]').onclick = async (ev) => {
+    const b = ev.currentTarget, box = app.querySelector(".wall-compose");
+    const msg = box.querySelector("[name=wmsg]").value.trim().slice(0, 280), nm = titleCase(box.querySelector("[name=wnm]").value).slice(0, 24);
+    const wn = box.querySelector("[name=wname]"), name = (me()?.name || (wn ? titleCase(wn.value) : "")).slice(0, 40);
+    if (!name) { toast(S.j_err_empty); wn?.focus(); return; }
+    if (!msg && !nm) { toast(S.w_empty); return; }
+    b.disabled = true;
+    try {
+      await fb.postWall(R.id, { name, ...(msg ? { msg } : {}), ...(nm ? { nm } : {}) });
+      ["wmsg", "wnm"].forEach(k => { box.querySelector(`[name=${k}]`).value = ""; delete R.drafts[k]; });
+      sfx.plop(); toast(S.w_sent);
+    } catch (e) { console.error(e); toast(S.err_generic); }
+    b.disabled = false;
+  };
   const pdfBtn = app.querySelector('[data-act="pdf"]');
   if (pdfBtn) pdfBtn.onclick = () => printGuesses(R, guesses, girl);
   app.querySelector('[data-act="replay"]').onclick = () => { unlock(); runShow(true); };
   app.querySelector('[data-act="story"]').onclick = (ev) => shareStory(R, girl, ev.currentTarget);
   app.querySelector('[data-act="rshare"]').onclick = () => share(fmt(girl ? S.r_share_text_girl : S.r_share_text_boy, babyOf(m)) + "\n" + roomUrl(R.id));
+}
+
+// Mesaj duvarı ve isim önerileri: yalnız bu bölümler canlı güncellenir (sayfanın geri kalanı yerinde kalır)
+const WALL_COLS = ["#FFE3EE", "#E2F2FF", "#FFF1CC", "#E8F7EE", "#F1E8FF"];
+function paintWall() {
+  const R = room, m = R?.meta, el = document.getElementById("wall"), ne = document.getElementById("wall-names");
+  if (!R || !el) return;
+  const all = Object.entries(R.wall || {}).map(([k, w]) => ({ k, ...w })).sort((a, b) => (b.at || 0) - (a.at || 0));
+  const msgs = all.filter(w => w.msg);
+  const list = Object.entries(R.votes || {}).filter(([u]) => u !== m.revealerUid).map(([u, v]) => ({ nm: v.nm, name: R.guests[u]?.name || "?" })).filter(v => v.nm);
+  const names = [...list, ...all.filter(w => w.nm).map(w => ({ nm: w.nm, name: w.name }))];
+  const canDel = (w) => w.uid === R.uid || m.hostUid === R.uid;
+  if (ne) ne.innerHTML = names.length ? `<section class="res-card"><h2>💡 ${S.r_names}</h2><div class="res-names">${names.map(v => `<span class="nmchip"><b>${esc(v.nm)}</b><small>${esc(v.name.split(" ")[0])}</small></span>`).join("")}</div></section>` : "";
+  el.hidden = !msgs.length;
+  el.innerHTML = msgs.length ? `<h2>💌 ${S.w_title} <small class="muted">(${msgs.length})</small></h2><div class="wall-grid">${msgs.map((w, i) => {
+    const h = hash(w.k), rot = ((h % 7) - 3) * .6;
+    return `<figure class="note" style="--bg:${WALL_COLS[h % WALL_COLS.length]};--rot:${rot}deg;--d:${Math.min(i, 8) * 60}ms">
+      <blockquote>${esc(w.msg)}</blockquote>${w.nm ? `<p class="note-nm">💡 ${esc(w.nm)}</p>` : ""}
+      <figcaption><span class="av" style="background:${PALETTE[hash(w.name) % PALETTE.length]}">${esc(initials(w.name))}</span>${esc(w.name)}</figcaption>
+      ${canDel(w) ? `<button class="note-del" data-k="${w.k}" aria-label="${S.w_del}">✕</button>` : ""}</figure>`;
+  }).join("")}</div>` : "";
+  el.querySelectorAll(".note-del").forEach(b => b.onclick = async () => { if (!confirm(S.w_del_confirm)) return; try { await fb.deleteWall(R.id, b.dataset.k); } catch (e) { toast(S.err_generic); } });
 }
 
 // Türkçe ilgi hâli eki: Ali → Ali'nin, Mehmet → Mehmet'in, Burak → Burak'ın, Can → Can'ın
@@ -888,6 +934,7 @@ function printGuesses(R, guesses, girl) {
   @media print{body{margin:14mm}button{display:none}}</style></head><body>
   <h1>${esc(title)}</h1><div class="r">${girl ? S.girl_big : S.boy_big} · ${esc(fmtDate(m.partyAt))}</div>
   <table><thead><tr><th>${S.pdf_name}</th><th>${S.pdf_pick}</th><th>${S.v_birth}</th><th>${S.v_weight}</th><th>${S.v_letter}</th><th>${S.v_name}</th></tr></thead><tbody>${rows}</tbody></table>
+  ${Object.values(R.wall || {}).filter(w => w.msg).length ? `<h2 style="font:800 22px 'Baloo 2',system-ui;margin:26px 0 8px">💌 ${S.w_title}</h2>` + Object.values(R.wall).filter(w => w.msg).sort((a, b) => a.at - b.at).map(w => `<p style="margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#FFF8EE"><b>${esc(w.name)}</b>${w.nm ? ` · 💡 ${esc(w.nm)}` : ""}<br>${esc(w.msg)}</p>`).join("") : ""}
   <p class="f">PinkOrBlue · anbertech.github.io/PinkOrBlue</p>
   <button onclick="print()" style="margin-top:16px;padding:12px 18px;border-radius:12px;border:0;background:#F2B93B;font-weight:800">📄 ${S.r_pdf}</button>
   <script>window.onload=function(){setTimeout(function(){print()},400)}<\/script></body></html>`;

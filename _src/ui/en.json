@@ -204,5 +204,16 @@
  "st_its": "And it's a…",
  "st_coming_girl": "%s is on the way 💗",
  "st_coming_boy": "%s is on the way 💙",
- "st_saved": "Card downloaded 📸"
+ "st_saved": "Card downloaded 📸",
+ "w_h": "Congrats! Leave a note",
+ "w_p": "Write a message to the family or, now that you know, suggest a name. Everything shows up here.",
+ "w_msg_ph": "Your wishes for %s…",
+ "w_nm_ph_girl": "Suggest a girl's name (optional)",
+ "w_nm_ph_boy": "Suggest a boy's name (optional)",
+ "w_send": "Send",
+ "w_empty": "Write a message or a name.",
+ "w_sent": "Sent 💌",
+ "w_title": "Messages",
+ "w_del": "Delete",
+ "w_del_confirm": "Delete this message?"
 }
