@@ -256,6 +256,76 @@ button.chip{cursor:pointer;min-height:40px}
 .doc .card{padding:24px}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* ---- v2: form, takvim, kurucu akışı, sade alt bilgi */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two label{margin-bottom:14px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;background:var(--cream);padding:4px;border-radius:var(--r-md);border:2px solid var(--line)}
+.seg label{margin:0;cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;font-weight:800;color:var(--ink-muted);transition:all .2s}
+.seg input:checked+span{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+.seg input:focus-visible+span{outline:3px solid var(--gold)}
+.lbl>input[name=other]{margin-top:8px}
+.dt{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.dt .dp-wrap{flex:1 1 180px}
+.tm{display:flex;align-items:center;gap:4px}
+.tm select{width:auto;min-width:72px;margin:0;text-align:center;-webkit-appearance:none;appearance:none;padding:12px 10px}
+.dp-wrap{position:relative;display:block}
+.dp-btn{width:100%;min-height:48px;margin-top:6px;padding:12px 14px;border-radius:var(--r-md);border:2px solid var(--line);background:var(--cream);color:var(--ink);font:700 1rem/1.2 var(--f-body);text-align:left;cursor:pointer;display:flex;align-items:center;gap:8px}
+.dt .dp-btn{margin-top:0}
+.dp-btn::before{content:"📅"}
+.dp-btn.empty{color:var(--ink-muted);font-weight:600}
+.cal{position:absolute;z-index:50;top:calc(100% + 6px);left:0;width:300px;max-width:calc(100vw - 48px);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-2);padding:12px;animation:rise .25s var(--ease-out)}
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cal-h b{font-family:var(--f-head);font-size:1.1rem;text-transform:capitalize}
+.cal-h button{width:40px;height:40px;border-radius:50%;border:0;background:var(--cream);color:var(--ink);font-size:20px;cursor:pointer}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-g .wd{font:800 .72rem/2 var(--f-body);color:var(--ink-muted);text-transform:uppercase}
+.cal-g button{aspect-ratio:1;border:0;border-radius:50%;background:transparent;color:var(--ink);font:700 .95rem/1 var(--f-body);cursor:pointer;min-height:36px}
+.cal-g button:hover:not(:disabled){background:var(--gold-soft)}
+.cal-g button.today{box-shadow:inset 0 0 0 2px var(--gold)}
+.cal-g button.on{background:var(--gold);color:#3B2A00}
+.cal-g button:disabled{opacity:.28;cursor:default}
+.inv-box summary{cursor:pointer;font-weight:800;padding:6px 0 12px}
+.inv-box em{font-style:normal;font-weight:600;color:var(--ink-muted)}
+.parents{margin:0 0 4px;font:800 1rem/1.2 var(--f-body);color:var(--gold-deep);letter-spacing:.02em}
+.sky{min-height:120px}
+.sky-stat{text-align:center;margin:8px 0 0;color:var(--ink-muted);font-size:.92rem}
+.sky-stat b{color:var(--ink)}
+.flow{box-shadow:var(--sh-2),inset 0 0 0 2px var(--gold)}
+.flow-steps{list-style:none;margin:8px 0 0;padding:0;counter-reset:f}
+.flow-steps>li{position:relative;padding:14px 0 14px 0;border-top:1px dashed var(--line)}
+.flow-steps>li:first-child{border-top:0;padding-top:4px}
+.flow-steps>li>b{display:block;font:800 1.05rem/1.2 var(--f-head);margin-bottom:6px}
+.flow-steps>li.done>b::after{content:" ✓";color:var(--online)}
+.flow-steps>li.locked{opacity:.75}
+.flow-steps .vote-btns{margin:8px 0 4px}
+.flow-steps .vb{min-height:72px;font-size:1.15rem}
+.link-text{word-break:break-all;margin:8px 0 0}
+.settings{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
+.settings summary{cursor:pointer;font-weight:800;color:var(--ink-muted);padding:8px 0}
+.settings .btn{margin:0 8px 10px 0}
+.settings small{display:block;font-weight:600;margin-top:2px}
+.vote.has h2{font-size:1.2rem}
+.vote.has .vb{min-height:64px;font-size:1.05rem}
+.vote.has .vb .vi{font-size:22px}
+.game-card .row{align-items:center;flex-wrap:nowrap}
+.game-card h2{margin:0 0 2px;font-size:1.15rem}
+.game-card p{margin:0}
+.board li.me{outline:2px solid var(--gold);outline-offset:-2px}
+.share-mini .row{flex-wrap:wrap}
+.share-mini p{margin:2px 0 0}
+details.waiting summary{cursor:pointer;font-weight:800}
+.secret-note{margin-top:6px}
+footer.mini{padding:18px 0 28px}
+footer.mini .wrap{display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;font-size:.85rem}
+.mini-maker{display:flex;align-items:center;gap:6px;color:var(--ink-muted);text-decoration:none;font-weight:700}
+.mini-maker img{width:18px;height:auto}
+footer.mini nav{gap:14px}
+footer.mini nav a{color:var(--ink-muted)}
+body[data-view=room] .seo{display:none}
+@media(max-width:360px){.two{grid-template-columns:1fr}.seg span{font-size:.9rem}}
 </style>
 </head>
 <body class="doc">
@@ -263,7 +333,7 @@ button.chip{cursor:pointer;min-height:40px}
   <a class="logo" href="../../en/"><img src="../../assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span class="lw"><span><b>Pink</b>Or<i>Blue</i></span><small class="by">by <img class="am am-d" src="../../assets/img/anbertech.png" alt="" width="14" height="13" /><img class="am am-l" src="../../assets/img/anbertech-ink.png" alt="" width="14" height="13" /><span>Anber<em>Tech</em></span></small></span></a>
   <span class="sp"></span><nav class="lang" aria-label="Language"><a href="https://anbertech.github.io/PinkOrBlue/gizlilik/" hreflang="tr" lang="tr">TR</a><a href="https://anbertech.github.io/PinkOrBlue/en/privacy/" hreflang="en" lang="en" aria-current="page">EN</a></nav>
 </div></header>
-<main><h1>Privacy Policy</h1><p class="muted">Last updated: November 16, 2026</p><div class="card"><h2>1. Overview</h2><p>PinkOrBlue is a free website that lets families reveal their baby's gender online, together with the people they love. A parent opens a party room and shares the link; guests vote and guess, and the reveal plays on everyone's screen at the same moment. This page explains what we store, why we store it and when it is deleted. PinkOrBlue is made by AnberTech.</p><h2>2. Data We Store</h2><p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the party name, the party date, the result entered by the host and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p><h2>3. Identity and Accounts</h2><p>There is no sign-up and no account. When you open the site, Firebase Anonymous Authentication creates a random, anonymous ID for you. It is used only to link your vote to you and to let you pick up where you left off if you come back to the room in the same browser. The ID does not contain your name, e-mail or anything else that identifies you. This anonymous session is kept in your browser's local storage and is never used for tracking.</p><h2>4. Where Data Is Stored</h2><p>Room details, names, votes, guesses and scores are stored in Firebase Realtime Database, a service provided by Google. This data is shown only to people who have the link to that room. It is never sold, rented or shared with anyone for advertising. Firebase processes the data under Google's own privacy and security terms.</p><p>When you connect to the site, the hosting service (GitHub Pages) and Firebase servers may process technical information such as your IP address in order to deliver the page. We do not collect or keep this information.</p><h2>5. Deletion</h2><p><b>All data belonging to a room is deleted automatically 7 days after the party date.</b></p><ul><li>The host can delete the room at any time; all names, votes, guesses and scores in it are then removed immediately.</li><li>If you are a guest and would like your name or vote removed sooner, ask the host or e-mail us at the address below.</li></ul><p>Deleted data cannot be recovered.</p><h2>6. Ads, Analytics and Cookies</h2><p>PinkOrBlue shows no ads. It uses no third-party analytics, statistics, advertising or tracking services, and no tracking cookies.</p><h2>7. Children&#x27;s Privacy</h2><p>PinkOrBlue is made for expecting families and their adult friends and relatives. It is not directed at children under 13. If you notice that a child under 13 has entered information, please let us know and we will delete it.</p><h2>8. Changes</h2><p>If this policy changes, the new version will be posted on this page and the date at the top will be updated.</p><h2>9. Contact</h2><p>For questions or deletion requests, you can contact us at:</p><p><a href="mailto:destek.anbertech@gmail.com">destek.anbertech@gmail.com</a></p></div></main>
+<main><h1>Privacy Policy</h1><p class="muted">Last updated: November 16, 2026</p><div class="card"><h2>1. Overview</h2><p>PinkOrBlue is a free website that lets families reveal their baby's gender online, together with the people they love. A parent opens a party room and shares the link; guests vote and guess, and the reveal plays on everyone's screen at the same moment. This page explains what we store, why we store it and when it is deleted. PinkOrBlue is made by AnberTech.</p><h2>2. Data We Store</h2><p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the parents' names (if entered), the baby's nickname, the reveal date, the result the host enters secretly, the guest list and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p><h2>3. Identity and Accounts</h2><p>There is no sign-up and no account. When you open the site, Firebase Anonymous Authentication creates a random, anonymous ID for you. It is used only to link your vote to you and to let you pick up where you left off if you come back to the room in the same browser. The ID does not contain your name, e-mail or anything else that identifies you. This anonymous session is kept in your browser's local storage and is never used for tracking.</p><h2>4. Where Data Is Stored</h2><p>Room details, names, votes, guesses and scores are stored in Firebase Realtime Database, a service provided by Google. This data is shown only to people who have the link to that room. It is never sold, rented or shared with anyone for advertising. Firebase processes the data under Google's own privacy and security terms.</p><p>When you connect to the site, the hosting service (GitHub Pages) and Firebase servers may process technical information such as your IP address in order to deliver the page. We do not collect or keep this information.</p><h2>5. Deletion</h2><p><b>All data belonging to a room is deleted automatically 7 days after the party date.</b></p><ul><li>The host can delete the room at any time; all names, votes, guesses and scores in it are then removed immediately.</li><li>If you are a guest and would like your name or vote removed sooner, ask the host or e-mail us at the address below.</li></ul><p>Deletion is done by a scheduled server task (Firebase Cloud Functions) twice a day; nobody can access an expired room in the meantime. Deleted data cannot be recovered.</p><h2>6. Ads, Analytics and Cookies</h2><p>PinkOrBlue shows no ads. It uses no third-party analytics, statistics, advertising or tracking services, and no tracking cookies.</p><h2>7. Children&#x27;s Privacy</h2><p>PinkOrBlue is made for expecting families and their adult friends and relatives. It is not directed at children under 13. If you notice that a child under 13 has entered information, please let us know and we will delete it.</p><h2>8. Changes</h2><p>If this policy changes, the new version will be posted on this page and the date at the top will be updated.</p><h2>9. Contact</h2><p>For questions or deletion requests, you can contact us at:</p><p><a href="mailto:destek.anbertech@gmail.com">destek.anbertech@gmail.com</a></p></div></main>
 <footer><div class="wrap">
   <a class="maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="../../assets/img/anbertech.png" alt="AnberTech" width="44" height="40" /><img class="am-l" src="../../assets/img/anbertech-ink.png" alt="AnberTech" width="44" height="40" /><span><b>PinkOrBlue</b> is made by AnberTech<br><small>More apps from AnberTech →</small></span></a>
   <span>© 2026 AnberTech · PinkOrBlue</span>

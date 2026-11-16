@@ -10,7 +10,7 @@
   ],
   [
    "2. Data We Store",
-   "<p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the party name, the party date, the result entered by the host and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p>"
+   "<p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the parents' names (if entered), the baby's nickname, the reveal date, the result the host enters secretly, the guest list and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p>"
   ],
   [
    "3. Identity and Accounts",
@@ -22,7 +22,7 @@
   ],
   [
    "5. Deletion",
-   "<p><b>All data belonging to a room is deleted automatically 7 days after the party date.</b></p><ul><li>The host can delete the room at any time; all names, votes, guesses and scores in it are then removed immediately.</li><li>If you are a guest and would like your name or vote removed sooner, ask the host or e-mail us at the address below.</li></ul><p>Deleted data cannot be recovered.</p>"
+   "<p><b>All data belonging to a room is deleted automatically 7 days after the party date.</b></p><ul><li>The host can delete the room at any time; all names, votes, guesses and scores in it are then removed immediately.</li><li>If you are a guest and would like your name or vote removed sooner, ask the host or e-mail us at the address below.</li></ul><p>Deletion is done by a scheduled server task (Firebase Cloud Functions) twice a day; nobody can access an expired room in the meantime. Deleted data cannot be recovered.</p>"
   ],
   [
    "6. Ads, Analytics and Cookies",

@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>🎈 You&#x27;re invited to a gender reveal!</title>
+<meta name="description" content="Boy or girl? Add your name, make your guess and watch the reveal live with everyone." />
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#FFF8EE" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#17121F" media="(prefers-color-scheme: dark)" />
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/img/favicon.png?v=3" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png?v=3" />
+<link rel="apple-touch-icon" href="../../assets/img/icon-180.png" />
+<link rel="manifest" href="../../manifest.webmanifest" />
+<link rel="canonical" href="https://anbertech.github.io/PinkOrBlue/en/party/" />
+<link rel="alternate" hreflang="tr" href="https://anbertech.github.io/PinkOrBlue/parti/" />
+<link rel="alternate" hreflang="en" href="https://anbertech.github.io/PinkOrBlue/en/party/" />
+<link rel="alternate" hreflang="x-default" href="https://anbertech.github.io/PinkOrBlue/en/party/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="PinkOrBlue" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:title" content="🎈 You&#x27;re invited to a gender reveal!" />
+<meta property="og:description" content="Boy or girl? Add your name, make your guess and watch the reveal live with everyone." />
+<meta property="og:url" content="https://anbertech.github.io/PinkOrBlue/en/party/" />
+<meta property="og:image" content="https://anbertech.github.io/PinkOrBlue/assets/img/og-invite-en.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://anbertech.github.io/PinkOrBlue/assets/img/og-invite-en.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap&subset=latin-ext" rel="stylesheet" />
+<style>:root{
+  --pink:#FF8FB8;--pink-deep:#D6336C;--pink-soft:#FFE3EE;
+  --blue:#7EC8FF;--blue-deep:#1C6FB8;--blue-soft:#E2F2FF;
+  --gold:#F2B93B;--gold-deep:#A8740A;--gold-soft:#FFF1CC;
+  --cream:#FFF8EE;--surface:#FFFFFF;--ink:#2B2140;--ink-muted:#6E6380;--line:#EADFD0;
+  --online:#2BB673;--danger:#E5484D;
+  --r-sm:10px;--r-md:16px;--r-lg:24px;--r-xl:32px;
+  --sh-1:0 1px 2px rgba(43,33,64,.06),0 4px 12px rgba(43,33,64,.08);
+  --sh-2:0 2px 4px rgba(43,33,64,.08),0 12px 28px rgba(43,33,64,.14);
+  --press:inset 0 -4px 0 rgba(0,0,0,.12);
+  --ease-out:cubic-bezier(.22,1,.36,1);--ease-back:cubic-bezier(.34,1.56,.64,1);
+  --f-head:"Baloo 2",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-body:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){:root{
+  --pink-deep:#FF9FC3;--pink-soft:#4A2233;--blue-deep:#9AD4FF;--blue-soft:#1C3348;--gold:#F5C451;--gold-deep:#FFD877;--gold-soft:#3A2F18;
+  --cream:#17121F;--surface:#231C2E;--ink:#F6EFFA;--ink-muted:#B9AEC8;--line:#3A3048;--online:#4FD597;--danger:#FF6B6E;
+  --sh-1:0 0 0 1px var(--line);--sh-2:0 0 0 1px var(--line),0 10px 30px rgba(0,0,0,.35);
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:400 16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.noscroll{overflow:hidden;touch-action:none}
+h1,h2,h3{font-family:var(--f-head);line-height:1.1;margin:0 0 .4em;letter-spacing:-.01em}
+a{color:var(--blue-deep)}
+img{max-width:100%;height:auto}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.muted{color:var(--ink-muted)}.small{font-size:.875rem}.center{text-align:center}
+.eyebrow{font:800 .8rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 10px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ---- üst çubuk */
+.top{position:sticky;top:0;z-index:20;background:var(--cream);background:color-mix(in srgb,var(--cream) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font:800 1.35rem/1 var(--f-head)}
+.logo img{width:34px;height:34px;border-radius:10px}
+.logo b{color:var(--pink-deep)}.logo i{font-style:normal;color:var(--blue-deep)}
+.logo .lw{display:flex;flex-direction:column;line-height:1}
+.logo .by{display:flex;align-items:center;gap:3px;margin-top:3px;font:700 .68rem/1 var(--f-body);color:var(--ink-muted);letter-spacing:.02em}
+.logo .by em{font-style:normal;color:#B8962E}
+.logo .by img{width:14px;height:auto;border-radius:0}
+.am-l{display:none}
+@media (prefers-color-scheme:light){.am-d{display:none}.am-l{display:inline}}
+.maker{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);background:var(--surface);box-shadow:var(--sh-1);border-radius:var(--r-lg);padding:12px 16px;flex-basis:100%}
+.maker img{width:44px;height:auto}
+.maker small{color:var(--ink-muted);font-weight:700}
+.r-maker{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;font:700 .8rem/1 var(--f-body);color:#6E6380;border-top:1px solid #F1E8DA}
+.r-maker img{width:16px;height:auto}
+.top .sp{flex:1}
+.lang{display:flex;gap:4px;font:800 .8rem/1 var(--f-body)}
+.lang a{padding:8px 10px;border-radius:999px;text-decoration:none;color:var(--ink-muted)}
+.lang a[aria-current]{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:0;background:var(--surface);box-shadow:var(--sh-1);font-size:18px;cursor:pointer;position:relative}
+.icon-btn.needs::after{content:"";position:absolute;right:2px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--gold);animation:pulse 1.4s infinite}
+
+/* ---- düğmeler */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:var(--r-md);border:0;background:var(--surface);color:var(--ink);font:800 1rem/1 var(--f-body);text-decoration:none;cursor:pointer;box-shadow:var(--sh-1),var(--press);transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(2px);box-shadow:var(--sh-1)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-gold{background:linear-gradient(180deg,#FFD36B,var(--gold));color:#3B2A00}
+.btn-big{min-height:60px;font-size:1.15rem;width:100%}
+.btn-wa{background:#25D366;color:#073B1D}
+.btn-danger{background:transparent;color:var(--danger);box-shadow:0 0 0 2px var(--danger)}
+
+/* ---- tanıtım sayfası */
+.hero{position:relative;padding:40px 0 30px;overflow:hidden}
+.hero .wrap{display:grid;gap:24px;align-items:center}
+@media(min-width:860px){.hero .wrap{grid-template-columns:1.1fr .9fr}.hero{padding:70px 0 50px}}
+.hero h1{font-size:clamp(2.4rem,8vw,4.2rem);font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--pink-deep),var(--blue-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{font-size:1.1rem;color:var(--ink-muted);max-width:36em}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:20px}
+.hero .cta .btn{min-height:58px;font-size:1.1rem;padding:0 26px}
+.hero-art{position:relative;height:340px}
+.hero-art img{position:absolute;filter:drop-shadow(0 18px 24px rgba(43,33,64,.18))}
+.hero-art .st{width:62%;left:6%;top:4%;animation:fly 6s ease-in-out infinite}
+.hero-art .bp{width:30%;right:4%;top:0;animation:float 5s ease-in-out infinite}
+.hero-art .bb{width:26%;right:22%;top:30%;animation:float 6s ease-in-out -2s infinite}
+.hero-art .gf{width:36%;left:30%;bottom:-4%;animation:float 7s ease-in-out -1s infinite}
+@keyframes fly{0%,100%{transform:translate(0,0) rotate(-2deg)}50%{transform:translate(10px,-16px) rotate(2deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.sec{padding:50px 0}
+.h2{font-size:clamp(1.8rem,5vw,2.6rem)}
+.steps{display:grid;gap:16px;counter-reset:s;margin-top:20px}
+@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{background:var(--surface);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-1);position:relative}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--gold-soft);color:var(--gold-deep);font:800 1.3rem/1 var(--f-head);margin-bottom:12px}
+.step:nth-child(1)::before{background:var(--pink-soft);color:var(--pink-deep)}.step:nth-child(3)::before{background:var(--blue-soft);color:var(--blue-deep)}
+.step h3,.feat h3{font-size:1.25rem}.step p,.feat p{margin:0;color:var(--ink-muted)}
+.feats{display:grid;gap:14px;margin-top:20px}
+@media(min-width:640px){.feats{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.feats{grid-template-columns:repeat(3,1fr)}}
+.feat{background:var(--surface);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-1)}
+.feat .fi{font-size:28px;display:block;margin-bottom:8px}
+.band{background:linear-gradient(120deg,var(--pink-soft),var(--blue-soft));border-radius:var(--r-xl);padding:36px 24px;text-align:center}
+.band h2{font-size:clamp(1.6rem,5vw,2.3rem)}
+.faq .qa{background:var(--surface);border-radius:var(--r-md);box-shadow:var(--sh-1);margin:10px 0;padding:0 18px}
+.faq summary{cursor:pointer;padding:16px 0;font-weight:800;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.faq summary::after{content:"+";font:800 1.4rem/1 var(--f-head);color:var(--gold-deep)}
+.faq details[open] summary::after{content:"–"}
+.faq .qa p{margin:0 0 16px;color:var(--ink-muted)}
+footer{padding:30px 0 40px;color:var(--ink-muted);font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+footer nav{display:flex;gap:16px;flex-wrap:wrap}
+footer a{color:var(--ink-muted)}
+
+/* ---- uygulama */
+.app-page main{max-width:520px;margin:0 auto;padding:8px 16px 60px}
+.app-intro{text-align:center;padding:10px 0 6px}
+.app-intro h1{font-size:clamp(2rem,8vw,2.6rem)}
+.app-intro h1 em{font-style:normal;color:var(--pink-deep)}
+.app-intro img{width:150px;margin:-6px auto 0;display:block;filter:drop-shadow(0 10px 14px rgba(43,33,64,.15));animation:fly 6s ease-in-out infinite}
+body[data-view=room] .app-intro,body[data-view=room] .seo{display:none}
+.card{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-1);padding:20px;margin:14px 0}
+.card h2{font-size:1.35rem}.card h3{font-size:1.1rem;margin-top:14px}
+.form label,.guesses label,.lbl{display:block;font-weight:800;margin:0 0 14px}
+.form em{font-style:normal;font-weight:600;color:var(--ink-muted)}
+.form small{display:block;font-weight:400;color:var(--ink-muted);margin-top:6px;font-size:.85rem}
+input,textarea,select{width:100%;margin-top:6px;min-height:48px;padding:12px 14px;border-radius:var(--r-md);border:2px solid var(--line);background:var(--cream);color:var(--ink);font:600 1rem/1.3 var(--f-body)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
+textarea{resize:vertical}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.row.gap{justify-content:flex-start;margin-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:0;border-radius:999px;padding:8px 14px;background:var(--gold-soft);color:var(--ink);font:700 .95rem/1.2 var(--f-body)}
+button.chip{cursor:pointer;min-height:40px}
+.chip.on{background:var(--gold);color:#3B2A00}
+.chip.ghost{background:transparent;box-shadow:inset 0 0 0 2px var(--line);color:var(--ink-muted)}
+.chip.dashed{box-shadow:none;border:2px dashed var(--line)}
+.join .room-title{font-size:2rem}
+#jf{display:grid;gap:12px;margin-top:10px}
+.ok{color:var(--online);font-weight:800}
+.room-head{text-align:center;padding:14px 0 0}
+.room-title{font-size:clamp(1.7rem,7vw,2.3rem)}
+.cd{margin:0;color:var(--ink-muted);font-weight:700}
+.bar{height:12px;border-radius:6px;background:var(--line);overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#FFD36B,var(--gold));border-radius:6px;transition:width .6s var(--ease-out)}
+
+/* gökyüzü + balonlar */
+.sky{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 4px;padding:18px 4px 8px;min-height:170px;border-radius:var(--r-xl);margin-top:12px;background:var(--blue-soft);
+  background:radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,var(--blue-soft) 70%,transparent),transparent 70%),radial-gradient(80% 60% at 80% 100%,color-mix(in srgb,var(--pink-soft) 70%,transparent),transparent 70%)}
+.balloon{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;width:62px;animation:bob var(--dur,4s) ease-in-out var(--d,0s) infinite}
+.balloon .bb{position:relative;display:grid;place-items:center;width:50px;height:58px;border-radius:50% 50% 48% 48%/55% 55% 45% 45%;border:2px dashed var(--line);background:transparent;opacity:.75;transition:all .5s var(--ease-back)}
+.balloon.voted .bb{border:0;opacity:1;background:radial-gradient(circle at 32% 28%,#FFF1B8 0 12%,#FFD36B 30%,var(--gold) 65%,#C9900F 100%);box-shadow:0 6px 14px rgba(168,116,10,.25)}
+.balloon .bb::after{content:"";position:absolute;bottom:-6px;left:50%;margin-left:-5px;border:5px solid transparent;border-top:6px solid var(--line)}
+.balloon.voted .bb::after{border-top-color:#C9900F}
+.balloon .av{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:#2B2140;font:800 .85rem/1 var(--f-body);box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.balloon .str{width:1px;height:16px;background:var(--ink-muted);opacity:.4;margin-top:4px}
+.balloon .nm{font:700 .72rem/1.1 var(--f-body);color:var(--ink-muted);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.balloon.on .bb::before{content:"";position:absolute;right:2px;bottom:6px;width:11px;height:11px;border-radius:50%;background:var(--online);box-shadow:0 0 0 2px var(--surface);animation:pulse 2s infinite}
+.balloon.me .nm{color:var(--gold-deep);font-weight:800}
+.balloon:not(.on){opacity:.65}
+.balloon.hop{animation:hop .5s var(--ease-back)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes hop{0%{transform:translateY(0) scale(1)}40%{transform:translateY(-14px) scale(1.12)}100%{transform:translateY(0) scale(1)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(43,182,115,.5)}70%{box-shadow:0 0 0 8px rgba(43,182,115,0)}100%{box-shadow:0 0 0 0 rgba(43,182,115,0)}}
+
+/* oy */
+.vote-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.vb{border:0;cursor:pointer;min-height:96px;border-radius:var(--r-lg);font:800 1.3rem/1 var(--f-head);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:var(--sh-1),var(--press);transition:transform .2s var(--ease-back),box-shadow .2s}
+.vb .vi{font-size:30px}
+.vb.girl{background:var(--pink-soft);color:var(--pink-deep)}
+.vb.boy{background:var(--blue-soft);color:var(--blue-deep)}
+.vb.on{transform:scale(1.04)}.vb.girl.on{background:var(--pink);color:#fff;box-shadow:0 8px 20px rgba(214,51,108,.35),var(--press)}
+.vb.boy.on{background:var(--blue);color:#0B3A63;box-shadow:0 8px 20px rgba(28,111,184,.35),var(--press)}
+.vb:active{transform:translateY(2px)}
+.guesses summary{cursor:pointer;font-weight:800;color:var(--gold-deep);padding:8px 0}
+.keeper{background:linear-gradient(160deg,var(--gold-soft),var(--surface) 60%);box-shadow:var(--sh-2),inset 0 0 0 2px var(--gold)}
+.host{box-shadow:var(--sh-1),inset 0 0 0 2px var(--line)}
+.start{margin-top:6px;animation:glow 2s infinite}
+.start:disabled{animation:none}
+@keyframes glow{0%,100%{box-shadow:var(--sh-1),var(--press),0 0 0 0 rgba(242,185,59,.6)}50%{box-shadow:var(--sh-1),var(--press),0 0 0 10px rgba(242,185,59,0)}}
+.danger-zone summary{cursor:pointer;font-weight:800;color:var(--ink-muted);padding:10px 0}
+.danger-zone .btn{margin:0 8px 10px 0}
+.board{margin:10px 0;padding:0;list-style:none;counter-reset:b}
+.board li{display:flex;justify-content:space-between;padding:8px 10px;border-radius:10px;counter-increment:b}
+.board li:nth-child(odd){background:var(--cream)}
+.board li span::before{content:counter(b) ". ";color:var(--ink-muted);font-weight:800}
+.link-row{display:flex;gap:8px}.link-row input{margin:0;font-size:.85rem}
+.big-emoji{font-size:56px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;z-index:200;background:var(--ink);color:var(--cream);padding:12px 18px;border-radius:14px;font-weight:700;max-width:90vw;transition:all .35s var(--ease-back);text-align:center}
+.toast.in{transform:translate(-50%,0);opacity:1}
+
+/* şov + oyun katmanları */
+.show,.game{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;touch-action:none;user-select:none;-webkit-user-select:none}
+.show{background:#17121F;transition:opacity .6s}
+.show.out{opacity:0}
+.show canvas,.game canvas{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%}
+.show-ui{position:absolute;left:0;right:0;bottom:12%;display:flex;justify-content:center}
+.show-live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.game{background:linear-gradient(180deg,#BFE6FF,#FFE3EE)}
+.game-hud{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top)) 16px 10px;font:800 1.6rem/1 var(--f-head);color:#2B2140;pointer-events:none}
+.game-hud .g-score::before{content:"🎈 "}.game-hud .g-time{margin-left:auto}.game-hud .g-time::before{content:"⏱ "}
+.g-close{pointer-events:auto;border:0;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.8);font-size:18px;cursor:pointer;color:#2B2140}
+.game-start{position:absolute;top:0;left:0;right:0;bottom:0;display:grid;place-items:center;padding:16px;background:rgba(43,33,64,.25)}
+.game-start .card{max-width:360px;text-align:center;background:#fff;color:#2B2140}
+
+/* sonuç kartı (paylaşılan görüntü hep açık temada) */
+.result{--rc:var(--pink);--rd:#D6336C;--rs:#FFE3EE;background:#fff;color:#2B2140;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-2);margin-top:14px;animation:rise .7s var(--ease-back)}
+.result.is-boy{--rc:var(--blue);--rd:#1C6FB8;--rs:#E2F2FF}
+.result>section{padding:14px 20px;border-top:1px solid #F1E8DA}
+.result h2{font-size:1.1rem}
+.r-top{text-align:center;padding:24px 20px 20px;background:linear-gradient(160deg,var(--rs),var(--rc));color:#fff}
+.r-top h1{font-size:clamp(3.5rem,18vw,5rem);margin:0;color:#fff;text-shadow:0 6px 0 rgba(0,0,0,.08)}
+.r-top p{margin:.2em 0;font-weight:800;color:#2B2140}
+.r-brand{font:800 .9rem/1 var(--f-head);opacity:.85}.r-brand span{opacity:.6}
+.r-me{margin:0;padding:12px 20px;text-align:center;font-weight:800;background:#FFF8EE}.r-me.yes{background:var(--rs);color:var(--rd)}
+.r-pie{display:flex;align-items:center;gap:18px}
+.r-pct{font:800 1.8rem/1 var(--f-head);color:var(--rd);margin:0 0 6px}
+.pie-g{animation:pie 1s var(--ease-out)}
+@keyframes pie{from{stroke-dasharray:0 999}}
+.chip.res{background:var(--rs);color:var(--rd)}
+.gtable{width:100%;border-collapse:collapse;font-size:.9rem}.gtable th{text-align:left;color:#6E6380;font-weight:800}.gtable td,.gtable th{padding:6px 4px;border-bottom:1px solid #F1E8DA}
+.r-badges{display:flex;flex-direction:column;gap:6px;font-weight:700}
+.r-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0}
+@keyframes rise{from{transform:translateY(30px) scale(.96);opacity:0}}
+
+/* belge sayfaları */
+.doc main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+.doc h1{font-size:2.2rem}.doc h2{font-size:1.3rem;margin-top:1.6em}
+.doc .card{padding:24px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* ---- v2: form, takvim, kurucu akışı, sade alt bilgi */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two label{margin-bottom:14px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;background:var(--cream);padding:4px;border-radius:var(--r-md);border:2px solid var(--line)}
+.seg label{margin:0;cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;font-weight:800;color:var(--ink-muted);transition:all .2s}
+.seg input:checked+span{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+.seg input:focus-visible+span{outline:3px solid var(--gold)}
+.lbl>input[name=other]{margin-top:8px}
+.dt{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.dt .dp-wrap{flex:1 1 180px}
+.tm{display:flex;align-items:center;gap:4px}
+.tm select{width:auto;min-width:72px;margin:0;text-align:center;-webkit-appearance:none;appearance:none;padding:12px 10px}
+.dp-wrap{position:relative;display:block}
+.dp-btn{width:100%;min-height:48px;margin-top:6px;padding:12px 14px;border-radius:var(--r-md);border:2px solid var(--line);background:var(--cream);color:var(--ink);font:700 1rem/1.2 var(--f-body);text-align:left;cursor:pointer;display:flex;align-items:center;gap:8px}
+.dt .dp-btn{margin-top:0}
+.dp-btn::before{content:"📅"}
+.dp-btn.empty{color:var(--ink-muted);font-weight:600}
+.cal{position:absolute;z-index:50;top:calc(100% + 6px);left:0;width:300px;max-width:calc(100vw - 48px);background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-2);padding:12px;animation:rise .25s var(--ease-out)}
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cal-h b{font-family:var(--f-head);font-size:1.1rem;text-transform:capitalize}
+.cal-h button{width:40px;height:40px;border-radius:50%;border:0;background:var(--cream);color:var(--ink);font-size:20px;cursor:pointer}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-g .wd{font:800 .72rem/2 var(--f-body);color:var(--ink-muted);text-transform:uppercase}
+.cal-g button{aspect-ratio:1;border:0;border-radius:50%;background:transparent;color:var(--ink);font:700 .95rem/1 var(--f-body);cursor:pointer;min-height:36px}
+.cal-g button:hover:not(:disabled){background:var(--gold-soft)}
+.cal-g button.today{box-shadow:inset 0 0 0 2px var(--gold)}
+.cal-g button.on{background:var(--gold);color:#3B2A00}
+.cal-g button:disabled{opacity:.28;cursor:default}
+.inv-box summary{cursor:pointer;font-weight:800;padding:6px 0 12px}
+.inv-box em{font-style:normal;font-weight:600;color:var(--ink-muted)}
+.parents{margin:0 0 4px;font:800 1rem/1.2 var(--f-body);color:var(--gold-deep);letter-spacing:.02em}
+.sky{min-height:120px}
+.sky-stat{text-align:center;margin:8px 0 0;color:var(--ink-muted);font-size:.92rem}
+.sky-stat b{color:var(--ink)}
+.flow{box-shadow:var(--sh-2),inset 0 0 0 2px var(--gold)}
+.flow-steps{list-style:none;margin:8px 0 0;padding:0;counter-reset:f}
+.flow-steps>li{position:relative;padding:14px 0 14px 0;border-top:1px dashed var(--line)}
+.flow-steps>li:first-child{border-top:0;padding-top:4px}
+.flow-steps>li>b{display:block;font:800 1.05rem/1.2 var(--f-head);margin-bottom:6px}
+.flow-steps>li.done>b::after{content:" ✓";color:var(--online)}
+.flow-steps>li.locked{opacity:.75}
+.flow-steps .vote-btns{margin:8px 0 4px}
+.flow-steps .vb{min-height:72px;font-size:1.15rem}
+.link-text{word-break:break-all;margin:8px 0 0}
+.settings{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
+.settings summary{cursor:pointer;font-weight:800;color:var(--ink-muted);padding:8px 0}
+.settings .btn{margin:0 8px 10px 0}
+.settings small{display:block;font-weight:600;margin-top:2px}
+.vote.has h2{font-size:1.2rem}
+.vote.has .vb{min-height:64px;font-size:1.05rem}
+.vote.has .vb .vi{font-size:22px}
+.game-card .row{align-items:center;flex-wrap:nowrap}
+.game-card h2{margin:0 0 2px;font-size:1.15rem}
+.game-card p{margin:0}
+.board li.me{outline:2px solid var(--gold);outline-offset:-2px}
+.share-mini .row{flex-wrap:wrap}
+.share-mini p{margin:2px 0 0}
+details.waiting summary{cursor:pointer;font-weight:800}
+.secret-note{margin-top:6px}
+footer.mini{padding:18px 0 28px}
+footer.mini .wrap{display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;font-size:.85rem}
+.mini-maker{display:flex;align-items:center;gap:6px;color:var(--ink-muted);text-decoration:none;font-weight:700}
+.mini-maker img{width:18px;height:auto}
+footer.mini nav{gap:14px}
+footer.mini nav a{color:var(--ink-muted)}
+body[data-view=room] .seo{display:none}
+@media(max-width:360px){.two{grid-template-columns:1fr}.seg span{font-size:.9rem}}
+</style>
+
+<script>window.POB_FB={"apiKey": "AIzaSyDfww0Xhe2_hjaaen0YnQEMmv4hA6fSloA", "authDomain": "pinkorblue-128d4.firebaseapp.com", "databaseURL": "https://pinkorblue-128d4-default-rtdb.europe-west1.firebasedatabase.app", "projectId": "pinkorblue-128d4", "appId": "1:16714237546:web:86619de855a5bd24902c13", "messagingSenderId": "16714237546"};window.POB_S={"girl": "Girl", "boy": "Boy", "girl_big": "GIRL!", "boy_big": "BOY!", "c_baby": "Baby's nickname", "c_baby_ph": "e.g. Peanut, Bean, Bug", "c_date": "When is the reveal?", "c_date_hint": "Guests see a countdown. The room deletes itself 7 days after this date.", "c_invitees": "Guest list", "c_invitees_ph": "One name per line\nGrandma\nUncle Mike\nZoe", "c_invitees_hint": "Guests pick their name from the list when they open the link, so you can see who hasn't shown up yet.", "c_submit": "Open the party room 🎈", "c_note": "Free · no sign-up · no ads", "c_err_date": "The reveal date can't be in the past.", "optional": "(optional)", "close": "Close", "copied": "Copied!", "copy": "Copy", "copy_manual": "Copy the link:", "err_generic": "Something went wrong. Check your connection and try again.", "wait": "One second…", "loading": "Loading the party…", "saved": "Saved", "you": "You", "missing_h": "We can't find this party", "missing_p": "The link may be broken, or the party has expired and its data was deleted.", "missing_btn": "Open a new party room", "j_eyebrow": "You're invited to a gender reveal", "j_pick": "Pick your name:", "j_or": "or type your name", "j_name_ph": "Your name", "j_submit": "Join the party", "lobby_eyebrow": "Waiting room", "lobby_title": "A party for %s", "lobby_any_moment": "The reveal could happen any minute!", "lobby_in_days": "Reveal in %d days", "lobby_in_hm": "Reveal in %d h %d min", "lobby_sky": "Who's here", "lobby_voted": "%d / %d have voted", "lobby_online": "%d here right now", "lobby_secret": "Who voted what stays secret until the reveal 🤫", "lobby_dashed": "Dashed names haven't opened the link yet.", "tip_voted": "voted", "tip_not_voted": "hasn't voted yet", "tip_here": "here now", "v_h": "What's your guess?", "v_more": "＋ Add bonus guesses (optional)", "v_birth": "Birth date", "v_weight": "Birth weight (grams)", "v_letter": "First letter of the name", "v_save": "Save my guesses", "v_birth_s": "Date", "v_weight_s": "Weight", "v_letter_s": "Letter", "v_private": "Only you can see your vote. Everyone's vote comes out at the reveal.", "v_done_girl": "Welcome to Team Pink 🎀", "v_done_boy": "Welcome to Team Blue 🎩", "v_pick_first": "Pick Girl or Boy first.", "v_saved": "Guesses saved", "game_name": "Balloon Pop", "game_teaser": "Waiting for the reveal? How many balloons can you pop in 30 seconds?", "game_play": "Play", "game_combo": "Combo x%d!", "game_result": "Your score: %d", "game_start": "Go!", "game_rules_html": "Tap balloons: <b>+1<\/b>. Gold balloon: <b>+5<\/b>. Stork: <b>×2<\/b> for 3 seconds. Don't touch the hedgehog: <b>−3<\/b>!", "h_eyebrow": "Host panel", "h_created": "Your room is ready! Now share the link below.", "h_device": "You're recognised as the host on this browser. Use the same phone and browser to manage the room.", "h_keeper": "Who keeps the secret?", "h_keeper_lbl": "The person who enters the result and starts the reveal", "h_keeper_me": "Me (host)", "h_keeper_is": "<b>%s<\/b> now keeps the secret. They'll enter the result and start the reveal, and you'll be surprised along with everyone else.", "h_keeper_confirm": "Hand the result and the reveal button to this person? You can take it back later.", "h_more": "More settings", "h_inv_edit": "Guest list (one name per line)", "h_inv_save": "Save list", "h_delete": "Delete the room and all data", "h_delete_confirm": "Permanently delete the room with all names, votes and scores?", "k_eyebrow": "You keep the secret", "k_h_guest": "The secret is in your hands!", "k_p": "Only you can see this choice. When you start the reveal, it opens on everyone's screen at the same moment.", "k_sealed": "Result sealed ✓ You can change it any time before the reveal.", "k_start": "Start the reveal for everyone", "k_status": "%d / %d voted · %d on screen now", "k_confirm": "Start the reveal? Everyone with the page open will watch at the same moment. This can't be undone.", "share_h": "Invite link", "share_more": "Share…", "share_text": "🎈 %s invite you to their gender reveal!\nBoy or girl? Make your guess and watch the reveal live with us.\n📅 %s\n👉 ", "show_sound": "🔊 Turn on sound and join", "show_ready": "The reveal is starting!", "show_ready_sub": "Get ready, we're about to blow it up together…", "show_tap": "Inflate it together! TAP TAP TAP!", "show_fastest": "Fastest fingers:", "show_enough": "That's it! It's going to pop…", "show_pink_q": "Pink…?", "show_blue_q": "Blue…?", "show_girl_line": "%s is a baby girl!", "show_boy_line": "%s is a baby boy!", "show_correct": "%d people guessed right!", "show_you_right": "You called it! 🏅", "show_you_wrong": "Not this time. Enjoy the surprise 💛", "r_pct": "%d% got it", "r_right": "Guessed right (%d)", "r_nobody": "Nobody saw it coming!", "r_guesses": "Guesses", "r_name": "Name", "r_champ": "Balloon Pop champion: %s (%d)", "r_fastest": "Fastest finger: %s (%d taps)", "r_total_taps": "Together we inflated it with %d taps", "r_replay": "Watch the reveal again", "r_share": "Share the result", "r_new": "Host a new party", "r_share_text_girl": "And the answer is… %s is a GIRL! 🎀", "r_share_text_boy": "And the answer is… %s is a BOY! 🎩", "r_expire": "This party's data deletes itself 7 days after the reveal date.", "sound_on": "Turn sound on", "sound_off": "Turn sound off", "brand_short": "an AnberTech product", "k_offline": "You seem to be offline. Try again once you're connected.", "c_mom": "Mom's name", "c_mom_ph": "e.g. Emma", "c_dad": "Dad's name", "c_dad_ph": "e.g. James", "c_who": "Who's setting up the room?", "c_who_mom": "Mom", "c_who_dad": "Dad", "c_who_other": "Someone else", "c_other_ph": "Your name (e.g. Aunt Zoe)", "c_err_parent": "Enter at least one parent's name.", "c_err_who": "Enter the name of the person setting up the room.", "c_err_other": "Enter your name as the host.", "c_hour": "Hour", "c_minute": "Minute", "pick_date": "Pick a date", "default_baby": "Baby", "j_type": "Type your name to join.", "j_err_empty": "Type your name first.", "j_err_taken": "Someone already joined with this name. Add an initial (e.g. Ali K.).", "lobby_waiting_n": "Who are we waiting for? (%d)", "tip_keeper": "keeps the secret", "v_yours_is": "Your guess: %s", "v_change": "You can change it until the reveal. Only you can see your vote.", "v_more_saved": "✓ Bonus guesses saved (edit)", "v_birth_ph": "Birthday guess", "v_err_weight": "Weight must be between 500 and 7000 grams.", "v_err_birth": "Pick a valid date.", "f_step1": "1. Enter the result secretly", "f_step2": "2. Share the invite link", "f_step3": "3. Start the reveal when everyone's here", "f_need_seal": "enter the result first", "f_keeper_starts": "%s will start the reveal. You'll find out with everyone else 🎉", "share_p_guest": "Know someone who's missing? Invite them too.", "share_text_np": "🎈 You're invited to our gender reveal!\nBoy or girl? Make your guess and watch the reveal live with us.\n📅 %s\n👉 ", "show_need": "%d / %d taps", "show_people_tapping": "%d tapping · %d s", "show_round": "Round %d! Tap faster!", "show_check": "Was it enough air…?", "show_fail": "Not enough air! 💨", "show_fail_sub": "%d / %d taps · it got away", "show_again": "Again! %d…", "show_congrats": "Congratulations %s! 💛", "game_names_hint": "The balloons carry the names of everyone here. The gold one with the baby's name is +5!", "r_total_taps_rounds": "Together we inflated it with %d taps in %d rounds", "sound_test": "🔊 Sound is on. No sound? Turn off your phone's silent mode.", "show_secs": "%d s left"};window.POB_INVITE="../party/";window.POB_CREATE="../virtual-gender-reveal/";window.POB_IS_INVITE=true;</script>
+<script type="module" src="../../assets/js/app.js?v=202611161755"></script>
+</head>
+<body class="app-page" data-view="room">
+<a class="skip" href="#app">↓</a>
+<header class="top"><div class="wrap">
+  <a class="logo" href="../../en/"><img src="../../assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span class="lw"><span><b>Pink</b>Or<i>Blue</i></span><small class="by">by <img class="am am-d" src="../../assets/img/anbertech.png" alt="" width="14" height="13" /><img class="am am-l" src="../../assets/img/anbertech-ink.png" alt="" width="14" height="13" /><span>Anber<em>Tech</em></span></small></span></a>
+  <span class="sp"></span><nav class="lang" aria-label="Language"><a href="https://anbertech.github.io/PinkOrBlue/parti/" hreflang="tr" lang="tr">TR</a><a href="https://anbertech.github.io/PinkOrBlue/en/party/" hreflang="en" lang="en" aria-current="page">EN</a></nav><button class="icon-btn" id="sound" type="button">🔊</button>
+</div></header>
+<main>
+  
+  <div id="app" aria-live="polite"><noscript><div class="card">JavaScript gerekli / JavaScript required.</div></noscript></div>
+</main>
+
+<footer class="mini"><div class="wrap">
+  <a class="mini-maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="../../assets/img/anbertech.png" alt="" width="18" height="16" /><img class="am-l" src="../../assets/img/anbertech-ink.png" alt="" width="18" height="16" /><span>PinkOrBlue · is made by AnberTech</span></a>
+  <nav><a href="../../en/privacy/">Privacy Policy</a><a href="../../en/support/">Support</a></nav>
+</div></footer>
+</body>
+</html>

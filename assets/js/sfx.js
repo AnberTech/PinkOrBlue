@@ -3,20 +3,38 @@ let ctx = null, master = null;
 let enabled = true;
 try { enabled = localStorage.getItem("pob_sound") !== "0"; } catch (e) {}
 
+// iOS: sessiz mod anahtarı Web Audio'yu susturur. iOS 17+ audioSession "playback" ile, eski sürümlerde
+// sessiz bir <audio> çalarak medya kanalına geçilir; ikisi de yalnız dokunma anında işe yarar.
+let mediaKick = null;
 export function unlock() {
   try {
+    if (navigator.audioSession) { try { navigator.audioSession.type = "playback"; } catch (e) {} }
+    if (!mediaKick) {
+      mediaKick = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=");
+      mediaKick.setAttribute("playsinline", ""); mediaKick.loop = false;
+    }
+    mediaKick.play().catch(() => {});
     if (!ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
       ctx = new AC();
       const comp = ctx.createDynamicsCompressor();
       comp.threshold.value = -14; comp.ratio.value = 6;
-      master = ctx.createGain(); master.gain.value = 0.5;
-      master.connect(comp); comp.connect(ctx.destination);
+      master = ctx.createGain(); master.gain.value = 0.6;
+      analyser = ctx.createAnalyser(); analyser.fftSize = 512;
+      master.connect(comp); comp.connect(ctx.destination); comp.connect(analyser);
     }
-    if (ctx.state !== "running") ctx.resume();
+    if (ctx.state !== "running") ctx.resume().catch(() => {});
   } catch (e) {}
 }
+let analyser = null;
+// Test ve teşhis için: son ~10 ms'deki ses seviyesi (0 = sessiz)
+export function level() {
+  if (!analyser) return 0;
+  const a = new Float32Array(analyser.fftSize); analyser.getFloatTimeDomainData(a);
+  let m = 0; for (const v of a) m = Math.max(m, Math.abs(v)); return m;
+}
+export const audioState = () => ctx ? ctx.state : "none";
 export const running = () => !!ctx && ctx.state === "running";
 export const isOn = () => enabled;
 export function setOn(v) {
@@ -77,6 +95,8 @@ export const sfx = {
   pop: () => { noise(0.04, 0.3, 0, "highpass", 1500); tone(900, 0.05, "sine", 0.2); },
   gold: () => { tone(1047, 0.1, "triangle", 0.25); tone(1568, 0.14, "triangle", 0.25, 0.08); },
   bonk: () => tone(160, 0.2, "square", 0.18, 0, 90),
+  deflate: () => { noise(1.4, 0.35, 0, "bandpass", 2600, 300, 1.5); tone(420, 1.3, "sawtooth", 0.06, 0, 110); },
+  test: () => { tone(784, 0.12, "triangle", 0.3); tone(1047, 0.18, "triangle", 0.3, 0.1); },
   plop: () => tone(520, 0.12, "sine", 0.3, 0, 780),
 };
 

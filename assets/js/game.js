@@ -1,15 +1,16 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611161727";
+import { sfx, vib, unlock } from "./sfx.js?v=202611161755";
 
 const DUR = 30;
-export function playGame({ root, S, onEnd }) {
+export function playGame({ root, S, onEnd, names = [], baby = "" }) {
+  const pool = names.length ? names : [""];
   const wrap = document.createElement("div");
   wrap.className = "game";
   wrap.innerHTML = `<canvas></canvas>
     <div class="game-hud"><span class="g-score">0</span><span class="g-time">30</span>
     <button class="g-close" aria-label="${S.close}">✕</button></div>
     <div class="game-start"><div class="card">
-      <h2>${S.game_name}</h2><p>${S.game_rules_html}</p>
+      <h2>${S.game_name}</h2><p>${S.game_rules_html}</p>${names.length > 1 ? `<p class="muted small">${S.game_names_hint}</p>` : ""}
       <button class="btn btn-gold g-go">${S.game_start}</button></div></div>`;
   root.appendChild(wrap);
   document.body.classList.add("noscroll");
@@ -26,12 +27,12 @@ export function playGame({ root, S, onEnd }) {
   const cols = ["#FF8FB8", "#7EC8FF", "#FFB3CF", "#A6D9FF"];
   function spawn(el) {
     const r = Math.random();
-    const speed = (1.2 + el / DUR * 1.2) * (H / 700);
+    const speed = (2 + el / DUR * 2) * (H / 700);
     let o;
     if (r < .05) o = { k: "stork", x: -60, y: H * (.2 + Math.random() * .4), vx: 1.6 * (W / 400), vy: 0, r: 30 };
-    else if (r < .13) o = { k: "gold", x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * 1.6, r: 24 };
+    else if (r < .13) o = { k: "gold", label: baby, x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * 1.5, r: 28 };
     else if (r < .23) o = { k: "spike", x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * .9, r: 24 };
-    else o = { k: "b", c: cols[Math.floor(Math.random() * 4)], x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed, r: 26 + Math.random() * 8 };
+    else o = { k: "b", label: pool[Math.floor(Math.random() * pool.length)], c: cols[Math.floor(Math.random() * 4)], x: 30 + Math.random() * (W - 60), y: H + 40, vx: 0, vy: -speed * (.85 + Math.random() * .4), r: 28 + Math.random() * 8 };
     o.ph = Math.random() * 6;
     objs.push(o);
   }
@@ -57,6 +58,12 @@ export function playGame({ root, S, onEnd }) {
     g.fillStyle = "#FFF8EE"; g.strokeStyle = "#F2B93B"; g.lineWidth = 2;
     g.beginPath(); g.arc(0, r * .9, r * .45, 0, 7); g.fill(); g.stroke(); g.restore();
   }
+  function label(s, x, y, r) {
+    const t = s.length > 7 ? s.slice(0, 6) + "…" : s;
+    g.save(); g.font = `800 ${Math.max(10, r * .42)}px "Baloo 2", system-ui`; g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillStyle = "rgba(255,255,255,.95)"; g.strokeStyle = "rgba(43,33,64,.25)"; g.lineWidth = 3;
+    g.strokeText(t, x, y + 2); g.fillText(t, x, y + 2); g.restore();
+  }
   function text(s, x, y, size, color, a = 1) {
     g.save(); g.globalAlpha = a; g.font = `800 ${size}px "Baloo 2", system-ui`; g.textAlign = "center"; g.fillStyle = color; g.fillText(s, x, y); g.restore();
   }
@@ -78,7 +85,7 @@ export function playGame({ root, S, onEnd }) {
           if (combo.length >= 3) { pts += 1; label = S.game_combo.replace("%d", combo.length); combo = []; }
         }
         score = Math.max(0, score + pts);
-        fx.push({ x: o.x, y: o.y, s: label || (pts > 0 ? "+" + pts : String(pts)), c: col, life: 1, parts: Array.from({ length: 6 }, () => ({ vx: (Math.random() - .5) * 6, vy: (Math.random() - .5) * 6 })), pc: o.c || (o.k === "gold" ? "#F2B93B" : "#aaa") });
+        fx.push({ x: o.x, y: o.y, s: label || ((o.label && pts > 0 ? o.label + " " : "") + (pts > 0 ? "+" + pts : String(pts))), c: col, life: 1, parts: Array.from({ length: 6 }, () => ({ vx: (Math.random() - .5) * 6, vy: (Math.random() - .5) * 6 })), pc: o.c || (o.k === "gold" ? "#F2B93B" : "#aaa") });
         elScore.textContent = score;
         return;
       }
@@ -90,7 +97,7 @@ export function playGame({ root, S, onEnd }) {
     const el = (now - t0) / 1000;
     const dt = Math.min(50, now - last) / 16.7; last = now;
     elTime.textContent = Math.max(0, Math.ceil(DUR - el));
-    spawnAcc += (0.8 + el / DUR * 1.7) * dt / 60;
+    spawnAcc += (1.4 + el / DUR * 2.6) * dt / 60;
     while (spawnAcc >= 1) { spawnAcc--; spawn(el); }
     g.save();
     if (shake > 0) { g.translate((Math.random() - .5) * 10 * shake, 0); shake -= .1; }
@@ -102,6 +109,7 @@ export function playGame({ root, S, onEnd }) {
       if (o.y < -80 || o.x > W + 80) { objs.splice(i, 1); continue; }
       if (o.k === "b") drawBalloon(o.x, o.y, o.r, o.c, o.ph);
       else if (o.k === "gold") drawBalloon(o.x, o.y, o.r, "#F2B93B", o.ph);
+      if (o.label) label(o.label, o.x + Math.sin(o.ph) * 3, o.y, o.r);
       else if (o.k === "spike") drawSpike(o.x, o.y, o.r);
       else drawStork(o.x, o.y + Math.sin(o.ph) * 10, o.r);
     }

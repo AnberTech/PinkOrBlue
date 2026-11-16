@@ -4,7 +4,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/fireba
 import { getAuth, signInAnonymously, onAuthStateChanged, connectAuthEmulator } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   getDatabase, connectDatabaseEmulator, ref, set, update, get, remove, onValue, onDisconnect,
-  serverTimestamp
+  serverTimestamp, increment, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 const app = initializeApp(window.POB_FB);
@@ -32,14 +32,14 @@ function newId(n = 10) {
   return Array.from(a, b => ID_ABC[b % ID_ABC.length]).join("");
 }
 
-export async function createRoom({ babyName, partyAt, lang, invitees, hostName }) {
+export async function createRoom({ babyName, parents, partyAt, lang, invitees, hostName }) {
   const uid = await ready;
   const id = newId();
   const expiresAt = partyAt + WEEK;
   const up = {};
   up["expiry/" + id] = expiresAt;
   up["rooms/" + id + "/meta"] = {
-    babyName, partyAt, expiresAt, lang, hostUid: uid, revealerUid: uid,
+    babyName, partyAt, expiresAt, lang, hostUid: uid, revealerUid: uid, ...(parents ? { parents } : {}),
     status: "open", createdAt: serverTimestamp()
   };
   await update(ref(db), up);
@@ -74,20 +74,23 @@ let connected = false;
 onValue(ref(db, ".info/connected"), s => { connected = s.val() === true; });
 export const isConnected = () => connected;
 
-export async function myVote(id) {
-  const uid = await ready;
-  return (await get(r(id, "votes/" + uid))).val();
-}
 
+// Her sekme/bağlantı kendi kaydını tutar (iki sekmeden biri kapanınca kişi çevrimdışı görünmesin)
+const CONN = newId(8);
+let presenceOff = null;
 export async function presence(id) {
   const uid = await ready;
-  const p = r(id, "presence/" + uid);
-  onValue(ref(db, ".info/connected"), async s => {
+  if (presenceOff) presenceOff();
+  const p = r(id, "presence/" + uid + "/" + CONN);
+  presenceOff = onValue(ref(db, ".info/connected"), async s => {
     if (s.val() === true) {
-      await onDisconnect(p).remove();
-      await set(p, serverTimestamp());
+      try { await onDisconnect(p).remove(); await set(p, serverTimestamp()); } catch (e) {}
     }
   });
+}
+export function presenceStop(id) {
+  if (presenceOff) { presenceOff(); presenceOff = null; }
+  ready.then(uid => remove(r(id, "presence/" + uid + "/" + CONN)).catch(() => {}));
 }
 
 export async function setInvitees(id, names) {
@@ -103,31 +106,38 @@ export async function seal(id, pick) {
   await set(r(id, "sealed/" + uid), pick);
 }
 
-export async function mySeal(id) {
-  const uid = await ready;
-  return (await get(r(id, "sealed/" + uid))).val();
-}
 
-export async function startReveal(id, pick, delayMs) {
+export async function startReveal(id, pick, delayMs, players) {
   const up = {};
   up["meta/status"] = "reveal";
-  up["meta/result"] = pick;
+  up["res"] = pick;
   up["meta/revealAt"] = Math.round(serverNow() + delayMs);
+  up["show/n"] = Math.max(1, Math.min(500, players | 0));
   await update(r(id), up);
 }
 
-export async function setTaps(id, n) {
+// Şişirme turu sonucu: ilk yazan kazanır, herkes aynı sonucu görür
+export async function setRound(id, k, o, t) {
+  const up = { ["show/r/" + k]: { o, t: Math.max(0, Math.min(1e6, t | 0)) } };
+  if (o === "pop") up["show/pop"] = k;
+  try { await update(r(id), up); return true; } catch (e) { return false; }
+}
+// Sonuç yalnız patlama anına yakın okunabilir (kural zamanla açar); açılana kadar tekrar dene
+export async function getResult(id) {
+  try { return (await get(r(id, "res"))).val(); } catch (e) { return null; }
+}
+
+// Atomik artış: iki sekme ya da yenileme sayacı geri düşürmez
+export async function addTaps(id, delta) {
   const uid = await ready;
-  await set(r(id, "taps/" + uid), Math.min(2000, n));
+  if (delta > 0) await set(r(id, "taps/" + uid), increment(delta));
 }
 
 export async function setScore(id, name, score) {
   const uid = await ready;
-  const cur = (await get(r(id, "scores/" + uid))).val();
-  if (!cur || score > cur.score) await set(r(id, "scores/" + uid), { name, score });
+  await runTransaction(r(id, "scores/" + uid), cur => (!cur || score > cur.score) ? { name, score } : undefined);
 }
 
 export async function deleteRoom(id) {
-  await remove(r(id));
-  await remove(ref(db, "expiry/" + id)).catch(() => {});
+  await update(ref(db), { ["rooms/" + id]: null, ["expiry/" + id]: null });
 }

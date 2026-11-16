@@ -17,6 +17,7 @@ EMAIL = 'destek.anbertech@gmail.com'
 DB_URL = 'https://pinkorblue-128d4-default-rtdb.europe-west1.firebasedatabase.app'
 LANGS = [('tr', 'Türkçe', 'tr_TR'), ('en', 'English', 'en_US')]
 DOC_SLUGS = {'tr': ('gizlilik', 'destek'), 'en': ('privacy', 'support')}
+INVITE_SLUG = {'tr': 'parti', 'en': 'party'}   # davet linkleri: önizlemesi davete özel, arama dışı
 FEAT_ICONS = ['🎈', '🤫', '👆', '🔮', '🎮', '🔒']
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com" />\n'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n'
@@ -82,11 +83,11 @@ def check(T, U, L):
         sys.exit('HATA:\n  ' + '\n  '.join(errs))
 
 
-def head(c, title, desc, url, base, alts, noindex=False):
+def head(c, title, desc, url, base, alts, noindex=False, og_img='og.jpg'):
     links = ''.join(f'<link rel="alternate" hreflang="{k}" href="{e(v)}" />\n' for k, v in alts.items())
     if 'en' in alts:
         links += f'<link rel="alternate" hreflang="x-default" href="{e(alts["en"])}" />\n'
-    og = SITE + 'assets/img/og.jpg'
+    og = SITE + 'assets/img/' + og_img
     return f'''<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>{e(title)}</title>
@@ -123,7 +124,12 @@ def topbar(c, base, T, alts, sound=False):
 </div></header>'''
 
 
-def footer(c, base, T, L):
+def footer(c, base, T, L, compact=False):
+    if compact:
+        return f'''<footer class="mini"><div class="wrap">
+  <a class="mini-maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="{base}assets/img/anbertech.png" alt="" width="18" height="16" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="18" height="16" /><span>PinkOrBlue · {e(T[c]['brand_by'])}</span></a>
+  <nav><a href="{base}{ldir(c)}{DOC_SLUGS[c][0]}/">{e(L[c]['pv_title'])}</a><a href="{base}{ldir(c)}{DOC_SLUGS[c][1]}/">{e(L[c]['sp_title'])}</a></nav>
+</div></footer>'''
     return f'''<footer><div class="wrap">
   <a class="maker" href="https://anbertech.github.io/" rel="noopener"><img class="am-d" src="{base}assets/img/anbertech.png" alt="AnberTech" width="44" height="40" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="AnberTech" width="44" height="40" /><span><b>PinkOrBlue</b> {e(T[c]['brand_by'])}<br><small>{e(T[c]['brand_more'])} →</small></span></a>
   <span>© {datetime.date.today().year} AnberTech · PinkOrBlue</span>
@@ -198,36 +204,44 @@ def page_home(c, T, L):
 '''
 
 
-def page_app(c, T, U, L, fbcfg):
+def url_invite(c): return SITE + ldir(c) + INVITE_SLUG[c] + '/'
+
+
+def page_app(c, T, U, L, fbcfg, invite=False):
     t, base = T[c], ('../' if c == 'tr' else '../../')
-    alts = {k: url_app(k, T) for k, *_ in LANGS}
-    ld = jsonld([ORG, webapp(c, T), {'@type': 'WebPage', 'name': t['fx_title'], 'url': url_app(c, T), 'inLanguage': c, 'about': {'@id': SITE + '#app'}}])
+    if invite:
+        alts = {k: url_invite(k) for k, *_ in LANGS}
+        title, desc, url, og = t['inv_title'], t['inv_desc'], url_invite(c), f'og-invite-{c}.jpg'
+    else:
+        alts = {k: url_app(k, T) for k, *_ in LANGS}
+        title, desc, url, og = t['fx_title'], t['fx_desc'], url_app(c, T), 'og.jpg'
+    ld = '' if invite else jsonld([ORG, webapp(c, T), {'@type': 'WebPage', 'name': t['fx_title'], 'url': url_app(c, T), 'inLanguage': c, 'about': {'@id': SITE + '#app'}}])
     cfg = dict(fbcfg); cfg['databaseURL'] = DB_URL
     cfg = {k: cfg[k] for k in ('apiKey', 'authDomain', 'databaseURL', 'projectId', 'appId', 'messagingSenderId')}
-    return f'''<!doctype html>
-<html lang="{c}">
-<head>
-{head(c, t['fx_title'], t['fx_desc'], url_app(c, T), base, alts)}
-{ld}
-<script>window.POB_FB={json.dumps(cfg)};window.POB_S={json.dumps(U[c], ensure_ascii=False).replace('</', '<\\/')};</script>
-<script type="module" src="{base}assets/js/app.js?v={VER}"></script>
-</head>
-<body class="app-page" data-view="create">
-<a class="skip" href="#app">↓</a>
-{topbar(c, base, T, alts, sound=True)}
-<main>
-  <div class="app-intro">
+    paths = {'POB_INVITE': '../' + INVITE_SLUG[c] + '/', 'POB_CREATE': '../' + t['fx_slug'] + '/', 'POB_IS_INVITE': invite}
+    intro = '' if invite else f'''<div class="app-intro">
     <img src="{base}assets/img/stork.png" alt="" width="560" height="560" />
     <h1>{t['fx_h1_html']}</h1>
     <p class="muted">{e(t['fx_sub'])}</p>
-  </div>
+  </div>'''
+    seo = '' if invite else f'<div class="seo">\n{how_html(t)}\n{faq_html(t)}\n</div>'
+    return f'''<!doctype html>
+<html lang="{c}">
+<head>
+{head(c, title, desc, url, base, alts, noindex=invite, og_img=og)}
+{ld}
+<script>window.POB_FB={json.dumps(cfg)};window.POB_S={json.dumps(U[c], ensure_ascii=False).replace('</', '<\\/')};{''.join(f'window.{k}={json.dumps(v)};' for k, v in paths.items())}</script>
+<script type="module" src="{base}assets/js/app.js?v={VER}"></script>
+</head>
+<body class="app-page" data-view="{'room' if invite else 'create'}">
+<a class="skip" href="#app">↓</a>
+{topbar(c, base, T, alts, sound=True)}
+<main>
+  {intro}
   <div id="app" aria-live="polite"><noscript><div class="card">JavaScript gerekli / JavaScript required.</div></noscript></div>
 </main>
-<div class="seo">
-{how_html(t)}
-{faq_html(t)}
-</div>
-{footer(c, base, T, L)}
+{seo}
+{footer(c, base, T, L, compact=True)}
 </body>
 </html>
 '''
@@ -312,6 +326,7 @@ def main():
     for c, *_ in LANGS:
         write(ldir(c) + 'index.html', page_home(c, T, L)); urls.append(url_home(c))
         write(ldir(c) + T[c]['fx_slug'] + '/index.html', page_app(c, T, U, L, fbcfg)); urls.append(url_app(c, T))
+        write(ldir(c) + INVITE_SLUG[c] + '/index.html', page_app(c, T, U, L, fbcfg, invite=True))
         for i in (0, 1):
             write(ldir(c) + DOC_SLUGS[c][i] + '/index.html', page_doc(c, i, T, L)); urls.append(url_doc(c, i))
     js = os.path.join(ROOT, 'assets', 'js'); os.makedirs(js, exist_ok=True)

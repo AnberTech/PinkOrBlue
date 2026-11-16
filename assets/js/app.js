@@ -1,43 +1,48 @@
-// PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu paneli, şov, sonuç.
-import * as fb from "./fb.js?v=202611161727";
-import { playShow } from "./show.js?v=202611161727";
-import { playGame } from "./game.js?v=202611161727";
-import { unlock, setOn, isOn, running, sfx } from "./sfx.js?v=202611161727";
+// PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
+import * as fb from "./fb.js?v=202611161755";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611161755";
+import { playGame } from "./game.js?v=202611161755";
+import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161755";
+window.__pob = { level, audioState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
 const LANG = document.documentElement.lang;
+const INVITE = new URL(window.POB_INVITE || "./", location.href).pathname;   // davet sayfası (önizlemesi davete özel)
+const CREATE = new URL(window.POB_CREATE || "./", location.href).pathname;   // oda kurma sayfası
 const $ = (s, el = document) => el.querySelector(s);
 const app = $("#app");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const fmt = (s, ...a) => { let i = 0; return s.replace(/%[sd]/g, () => a[i++]); };
-const SHOW_LEAD = 6000, SHOW_LEN = 22000;
-const ASSET = new URL("../", import.meta.url).href; // .../assets/
+const fmt = (s, ...a) => { let i = 0; return String(s).replace(/%[sd]/g, () => a[i++]); };
+const SHOW_LEAD = 6000;
+const PER_PERSON = 33;                                    // kişi başı ortalama dokunuş hedefi
+const ASSET = new URL("../", import.meta.url).href;
+const lower = (s) => String(s).trim().toLocaleLowerCase(LANG);
 
 // ---------------------------------------------------------------- yardımcılar
 const PALETTE = ["#E9B949", "#7FD1AE", "#FFB38A", "#B9A3E3", "#F08A7E", "#A3B86C", "#7FA7A8", "#D9BF8C"];
 function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function initials(n) {
   const p = n.trim().split(/\s+/).filter(Boolean);
-  const s = (p[0]?.[0] || "?") + (p.length > 1 ? p[p.length - 1][0] : "");
-  return s.toLocaleUpperCase(LANG);
+  return ((p[0]?.[0] || "?") + (p.length > 1 ? p[p.length - 1][0] : "")).toLocaleUpperCase(LANG);
 }
 function toast(msg) {
   const el = document.createElement("div"); el.className = "toast"; el.textContent = msg;
   document.body.appendChild(el); setTimeout(() => el.classList.add("in"), 10);
-  setTimeout(() => { el.classList.remove("in"); setTimeout(() => el.remove(), 400); }, 2400);
+  setTimeout(() => { el.classList.remove("in"); setTimeout(() => el.remove(), 400); }, 2600);
 }
 async function copy(text) {
   try { await navigator.clipboard.writeText(text); toast(S.copied); }
   catch (e) { prompt(S.copy_manual, text); }
 }
-async function share(text, url) {
-  if (navigator.share) { try { await navigator.share({ title: "PinkOrBlue", text, url }); return; } catch (e) { if (e.name === "AbortError") return; } }
-  copy(url);
+async function share(text) {
+  if (navigator.share) { try { await navigator.share({ text }); return; } catch (e) { if (e.name === "AbortError") return; } }
+  copy(text);
 }
-function fmtDate(ms) {
-  try { return new Intl.DateTimeFormat(LANG, { dateStyle: "long", timeStyle: "short" }).format(new Date(ms)); }
-  catch (e) { return new Date(ms).toLocaleString(LANG); }
-}
+const dtf = (o) => { try { return new Intl.DateTimeFormat(LANG, o); } catch (e) { return null; } };
+const DF_LONG = dtf({ dateStyle: "long", timeStyle: "short" }), DF_DAY = dtf({ day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
+const DF_PICK = dtf({ weekday: "short", day: "numeric", month: "long", year: "numeric" }), DF_SHORT = dtf({ day: "numeric", month: "short" });
+const DF_MONTH = dtf({ month: "long", year: "numeric" }), DF_WD = dtf({ weekday: "narrow" });
+const fmtDate = (ms) => DF_LONG ? DF_LONG.format(new Date(ms)) : new Date(ms).toLocaleString(LANG);
 function countdown(ms) {
   const d = ms - fb.serverNow();
   if (d <= 0) return S.lobby_any_moment;
@@ -45,395 +50,573 @@ function countdown(ms) {
   if (h >= 48) return fmt(S.lobby_in_days, Math.floor(h / 24));
   return fmt(S.lobby_in_hm, h, m);
 }
-function shortDate(s) {
-  if (!s) return "–";
-  const d = new Date(s + "T12:00:00");
-  if (isNaN(d)) return "–";
-  try { return new Intl.DateTimeFormat(LANG, { day: "numeric", month: "short" }).format(d); } catch (e) { return s; }
+const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+function parseYmd(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); if (!m) return null;
+  const d = new Date(+m[1], +m[2] - 1, +m[3], 12);
+  return d.getMonth() === +m[2] - 1 && d.getDate() === +m[3] ? d : null;   // 31 Şubat gibi tarihleri reddet
 }
-const roomUrl = (id) => location.origin + location.pathname + "#r=" + id;
-const roomId = () => (location.hash.match(/r=([a-z0-9]{6,20})/) || [])[1] || null;
-function setRemembered(id, name) { try { localStorage.setItem("pob_name_" + id, name); } catch (e) {} }
+function shortDate(s) { const d = parseYmd(s); return d ? (DF_SHORT ? DF_SHORT.format(d) : s) : "–"; }
+const roomUrl = (id) => location.origin + INVITE + "#r=" + id;
+function roomId() {
+  const m = location.hash.match(/r=([A-Za-z0-9]+)/);
+  if (!m) return null;
+  return m[1].toLowerCase();
+}
+const babyOf = (m) => m.babyName || S.default_baby;
+function shareText(m) {
+  const when = DF_DAY ? DF_DAY.format(new Date(m.partyAt)) : fmtDate(m.partyAt);
+  return (m.parents ? fmt(S.share_text, m.parents, when) : fmt(S.share_text_np, when)) + roomUrl(room.id);
+}
 
-// ses düğmesi (sağ üst)
+// Dil bağlantıları aynı odayı korusun
+function keepHashInLangLinks() {
+  document.querySelectorAll(".lang a").forEach(a => { a.href = a.href.split("#")[0] + (roomId() ? "#r=" + roomId() : ""); });
+}
+
+// ---------------------------------------------------------------- ses düğmesi
 const soundBtn = $("#sound");
 function paintSound() { soundBtn.textContent = isOn() ? "🔊" : "🔇"; soundBtn.setAttribute("aria-label", isOn() ? S.sound_off : S.sound_on); soundBtn.classList.toggle("needs", isOn() && !running()); }
-soundBtn.onclick = () => { setOn(!isOn()); if (isOn()) unlock(); paintSound(); };
-// iOS Safari sesi yalnız "dokunma bitti / tıklama" olaylarında açar (pointerdown sayılmaz)
+soundBtn.onclick = () => {
+  const on = !(isOn() && running());
+  setOn(on); if (on) { unlock(); setTimeout(() => sfx.test(), 60); toast(S.sound_test); }
+  setTimeout(paintSound, 120);
+};
+// iOS Safari sesi yalnız "dokunma bitti / tıklama" anında açar (pointerdown sayılmaz)
 ["pointerdown", "touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (isOn() && !running()) { unlock(); setTimeout(paintSound, 150); } }, { passive: true, capture: true }));
 paintSound();
+
+// Fare basılıyken ekranı yeniden çizme (yoksa basılan düğme değişir ve tıklama kaybolur)
+let pointerDown = false, pendingRender = false;
+document.addEventListener("pointerdown", () => { pointerDown = true; }, true);
+const release = () => { if (!pointerDown) return; pointerDown = false; if (pendingRender) { pendingRender = false; setTimeout(render, 150); } };
+document.addEventListener("pointerup", release, true);
+document.addEventListener("pointercancel", release, true);
+
+// ---------------------------------------------------------------- tarih seçici (kendi takvimimiz)
+function dateField(name, value, { min, max, ph }) {
+  return `<span class="dp-wrap"><input type="hidden" name="${name}" value="${esc(value || "")}">
+    <button type="button" class="dp-btn" data-for="${name}" data-min="${min || ""}" data-max="${max || ""}" data-ph="${esc(ph || "")}" aria-haspopup="dialog"></button></span>`;
+}
+function paintDates(root) {
+  root.querySelectorAll(".dp-btn").forEach(b => {
+    const v = parseYmd(b.previousElementSibling.value);
+    b.textContent = v ? (DF_PICK ? DF_PICK.format(v) : ymd(v)) : (b.dataset.ph || S.pick_date);
+    b.classList.toggle("empty", !v);
+  });
+}
+let openCal = null;
+function closeCal() { if (openCal) { openCal.remove(); openCal = null; document.removeEventListener("pointerdown", outsideCal, true); document.removeEventListener("keydown", escCal, true); } }
+function outsideCal(e) { if (openCal && !openCal.contains(e.target) && !e.target.closest(".dp-btn")) closeCal(); }
+function escCal(e) { if (e.key === "Escape") closeCal(); }
+function bindDates(root) {
+  paintDates(root);
+  root.querySelectorAll(".dp-btn").forEach(b => b.onclick = () => {
+    if (openCal && openCal.dataset.for === b.dataset.for) return closeCal();
+    closeCal();
+    const inp = b.previousElementSibling;
+    const min = parseYmd(b.dataset.min), max = parseYmd(b.dataset.max);
+    let view = parseYmd(inp.value) || min || new Date();
+    view = new Date(view.getFullYear(), view.getMonth(), 1, 12);
+    const cal = document.createElement("div");
+    cal.className = "cal"; cal.dataset.for = b.dataset.for; cal.setAttribute("role", "dialog");
+    const paint = () => {
+      const y = view.getFullYear(), mo = view.getMonth();
+      const first = (new Date(y, mo, 1).getDay() + 6) % 7;   // Pazartesi başlangıç
+      const days = new Date(y, mo + 1, 0).getDate();
+      const sel = inp.value, today = ymd(new Date());
+      let cells = "";
+      for (let i = 0; i < 7; i++) cells += `<span class="wd">${DF_WD ? DF_WD.format(new Date(2024, 0, 1 + i)) : ""}</span>`;
+      for (let i = 0; i < first; i++) cells += "<span></span>";
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(y, mo, d, 12), v = ymd(dt);
+        const off = (min && dt < new Date(min.getFullYear(), min.getMonth(), min.getDate())) || (max && dt > max);
+        cells += `<button type="button" data-v="${v}" class="${v === sel ? "on" : ""} ${v === today ? "today" : ""}" ${off ? "disabled" : ""}>${d}</button>`;
+      }
+      cal.innerHTML = `<div class="cal-h"><button type="button" class="prev" aria-label="‹">‹</button><b>${DF_MONTH ? DF_MONTH.format(view) : y + "-" + (mo + 1)}</b><button type="button" class="next" aria-label="›">›</button></div><div class="cal-g">${cells}</div>`;
+      cal.querySelector(".prev").onclick = () => { view = new Date(y, mo - 1, 1, 12); paint(); };
+      cal.querySelector(".next").onclick = () => { view = new Date(y, mo + 1, 1, 12); paint(); };
+      cal.querySelectorAll(".cal-g button").forEach(x => x.onclick = () => { inp.value = x.dataset.v; inp.dataset.dirty = "1"; paintDates(root); closeCal(); inp.dispatchEvent(new Event("change", { bubbles: true })); });
+    };
+    paint();
+    b.parentElement.appendChild(cal); openCal = cal;
+    setTimeout(() => { document.addEventListener("pointerdown", outsideCal, true); document.addEventListener("keydown", escCal, true); }, 0);
+  });
+}
 
 // ---------------------------------------------------------------- oluştur
 function viewCreate() {
   document.body.dataset.view = "create";
-  const def = new Date(Date.now() + 86400000); def.setHours(20, 0, 0, 0);
-  const local = new Date(def - def.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  closeCal();
+  const def = new Date(Date.now() + 86400000);
+  const today = ymd(new Date()), maxD = ymd(new Date(Date.now() + 400 * 86400000));
+  const hours = Array.from({ length: 24 }, (_, h) => `<option value="${h}" ${h === 20 ? "selected" : ""}>${String(h).padStart(2, "0")}</option>`).join("");
+  const mins = [0, 15, 30, 45].map(m => `<option value="${m}">${String(m).padStart(2, "0")}</option>`).join("");
   app.innerHTML = `
-  <form class="card form" id="cf" autocomplete="off">
-    <label>${S.c_your_name}<input name="host" required maxlength="40" placeholder="${S.c_your_name_ph}"></label>
-    <label>${S.c_baby}<input name="baby" required maxlength="40" placeholder="${S.c_baby_ph}"><small>${S.c_baby_hint}</small></label>
-    <label>${S.c_date}<input name="date" type="datetime-local" required value="${local}"><small>${S.c_date_hint}</small></label>
-    <label>${S.c_invitees} <em>${S.optional}</em><textarea name="inv" rows="5" placeholder="${S.c_invitees_ph}"></textarea><small>${S.c_invitees_hint}</small></label>
+  <form class="card form" id="cf" autocomplete="off" novalidate>
+    <div class="two">
+      <label>${S.c_mom}<input name="mom" maxlength="40" placeholder="${S.c_mom_ph}"></label>
+      <label>${S.c_dad}<input name="dad" maxlength="40" placeholder="${S.c_dad_ph}"></label>
+    </div>
+    <div class="lbl">${S.c_who}
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="who" value="mom" checked><span>${S.c_who_mom}</span></label>
+        <label><input type="radio" name="who" value="dad"><span>${S.c_who_dad}</span></label>
+        <label><input type="radio" name="who" value="other"><span>${S.c_who_other}</span></label>
+      </div>
+      <input name="other" maxlength="40" placeholder="${S.c_other_ph}" hidden>
+    </div>
+    <label>${S.c_baby} <em>${S.optional}</em><input name="baby" maxlength="40" placeholder="${S.c_baby_ph}"></label>
+    <div class="lbl">${S.c_date}
+      <div class="dt">${dateField("date", ymd(def), { min: today, max: maxD })}
+        <span class="tm"><select name="hh" aria-label="${S.c_hour}">${hours}</select><b>:</b><select name="mm" aria-label="${S.c_minute}">${mins}</select></span></div>
+      <small>${S.c_date_hint}</small></div>
+    <details class="inv-box"><summary>${S.c_invitees} <em>${S.optional}</em></summary>
+      <textarea name="inv" rows="5" placeholder="${S.c_invitees_ph}"></textarea><small>${S.c_invitees_hint}</small></details>
     <button class="btn btn-gold btn-big" type="submit">${S.c_submit}</button>
-    <p class="muted center">${S.c_note}</p>
+    <p class="muted center small">${S.c_note}</p>
   </form>`;
-  $("#cf").onsubmit = async (ev) => {
+  const f = $("#cf");
+  bindDates(f);
+  const other = f.querySelector("[name=other]");
+  f.querySelectorAll("[name=who]").forEach(r => r.onchange = () => { other.hidden = f.who.value !== "other"; if (!other.hidden) other.focus(); });
+  f.onsubmit = async (ev) => {
     ev.preventDefault();
     unlock();
-    const f = new FormData(ev.target);
-    const btn = ev.target.querySelector("button"); btn.disabled = true; btn.textContent = S.wait;
+    const mom = f.mom.value.trim(), dad = f.dad.value.trim(), who = f.who.value;
+    const host = who === "mom" ? mom : who === "dad" ? dad : other.value.trim();
+    const err = !mom && !dad ? S.c_err_parent : !host ? (who === "other" ? S.c_err_other : S.c_err_who) : null;
+    if (err) return toast(err);
+    const d = parseYmd(f.date.value);
+    if (!d) return toast(S.c_err_date);
+    const partyAt = new Date(d.getFullYear(), d.getMonth(), d.getDate(), +f.hh.value, +f.mm.value).getTime();
+    if (!(partyAt > Date.now() - 3600000)) return toast(S.c_err_date);
+    const btn = f.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = S.wait;
     try {
-      const partyAt = new Date(f.get("date")).getTime();
-      if (!(partyAt > Date.now() - 3600000)) throw new Error(S.c_err_date);
-      const invitees = String(f.get("inv") || "").split(/[\n,]/).map(s => s.trim().slice(0, 40)).filter(Boolean).slice(0, 80);
-      const host = String(f.get("host")).trim();
-      const id = await fb.createRoom({ babyName: String(f.get("baby")).trim(), partyAt, lang: LANG, invitees: [...new Set(invitees)], hostName: host });
-      setRemembered(id, host);
-      history.replaceState(null, "", "#r=" + id);
+      const seen = new Set([lower(host)]), invitees = [];
+      [mom, dad, ...String(f.inv.value || "").split(/[\n,]/)].map(s => s.trim().slice(0, 40)).filter(Boolean)
+        .forEach(n => { if (!seen.has(lower(n))) { seen.add(lower(n)); invitees.push(n); } });
+      const id = await fb.createRoom({ babyName: f.baby.value.trim() || S.default_baby, parents: [mom, dad].filter(Boolean).join(" & "), partyAt, lang: LANG, invitees: invitees.slice(0, 80), hostName: host });
+      history.replaceState(null, "", INVITE + "#r=" + id);
       route(true);
     } catch (e) {
-      console.error(e); toast(e.message && !e.code ? e.message : S.err_generic);
+      console.error(e); toast(S.err_generic);
       btn.disabled = false; btn.textContent = S.c_submit;
     }
   };
 }
 
 // ---------------------------------------------------------------- oda
-let room = null; // canlı durum
-function cleanupRoom() { if (room) { room.unsubs.forEach(u => u && u()); clearInterval(room.timer); if (room.showCtl) room.showCtl.stop(); if (room.game) room.game.abort(); room = null; } }
+let room = null, routeGen = 0;
+function cleanupRoom() {
+  if (!room) return;
+  room.unsubs.forEach(u => u && u()); clearInterval(room.timer); clearInterval(room.resTimer);
+  if (room.showCtl) room.showCtl.stop(); if (room.game) room.game.abort();
+  fb.presenceStop(room.id);
+  room = null;
+}
 
 async function viewRoom(id, justCreated) {
+  const gen = routeGen;
   document.body.dataset.view = "room";
   app.innerHTML = `<div class="card center"><p>${S.loading}</p></div>`;
   const uid = await fb.ready;
+  if (gen !== routeGen) return;            // bu sırada başka sayfaya geçildi
   cleanupRoom();
-  const R = room = { id, uid, meta: null, guests: {}, invitees: {}, presence: {}, taps: {}, scores: {}, votes: null, mine: null, sealed: null, unsubs: [], showing: false, shown: false, justCreated, drafts: {} };
-  // Önce kişisel ve liste verileri yüklensin; meta (ve dolayısıyla şov) en son. Böylece şov sırasında
-  // sayfayı yenileyen misafirin tahmini ve dokunma yetkisi eksik kalmaz.
-  const first = (path) => new Promise(res => { let done = false; R.unsubs.push(fb.watch(id, path, v => { R[key(path)] = v || (path.includes("/") ? null : {}); if (!done) { done = true; res(); } else if (room === R) render(); })); });
+  const R = room = { id, uid, meta: null, guests: {}, invitees: {}, presence: {}, taps: {}, scores: {}, show: {}, votes: null, mine: null, sealed: null, result: null, unsubs: [], showing: false, shown: false, justCreated, drafts: {}, decided: {}, presenceOn: false };
   const key = (p) => ({ ["votes/" + uid]: "mine", ["sealed/" + uid]: "sealed" }[p] || p);
-  await Promise.all(["guests", "invitees", "presence", "scores", "votes/" + uid, "sealed/" + uid].map(first));
+  const first = (path) => new Promise(res => {
+    let done = false;
+    R.unsubs.push(fb.watch(id, path, v => {
+      R[key(path)] = v || (path.includes("/") ? null : {});
+      if (!done) { done = true; res(); } else if (room === R) render();
+    }));
+  });
+  // Önce liste ve kişisel veriler; meta (ve şov) en son
+  await Promise.all(["guests", "invitees", "presence", "scores", "show", "votes/" + uid, "sealed/" + uid].map(first));
   if (room !== R) return;
   R.unsubs.push(fb.watch(id, "taps", v => { R.taps = v || {}; }));
   R.unsubs.push(fb.watch(id, "meta", (m) => {
     if (room !== R) return;
     const prev = R.meta; R.meta = m;
     if (!m) return renderMissing();
-    if (m.status === "reveal" && (!prev || prev.status !== "reveal")) onReveal();
+    if (m.status === "reveal" && (!prev || prev.status !== "reveal") && !R.starting) onReveal();
     render();
   }));
   R.timer = setInterval(() => { const el = $("#cd"); if (el && R.meta) el.textContent = countdown(R.meta.partyAt); }, 20000);
 }
 
 function renderMissing() {
+  closeCal();
   app.innerHTML = `<div class="card center"><div class="big-emoji">🎈</div><h2>${S.missing_h}</h2><p>${S.missing_p}</p>
-  <a class="btn btn-gold" href="${location.pathname}">${S.missing_btn}</a></div>`;
+  <a class="btn btn-gold" href="${CREATE}">${S.missing_btn}</a></div>`;
 }
 
 const me = () => room.guests[room.uid];
 const isHost = () => room.meta && room.meta.hostUid === room.uid;
 const isRevealer = () => room.meta && room.meta.revealerUid === room.uid;
+const onlineUids = () => Object.keys(room.presence || {}).filter(u => room.guests[u] && room.presence[u] && Object.keys(room.presence[u]).length);
 
 let deferred = false;
 function render() {
   if (!room || !room.meta) return;
   if (room.showing) return;
+  if (pointerDown) { pendingRender = true; return; }
+  if (openCal) { pendingRender = true; return; }
   const ae = document.activeElement;
   if (ae && app.contains(ae) && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName) && ae.type !== "button") {
-    if (!deferred) { deferred = true; ae.addEventListener("blur", () => { deferred = false; setTimeout(render, 50); }, { once: true }); }
+    if (!deferred) { deferred = true; ae.addEventListener("blur", () => { deferred = false; setTimeout(render, 200); }, { once: true }); }
     return;
   }
-  const open = [...app.querySelectorAll("details[open]")].map(d => d.className);
-  // Kaydedilmemiş form girişlerini koru (başkası katılınca ekran yeniden çizilir)
-  app.querySelectorAll("input[name], textarea[id], textarea[name]").forEach(el => {
-    const k = el.name || el.id;
-    if (el.value !== el.defaultValue) room.drafts[k] = el.value; else delete room.drafts[k];
+  const open = [...app.querySelectorAll("details[open]")].map(d => d.className.split(" ")[0]);
+  app.querySelectorAll("input[name], textarea[name], select[name]").forEach(el => {
+    if (el.type === "radio") return;
+    const k = el.name;
+    const changed = el.type === "hidden" ? el.dataset.dirty === "1" : el.value !== (el.tagName === "SELECT" ? el.dataset.init : el.defaultValue);
+    if (changed) room.drafts[k] = el.value; else delete room.drafts[k];
   });
-  const y = scrollY;
+  const oldSky = app.querySelector(".sky"), y = scrollY;
   renderInner();
-  open.forEach(c => { const d = app.querySelector("details." + c.split(" ")[0]); if (d) d.open = true; });
-  Object.entries(room.drafts).forEach(([k, v]) => { const el = app.querySelector(`[name="${k}"],textarea#${k}`); if (el && !el.readOnly) el.value = v; });
+  // Gökyüzü değişmediyse eski balonları koru (animasyonlar baştan başlamasın)
+  const newSky = app.querySelector(".sky");
+  if (oldSky && newSky && oldSky.dataset.sig === newSky.dataset.sig) newSky.replaceWith(oldSky);
+  open.forEach(c => { const d = app.querySelector("details." + c); if (d) d.open = true; });
+  Object.entries(room.drafts).forEach(([k, v]) => { const el = app.querySelector(`[name="${k}"]`); if (el && !el.readOnly) { el.value = v; if (el.type === "hidden") el.dataset.dirty = "1"; } });
+  paintDates(app);
   if (Math.abs(scrollY - y) > 2) scrollTo(0, y);
 }
 function renderInner() {
+  closeCal();
   const m = room.meta;
   if (m.status === "reveal" && room.shown) return renderResult();
-  if (m.status === "reveal") return; // şov başlamak üzere
+  if (m.status === "reveal") {
+    app.innerHTML = `<div class="card center"><div class="big-emoji">🎈</div><h2>${S.show_ready}</h2><p class="muted">${S.show_ready_sub}</p></div>`;
+    return;
+  }
   if (!me()) return renderJoin();
   renderLobby();
 }
 
+function headHtml(m, eyebrow) {
+  return `<header class="room-head">
+    ${m.parents ? `<p class="parents">${esc(m.parents)}</p>` : `<p class="eyebrow">${eyebrow}</p>`}
+    <h1 class="room-title">${esc(fmt(S.lobby_title, babyOf(m)))}</h1>
+    <p class="cd"><span id="cd">${countdown(m.partyAt)}</span> · ${esc(fmtDate(m.partyAt))}</p>
+  </header>`;
+}
+
 function renderJoin() {
   const m = room.meta;
-  const taken = new Set(Object.values(room.guests).map(g => g.name.toLocaleLowerCase(LANG)));
-  const free = Object.values(room.invitees).filter(n => !taken.has(n.toLocaleLowerCase(LANG)));
+  const taken = new Set(Object.values(room.guests).map(g => lower(g.name)));
+  const free = Object.values(room.invitees).filter(n => !taken.has(lower(n)));
   app.innerHTML = `
+  ${headHtml(m, S.j_eyebrow)}
   <div class="card center join">
     <p class="eyebrow">${S.j_eyebrow}</p>
-    <h1 class="room-title">${fmt(S.j_title, esc(m.babyName))}</h1>
-    <p class="muted">${esc(fmtDate(m.partyAt))}</p>
-    ${free.length ? `<p class="lbl">${S.j_pick}</p><div class="chips pick">${free.map(n => `<button type="button" class="chip" data-n="${esc(n)}">${esc(n)}</button>`).join("")}</div><p class="muted small">${S.j_or}</p>` : ""}
-    <form id="jf"><input name="n" maxlength="40" required placeholder="${S.j_name_ph}"><button class="btn btn-gold btn-big" type="submit">${S.j_submit}</button></form>
+    ${free.length ? `<p class="lbl">${S.j_pick}</p><div class="chips pick">${free.map(n => `<button type="button" class="chip" data-n="${esc(n)}">${esc(n)}</button>`).join("")}</div><p class="muted small">${S.j_or}</p>` : `<p class="muted">${S.j_type}</p>`}
+    <form id="jf" novalidate><input name="n" maxlength="40" placeholder="${S.j_name_ph}" autocomplete="name"><button class="btn btn-gold btn-big" type="submit">${S.j_submit}</button></form>
   </div>`;
   const inp = $("#jf input");
   const mark = () => app.querySelectorAll(".pick .chip").forEach(x => x.classList.toggle("on", x.dataset.n === inp.value));
-  if (room.joinDraft) { inp.value = room.joinDraft; mark(); }
-  inp.oninput = () => { room.joinDraft = inp.value; mark(); };
-  app.querySelectorAll(".pick .chip").forEach(b => b.onclick = () => { inp.value = room.joinDraft = b.dataset.n; mark(); });
+  inp.addEventListener("input", mark);
+  setTimeout(mark, 0);
+  app.querySelectorAll(".pick .chip").forEach(b => b.onclick = () => { inp.value = b.dataset.n; room.drafts.n = inp.value; mark(); });
   $("#jf").onsubmit = async (ev) => {
     ev.preventDefault(); unlock(); paintSound();
-    const n = inp.value.trim(); if (!n) return;
-    try { await fb.join(room.id, n); setRemembered(room.id, n); sfx.plop(); document.activeElement?.blur(); render(); }
+    const R = room, n = inp.value.trim();
+    if (!n) { toast(S.j_err_empty); inp.focus(); return; }
+    if (Object.entries(R.guests).some(([u, g]) => u !== R.uid && lower(g.name) === lower(n))) { toast(S.j_err_taken); inp.focus(); return; }
+    try { await fb.join(R.id, n); if (room !== R) return; delete R.drafts.n; sfx.plop(); document.activeElement?.blur(); render(); }
     catch (e) { console.error(e); toast(S.err_generic); }
   };
 }
 
 function people() {
-  const online = room.presence;
-  return Object.entries(room.guests).map(([uid, g]) => ({ uid, name: g.name, voted: !!g.voted || uid === room.meta.revealerUid, keeper: uid === room.meta.revealerUid, online: !!online[uid], me: uid === room.uid, host: uid === room.meta.hostUid }))
+  const on = new Set(onlineUids()), m = room.meta;
+  return Object.entries(room.guests).map(([uid, g]) => ({ uid, name: g.name, voted: !!g.voted, keeper: uid === m.revealerUid, online: on.has(uid), me: uid === room.uid, host: uid === m.hostUid }))
     .sort((a, b) => (b.voted - a.voted) || a.name.localeCompare(b.name, LANG));
 }
 
-let presenceStarted = false;
 function renderLobby() {
-  if (!presenceStarted) { presenceStarted = true; fb.presence(room.id); }
+  if (!room.presenceOn) { room.presenceOn = true; fb.presence(room.id); }
   const m = room.meta, ps = people();
-  const voters = ps.filter(p => p.uid !== m.revealerUid); // sırrı tutan oy vermez
+  const voters = ps.filter(p => !p.keeper);
   const votedN = voters.filter(p => p.voted).length;
-  const joinedNames = new Set(ps.map(p => p.name.toLocaleLowerCase(LANG)));
-  const notJoined = Object.values(room.invitees).filter(n => !joinedNames.has(n.toLocaleLowerCase(LANG)));
+  const joinedNames = new Set(ps.map(p => lower(p.name)));
+  const notJoined = Object.values(room.invitees).filter(n => !joinedNames.has(lower(n)));
   const notVoted = voters.filter(p => !p.voted).map(p => p.name);
   const expected = voters.length + notJoined.length;
-  const scores = Object.entries(room.scores).map(([u, x]) => ({ name: room.guests[u]?.name || x.name, score: x.score })).sort((a, b) => b.score - a.score).slice(0, 5);
-  const myBest = room.scores[room.uid]?.score;
-  const url = roomUrl(room.id);
-
-  // Var olan gökyüzünü koru (balonlar her güncellemede baştan zıplamasın)
+  const onN = ps.filter(p => p.online).length;
+  const sig = ps.map(p => `${p.uid}${+p.voted}${+p.online}${+p.keeper}`).join("|");
   app.innerHTML = `
-  <header class="room-head">
-    <p class="eyebrow">${S.lobby_eyebrow}</p>
-    <h1 class="room-title">${fmt(S.lobby_title, esc(m.babyName))}</h1>
-    <p class="cd"><span id="cd">${countdown(m.partyAt)}</span> · ${esc(fmtDate(m.partyAt))}</p>
-  </header>
-  <section class="sky" aria-label="${S.lobby_sky}">${ps.map(balloonHtml).join("") || `<p class="muted">${S.lobby_empty}</p>`}</section>
-  <section class="card status">
-    <div class="row"><b>${fmt(S.lobby_voted, votedN, expected)}</b><span class="muted">${fmt(S.lobby_online, ps.filter(p => p.online).length)}</span></div>
-    <div class="bar"><i style="width:${expected ? Math.round(votedN / expected * 100) : 0}%"></i></div>
-    <p class="muted small">${S.lobby_secret}</p>
-  </section>
-  ${hostPanel(url)}
-  ${revealerPanel()}
-  ${voteCard()}
-  <section class="card game-card">
-    <div class="row"><h2>🎈 ${S.game_name}</h2>${myBest != null ? `<span class="muted">${fmt(S.game_best, myBest)}</span>` : ""}</div>
-    <p class="muted">${S.game_teaser}</p>
-    ${scores.length ? `<ol class="board">${scores.map(s => `<li><span>${esc(s.name)}</span><b>${s.score}</b></li>`).join("")}</ol>` : ""}
-    <button class="btn btn-gold" id="play">${S.game_play}</button>
-  </section>
-  ${(notVoted.length || notJoined.length) ? `<section class="card waiting"><h2>${S.lobby_waiting}</h2>
+  ${headHtml(m, S.lobby_eyebrow)}
+  <section class="sky" data-sig="${esc(sig)}" aria-label="${S.lobby_sky}">${ps.map(balloonHtml).join("")}</section>
+  <p class="sky-stat"><b>${fmt(S.lobby_voted, votedN, expected)}</b> · ${fmt(S.lobby_online, onN)}</p>
+  ${isHost() ? hostFlow(votedN, expected, onN) : isRevealer() ? keeperCard(votedN, expected, onN) : ""}
+  ${!isRevealer() ? voteCard() : ""}
+  ${gameCard()}
+  ${!isHost() ? `<section class="card share-mini"><div class="row"><div><b>${S.share_h}</b><p class="muted small">${S.share_p_guest}</p></div>
+    <div class="row gap"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(shareText(m))}">WhatsApp</a><button class="btn" data-act="share">${S.share_more}</button></div></div></section>` : ""}
+  ${(notVoted.length || notJoined.length) ? `<details class="waiting card"><summary>${fmt(S.lobby_waiting_n, notVoted.length + notJoined.length)}</summary>
     <div class="chips">${notVoted.map(n => `<span class="chip ghost">${esc(n)}</span>`).join("")}${notJoined.map(n => `<span class="chip ghost dashed">${esc(n)}</span>`).join("")}</div>
-    ${notJoined.length ? `<p class="muted small">${S.lobby_dashed}</p>` : ""}</section>` : ""}
-  <section class="card share-card"><h2>${S.share_h}</h2><p class="muted small">${S.share_p}</p>
-    <div class="link-row"><input readonly value="${esc(url)}" aria-label="${S.share_h}"><button class="btn" id="cp">${S.copy}</button></div>
-    <div class="row gap"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(fmt(S.share_text, m.babyName) + " " + url)}">WhatsApp</a><button class="btn" id="sh">${S.share_more}</button></div>
-  </section>`;
-  bindLobby(url);
+    ${notJoined.length ? `<p class="muted small">${S.lobby_dashed}</p>` : ""}</details>` : ""}
+  <p class="muted small center secret-note">${S.lobby_secret}</p>`;
+  bindLobby();
 }
 
 function balloonHtml(p) {
   const h = hash(p.name);
   const col = PALETTE[h % PALETTE.length];
   const delay = -(h % 5000) / 1000, dur = 3 + (h % 3000) / 1000;
-  return `<button type="button" class="balloon ${p.voted ? "voted" : ""} ${p.online ? "on" : ""} ${p.me ? "me" : ""}" style="--d:${delay}s;--dur:${dur}s" data-tip="${esc(p.name)} · ${p.voted ? S.tip_voted : S.tip_not_voted}${p.online ? " · " + S.tip_here : ""}">
+  const tip = `${p.name} · ${p.keeper ? S.tip_keeper : p.voted ? S.tip_voted : S.tip_not_voted}${p.online ? " · " + S.tip_here : ""}`;
+  return `<button type="button" class="balloon ${p.voted || p.keeper ? "voted" : ""} ${p.online ? "on" : ""} ${p.me ? "me" : ""}" style="--d:${delay}s;--dur:${dur}s" data-tip="${esc(tip)}">
     <span class="bb"><span class="av" style="background:${col}">${esc(initials(p.name))}</span></span><span class="str"></span>
     <span class="nm">${p.keeper ? "🤫 " : ""}${p.me ? S.you : esc(p.name.split(" ")[0])}</span></button>`;
 }
 
+function pickBtns(cls, sel, attr) {
+  return `<div class="vote-btns ${cls}">
+    <button class="vb girl ${sel === "girl" ? "on" : ""}" data-${attr}="girl"><span class="vi">🎀</span>${S.girl}</button>
+    <button class="vb boy ${sel === "boy" ? "on" : ""}" data-${attr}="boy"><span class="vi">🎩</span>${S.boy}</button></div>`;
+}
+
 function voteCard() {
-  if (isRevealer()) return "";
   const v = room.mine;
-  return `<section class="card vote" id="vote">
-    <h2>${v ? S.v_yours : S.v_h}</h2>
-    <div class="vote-btns">
-      <button class="vb girl ${v?.pick === "girl" ? "on" : ""}" data-p="girl"><span class="vi">🎀</span>${S.girl}</button>
-      <button class="vb boy ${v?.pick === "boy" ? "on" : ""}" data-p="boy"><span class="vi">🎩</span>${S.boy}</button>
-    </div>
-    <details class="guesses" ${v && !v.birth && !v.weight && !v.letter ? "" : ""}>
-      <summary>${S.v_more}</summary>
-      <label>${S.v_birth}<input type="date" name="birth" value="${esc(v?.birth || "")}"></label>
-      <label>${S.v_weight}<input type="number" name="weight" min="500" max="7000" step="10" inputmode="numeric" placeholder="3250" value="${esc(v?.weight || "")}"></label>
-      <label>${S.v_letter}<input name="letter" maxlength="1" value="${esc(v?.letter || "")}"></label>
-      <button class="btn" id="saveg">${S.v_save}</button>
+  const maxB = ymd(new Date(Date.now() + 320 * 86400000));
+  const extras = v && (v.birth || v.weight || v.letter);
+  return `<section class="card vote ${v ? "has" : ""}">
+    <h2>${v ? fmt(S.v_yours_is, v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : S.v_h}</h2>
+    ${v ? `<p class="muted small">${S.v_change}</p>` : `<p class="muted small">${S.v_private}</p>`}
+    ${pickBtns("cast", v?.pick, "p")}
+    <details class="guesses"><summary>${extras ? S.v_more_saved : S.v_more}</summary>
+      <label class="lbl">${S.v_birth}${dateField("birth", v?.birth, { min: ymd(new Date()), max: maxB, ph: S.v_birth_ph })}</label>
+      <label class="lbl">${S.v_weight}<input type="number" name="weight" min="500" max="7000" step="10" inputmode="numeric" placeholder="3250" value="${esc(v?.weight || "")}"></label>
+      <label class="lbl">${S.v_letter}<input name="letter" maxlength="1" value="${esc(v?.letter || "")}" autocapitalize="characters"></label>
+      <button class="btn" data-act="saveg">${S.v_save}</button>
     </details>
-    <p class="muted small">${S.v_private}</p>
   </section>`;
 }
 
-function hostPanel(url) {
-  if (!isHost()) return "";
-  const m = room.meta, ps = people().filter(p => !p.me);
+function stepStart(votedN, expected, onN) {
+  const s = room.sealed;
+  return `<li class="${s ? "" : "locked"}"><b>${S.f_step3}</b>
+    <button class="btn btn-gold btn-big start" data-act="start" ${s ? "" : "disabled"}>🎉 ${S.k_start}</button>
+    <p class="muted small center">${fmt(S.k_status, votedN, expected, onN)}${s ? "" : " · " + S.f_need_seal}</p></li>`;
+}
+function stepSeal() {
+  const s = room.sealed;
+  return `<li class="${s ? "done" : ""}"><b>${S.f_step1}</b><p class="muted small">${S.k_p}</p>${pickBtns("seal", s, "s")}${s ? `<p class="ok small">${S.k_sealed}</p>` : ""}</li>`;
+}
+function hostFlow(votedN, expected, onN) {
+  const m = room.meta, others = people().filter(p => !p.me);
   const delegated = m.revealerUid !== room.uid;
   const who = delegated ? room.guests[m.revealerUid]?.name : null;
-  return `<section class="card host">
+  const url = roomUrl(room.id);
+  return `<section class="card flow">
     <p class="eyebrow">👑 ${S.h_eyebrow}</p>
     ${room.justCreated ? `<p class="ok">${S.h_created}</p>` : ""}
-    <p class="muted small">${S.h_device}</p>
-    <h3>${S.h_keeper}</h3>
-    <label class="lbl">${S.h_keeper_lbl}
-      <select id="keeper"><option value="${room.uid}">${S.h_keeper_me}</option>
-      ${ps.map(p => `<option value="${p.uid}" ${p.uid === m.revealerUid ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label>
-    ${delegated ? `<p class="small">${fmt(S.h_keeper_is, esc(who || "?"))}</p>` : ""}
-    <details class="danger-zone"><summary>${S.h_more}</summary>
-      <label class="lbl">${S.h_inv_edit}<textarea id="inv" rows="4">${esc(Object.values(room.invitees).join("\n"))}</textarea></label>
-      <button class="btn" id="saveinv">${S.h_inv_save}</button>
-      <button class="btn btn-danger" id="del">${S.h_delete}</button>
+    <ol class="flow-steps">
+      ${delegated ? `<li class="done"><b>${S.f_step1}</b><p>${fmt(S.h_keeper_is, esc(who || "?"))}</p></li>` : stepSeal()}
+      <li><b>${S.f_step2}</b>
+        <div class="row gap"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(shareText(m))}">WhatsApp</a>
+        <button class="btn" data-act="share">${S.share_more}</button><button class="btn" data-act="copy">${S.copy}</button></div>
+        <p class="muted small link-text">${esc(url)}</p></li>
+      ${delegated ? `<li><b>${S.f_step3}</b><p class="muted">${fmt(S.f_keeper_starts, esc(who || "?"))}</p></li>` : stepStart(votedN, expected, onN)}
+    </ol>
+    <details class="settings"><summary>⚙️ ${S.h_more}</summary>
+      <label class="lbl">${S.h_keeper}<small class="muted">${S.h_keeper_lbl}</small>
+        <select name="keeper" data-init="${m.revealerUid}"><option value="${room.uid}">${S.h_keeper_me}</option>
+        ${others.map(p => `<option value="${p.uid}" ${p.uid === m.revealerUid ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label>
+      <label class="lbl">${S.h_inv_edit}<textarea name="inv" rows="4">${esc(Object.values(room.invitees).join("\n"))}</textarea></label>
+      <button class="btn" data-act="saveinv">${S.h_inv_save}</button>
+      <p class="muted small">${S.h_device}</p>
+      <button class="btn btn-danger" data-act="del">${S.h_delete}</button>
     </details>
   </section>`;
 }
-
-function revealerPanel() {
-  if (!isRevealer()) return "";
-  const s = room.sealed;
-  const ps = people(), votedN = ps.filter(p => p.voted).length, onN = ps.filter(p => p.online).length;
-  return `<section class="card keeper">
-    <p class="eyebrow">🤫 ${S.k_eyebrow}</p>
-    <h2>${isHost() ? S.k_h_host : S.k_h_guest}</h2>
-    <p class="muted small">${S.k_p}</p>
-    <div class="vote-btns seal">
-      <button class="vb girl ${s === "girl" ? "on" : ""}" data-s="girl"><span class="vi">🎀</span>${S.girl}</button>
-      <button class="vb boy ${s === "boy" ? "on" : ""}" data-s="boy"><span class="vi">🎩</span>${S.boy}</button>
-    </div>
-    ${s ? `<p class="ok small">${S.k_sealed}</p>` : ""}
-    <button class="btn btn-gold btn-big start" id="start" ${s ? "" : "disabled"}>🎉 ${S.k_start}</button>
-    <p class="muted small center">${fmt(S.k_status, votedN, onN)}</p>
-  </section>`;
+function keeperCard(votedN, expected, onN) {
+  return `<section class="card flow keeper"><p class="eyebrow">🤫 ${S.k_eyebrow}</p><h2>${S.k_h_guest}</h2>
+    <ol class="flow-steps">${stepSeal()}${stepStart(votedN, expected, onN)}</ol></section>`;
+}
+function gameCard() {
+  const scores = Object.entries(room.scores).map(([u, x]) => ({ name: room.guests[u]?.name || x.name, score: x.score, me: u === room.uid })).sort((a, b) => b.score - a.score).slice(0, 3);
+  return `<section class="card game-card"><div class="row"><div><h2>🎈 ${S.game_name}</h2><p class="muted small">${S.game_teaser}</p></div>
+    <button class="btn btn-gold" data-act="play">${S.game_play}</button></div>
+    ${scores.length ? `<ol class="board">${scores.map(s => `<li class="${s.me ? "me" : ""}"><span>${esc(s.name)}</span><b>${s.score}</b></li>`).join("")}</ol>` : ""}</section>`;
 }
 
-function bindLobby(url) {
+function bindLobby() {
+  const R = room;
+  bindDates(app);
   app.querySelectorAll(".balloon").forEach(b => b.onclick = () => { toast(b.dataset.tip); b.classList.remove("hop"); void b.offsetWidth; b.classList.add("hop"); });
-  app.querySelectorAll(".vote .vb").forEach(b => b.onclick = async () => {
-    const pick = b.dataset.p;
-    const next = Object.assign({}, room.mine || {}, { pick });
-    try { await fb.vote(room.id, clean(next)); room.mine = next; sfx.plop(); toast(pick === "girl" ? S.v_done_girl : S.v_done_boy); render(); }
+  app.querySelectorAll(".cast .vb").forEach(b => b.onclick = async () => {
+    const next = Object.assign({}, R.mine || {}, { pick: b.dataset.p });
+    try { await fb.vote(R.id, clean(next)); if (room !== R) return; R.mine = next; sfx.plop(); toast(next.pick === "girl" ? S.v_done_girl : S.v_done_boy); render(); }
     catch (e) { console.error(e); toast(S.err_generic); }
   });
-  const sg = $("#saveg");
-  if (sg) sg.onclick = async () => {
-    const box = sg.closest(".guesses");
-    const next = Object.assign({}, room.mine || {});
-    if (!next.pick) return toast(S.v_pick_first);
-    const b = box.querySelector("[name=birth]").value, w = parseInt(box.querySelector("[name=weight]").value, 10), l = box.querySelector("[name=letter]").value.trim();
-    if (b) next.birth = b; else delete next.birth;
-    if (w >= 500 && w <= 7000) next.weight = w; else delete next.weight;
-    if (l) next.letter = l.toLocaleUpperCase(LANG); else delete next.letter;
-    try { await fb.vote(room.id, clean(next)); room.mine = next; toast(S.v_saved); } catch (e) { console.error(e); toast(S.err_generic); }
-  };
   app.querySelectorAll(".seal .vb").forEach(b => b.onclick = async () => {
-    try { await fb.seal(room.id, b.dataset.s); room.sealed = b.dataset.s; sfx.plop(); render(); } catch (e) { console.error(e); toast(S.err_generic); }
+    try { await fb.seal(R.id, b.dataset.s); if (room !== R) return; R.sealed = b.dataset.s; sfx.plop(); render(); } catch (e) { console.error(e); toast(S.err_generic); }
   });
-  const st = $("#start");
-  if (st) st.onclick = async () => {
+  const act = (name, fn) => app.querySelectorAll(`[data-act="${name}"]`).forEach(el => el.onclick = fn);
+  act("saveg", async () => {
+    const box = app.querySelector(".guesses");
+    const next = Object.assign({}, R.mine || {});
+    if (!next.pick) return toast(S.v_pick_first);
+    const bv = box.querySelector("[name=birth]").value, wRaw = box.querySelector("[name=weight]").value.trim(), l = box.querySelector("[name=letter]").value.trim();
+    const w = parseInt(wRaw, 10);
+    if (wRaw && !(w >= 500 && w <= 7000)) return toast(S.v_err_weight);
+    if (bv && !parseYmd(bv)) return toast(S.v_err_birth);
+    if (bv) next.birth = bv; else delete next.birth;
+    if (wRaw) next.weight = w; else delete next.weight;
+    if (l) next.letter = l.toLocaleUpperCase(LANG); else delete next.letter;
+    try { await fb.vote(R.id, clean(next)); if (room !== R) return; R.mine = next; ["birth", "weight", "letter"].forEach(k => delete R.drafts[k]); document.activeElement?.blur(); toast(S.v_saved); render(); }
+    catch (e) { console.error(e); toast(S.err_generic); }
+  });
+  act("start", async (ev) => {
+    const st = ev.currentTarget;
     if (!confirm(S.k_confirm)) return;
-    unlock(); st.disabled = true;
-    // Çevrimdışıyken başlatma: yerel şov açılır ama sunucu reddeder, diğerleri görmez
-    if (!fb.isConnected()) { toast(S.k_offline); st.disabled = false; return; }
-    const R = room;
-    try { await fb.startReveal(R.id, R.sealed, SHOW_LEAD); }
-    catch (e) {
-      console.error(e); toast(S.err_generic);
-      if (R.showCtl) { R.showCtl.stop(); R.showCtl = null; }
-      R.showing = false; location.reload();
+    unlock();
+    if (!fb.isConnected()) return toast(S.k_offline);
+    st.disabled = true;
+    R.starting = true;   // yerel "reveal" olayı sunucu onayı gelmeden şovu başlatmasın
+    try {
+      await fb.startReveal(R.id, R.sealed, SHOW_LEAD, onlineUids().length || 1);
+      R.starting = false;
+      if (room === R && R.meta?.status === "reveal") onReveal();
+    } catch (e) {
+      console.error(e); R.starting = false;
+      if (room !== R) return;
+      toast(S.err_generic); st.disabled = false; render();
     }
-  };
-  const kp = $("#keeper");
+  });
+  const kp = app.querySelector("[name=keeper]");
   if (kp) kp.onchange = async () => {
-    if (kp.value !== room.uid && !confirm(S.h_keeper_confirm)) { kp.value = room.meta.revealerUid; return; }
-    try { await fb.delegate(room.id, kp.value); } catch (e) { console.error(e); toast(S.err_generic); }
+    if (kp.value !== R.uid && !confirm(S.h_keeper_confirm)) { kp.value = R.meta.revealerUid; return; }
+    try { await fb.delegate(R.id, kp.value); delete R.drafts.keeper; } catch (e) { console.error(e); toast(S.err_generic); }
   };
-  const si = $("#saveinv");
-  if (si) si.onclick = async () => {
-    const names = [...new Set($("#inv").value.split(/[\n,]/).map(s => s.trim().slice(0, 40)).filter(Boolean))].slice(0, 80);
-    try { await fb.setInvitees(room.id, names); toast(S.saved); } catch (e) { console.error(e); toast(S.err_generic); }
-  };
-  const del = $("#del");
-  if (del) del.onclick = async () => {
+  act("saveinv", async () => {
+    const seen = new Set(), names = [];
+    app.querySelector("[name=inv]").value.split(/[\n,]/).map(s => s.trim().slice(0, 40)).filter(Boolean).forEach(n => { if (!seen.has(lower(n))) { seen.add(lower(n)); names.push(n); } });
+    try { await fb.setInvitees(R.id, names.slice(0, 80)); delete R.drafts.inv; toast(S.saved); } catch (e) { console.error(e); toast(S.err_generic); }
+  });
+  act("del", async () => {
     if (!confirm(S.h_delete_confirm)) return;
-    try { await fb.deleteRoom(room.id); cleanupRoom(); location.hash = ""; route(); } catch (e) { console.error(e); toast(S.err_generic); }
-  };
-  $("#cp").onclick = () => copy(url);
-  $("#sh").onclick = () => share(fmt(S.share_text, room.meta.babyName), url);
-  $("#play").onclick = () => {
-    room.game = playGame({ root: document.body, S, onEnd: async (score) => {
-      room.game = null;
-      if (score != null && room) { try { await fb.setScore(room.id, me().name, score); } catch (e) {} toast(fmt(S.game_result, score)); }
+    try { await fb.deleteRoom(R.id); cleanupRoom(); location.href = CREATE; } catch (e) { console.error(e); toast(S.err_generic); }
+  });
+  act("copy", () => copy(roomUrl(R.id)));
+  act("share", () => share(shareText(R.meta)));
+  act("play", () => {
+    const names = [...new Set([...Object.values(R.guests).map(g => g.name), ...Object.values(R.invitees)].map(n => n.trim().split(/\s+/)[0]).filter(Boolean))];
+    R.game = playGame({ root: document.body, S, names, baby: babyOf(R.meta), onEnd: async (score) => {
+      R.game = null;
+      if (score != null && room === R && me()) { try { await fb.setScore(R.id, me().name, score); } catch (e) {} toast(fmt(S.game_result, score)); }
     } });
-  };
+  });
 }
 const clean = (o) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && v !== null && v !== ""));
 
 // ---------------------------------------------------------------- açılış
-async function onReveal() {
-  const m = room.meta;
-  if (room.game) room.game.abort();
-  const late = fb.serverNow() - m.revealAt;
-  // Oylar artık okunabilir
-  room.unsubs.push(fb.watch(room.id, "votes", v => { room.votes = v || {}; if (room.shown && !room.showing) render(); }));
-  if (late > SHOW_LEN) { room.shown = true; render(); return; }
+const needFor = (R, k) => k >= 4 ? 1 : Math.ceil((R.show?.n || 1) * PER_PERSON * (k >= 2 ? .6 : 1));
+const sumTaps = (R) => Object.values(R.taps || {}).reduce((s, n) => s + (+n || 0), 0);
+
+function onReveal() {
+  const R = room, m = R.meta;
+  if (R.game) R.game.abort();
+  closeCal();
+  R.unsubs.push(fb.watch(R.id, "votes", v => { R.votes = v || {}; if (room === R && R.shown && !R.showing) render(); }));
+  const t = (fb.serverNow() - m.revealAt) / 1000;
+  const pop = R.show?.pop;
+  if (pop != null && t > showEnd(pop)) { R.shown = true; fetchResult(R, () => render()); render(); return; }
   runShow(false);
 }
 
+function fetchResult(R, done) {
+  if (R.result) return done && done();
+  clearInterval(R.resTimer);
+  const tryGet = async () => {
+    const v = await fb.getResult(R.id);
+    if (v && room === R) { R.result = v; clearInterval(R.resTimer); done && done(); }
+  };
+  tryGet(); R.resTimer = setInterval(tryGet, 300);
+}
+
 function runShow(local) {
-  const m = room.meta, R = room;
-  room.showing = true;
-  const localStart = performance.now();
-  const getT = local ? () => performance.now() - localStart - 1500 : () => fb.serverNow() - m.revealAt;
-  let lastSent = 0, pending = 0, sendT = null;
+  const R = room, m = R.meta;
+  R.showing = true;
+  const base = fb.serverNow() - performance.now();               // saati bir kez sabitle (sıçramasın)
+  const t0 = performance.now();
+  const getT = local ? () => performance.now() - t0 - 1500 : () => base + performance.now() - m.revealAt;
   const canTap = () => !local && room === R && !!R.guests[R.uid];
+  let unsent = 0, sendT = null;
+  const flush = () => { sendT = null; const d = unsent; unsent = 0; if (d && room === R) fb.addTaps(R.id, d).catch(() => { unsent += d; }); };
+  // patlama yaklaşınca sonucu iste (kural ancak o an açar)
+  if (!local) R.resWatch = setInterval(() => {
+    if (room !== R || !R.showing) return clearInterval(R.resWatch);
+    const pop = R.show?.pop;
+    if (pop != null && !R.result && getT() / 1000 >= roundStart(pop) + 14.05) { clearInterval(R.resWatch); fetchResult(R); }
+  }, 200);
   R.showCtl = playShow({
-    root: document.body, getT, result: m.result, babyName: m.babyName, S,
+    root: document.body, getT, S, babyName: babyOf(m), parents: m.parents,
+    getShow: () => R.show,
+    getResult: () => R.result,
+    need: (k) => needFor(R, k),
     get myPick() { return R.mine?.pick; },
     soundWanted: isOn(),
-    correctCount: () => Object.values(room.votes || {}).filter(v => v.pick === m.result).length,
-    getTaps: () => {
-      const entries = Object.entries(room.taps).filter(([, n]) => n > 0);
-      const mine = pending;
-      let total = 0;
-      entries.forEach(([uid, n]) => { total += uid === room.uid ? Math.max(n, mine) : n; });
-      if (!room.taps[room.uid] && mine) total += mine;
-      const top = entries.map(([uid, n]) => [room.guests[uid]?.name?.split(" ")[0] || "?", uid === room.uid ? Math.max(n, mine) : n]).sort((a, b) => b[1] - a[1]);
-      return { total, people: entries.length + (!room.taps[room.uid] && mine ? 1 : 0), top, expected: Object.keys(room.presence).length || 1 };
+    correctCount: () => Object.entries(R.votes || {}).filter(([u, v]) => u !== m.revealerUid && v.pick === R.result).length,
+    getTaps: (k) => {
+      const r = R.show?.r || {}, baseK = k ? (r[k - 1]?.t || 0) : 0;
+      if (local) {
+        const tl = getT() / 1000 - roundStart(k), endT = r[k]?.t ?? baseK;
+        return { round: Math.max(0, (endT - baseK) * Math.max(0, Math.min(1, tl / 10))), people: 0, top: [] };
+      }
+      const mineDb = +(R.taps[R.uid] || 0), mine = mineDb + (canTap() ? unsent : 0);
+      const total = sumTaps(R) - mineDb + mine;
+      const entries = Object.entries(R.taps).map(([u, n]) => [u, u === R.uid ? mine : +n]);
+      if (!R.taps[R.uid] && mine) entries.push([R.uid, mine]);
+      const top = entries.filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([u, n]) => [R.guests[u]?.name?.split(" ")[0] || "?", n]);
+      return { round: Math.max(0, total - baseK), people: top.length, top };
     },
-    onTap: (n) => {
-      pending = n;
+    decide: (k) => {
+      if (local || R.decided[k] || room !== R || !R.guests[R.uid] || R.show?.r?.[k]) return;
+      const tl = getT() / 1000 - roundStart(k);
+      if (!isRevealer() && tl < 11.3) return;                     // önce sır tutucu yazsın, gecikirse herkes
+      R.decided[k] = true;
+      const r = R.show?.r || {}, baseK = k ? (r[k - 1]?.t || 0) : 0, total = sumTaps(R);
+      const o = (k >= 4 || total - baseK >= needFor(R, k)) ? "pop" : "fail";
+      fb.setRound(R.id, k, o, total).then(ok => { if (!ok) R.decided[k] = false; });
+    },
+    onTap: () => {
       if (!canTap()) return;
-      const now = performance.now();
-      const send = () => { lastSent = performance.now(); sendT = null; if (room === R) fb.setTaps(R.id, pending).catch(() => {}); };
-      if (now - lastSent > 400) send(); else if (!sendT) sendT = setTimeout(send, 400 - (now - lastSent));
+      unsent++;
+      if (!sendT) sendT = setTimeout(flush, 350);
     },
-    onEnd: () => { R.showing = false; R.shown = true; R.showCtl = null; if (room === R) render(); },
+    onEnd: () => { flush(); R.showing = false; R.shown = true; R.showCtl = null; clearInterval(R.resWatch); if (room === R) render(); },
   });
 }
 
 function renderResult() {
-  const m = room.meta, girl = m.result === "girl";
-  const votes = room.votes || {};
-  const list = Object.entries(votes).map(([uid, v]) => ({ uid, name: room.guests[uid]?.name || "?", ...v }));
-  const right = list.filter(v => v.pick === m.result), nG = list.filter(v => v.pick === "girl").length, nB = list.filter(v => v.pick === "boy").length;
+  const R = room, m = R.meta;
+  if (!R.result) { app.innerHTML = `<div class="card center"><p>${S.loading}</p></div>`; return fetchResult(R, () => render()); }
+  const girl = R.result === "girl";
+  const list = Object.entries(R.votes || {}).filter(([u]) => u !== m.revealerUid).map(([uid, v]) => ({ uid, name: R.guests[uid]?.name || "?", ...v }));
+  const right = list.filter(v => v.pick === R.result), nG = list.filter(v => v.pick === "girl").length, nB = list.filter(v => v.pick === "boy").length;
   const tot = nG + nB, pct = tot ? Math.round(right.length / tot * 100) : 0;
-  const R = 46, Cc = 2 * Math.PI * R, gLen = tot ? Cc * nG / tot : 0;
-  const scores = Object.entries(room.scores).map(([u, x]) => ({ name: room.guests[u]?.name || x.name, score: x.score })).sort((a, b) => b.score - a.score);
-  const taps = Object.entries(room.taps).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
+  const Rr = 46, Cc = 2 * Math.PI * Rr, gLen = tot ? Cc * nG / tot : 0;
+  const scores = Object.entries(R.scores).map(([u, x]) => ({ name: R.guests[u]?.name || x.name, score: x.score })).sort((a, b) => b.score - a.score);
+  const taps = Object.entries(R.taps).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
   const tapTotal = taps.reduce((s, [, n]) => s + n, 0);
+  const rounds = Object.keys(R.show?.r || {}).length;
   const guesses = list.filter(v => v.birth || v.weight || v.letter);
-  const mine = room.mine?.pick;
+  const mine = m.revealerUid === R.uid ? null : R.mine?.pick;
   app.innerHTML = `
   <article class="result ${girl ? "is-girl" : "is-boy"}" id="rc">
     <header class="r-top"><p class="r-brand">Pink<span>Or</span>Blue</p><h1>${girl ? S.girl_big : S.boy_big}</h1>
-      <p>${esc(fmt(girl ? S.show_girl_line : S.show_boy_line, m.babyName))}</p><p class="small">${esc(fmtDate(m.partyAt))}</p></header>
-    ${mine ? `<p class="r-me ${mine === m.result ? "yes" : ""}">${mine === m.result ? S.show_you_right : S.show_you_wrong}</p>` : ""}
+      <p>${esc(fmt(girl ? S.show_girl_line : S.show_boy_line, babyOf(m)))}</p>
+      ${m.parents ? `<p class="small">${esc(fmt(S.show_congrats, m.parents))}</p>` : ""}<p class="small">${esc(fmtDate(m.partyAt))}</p></header>
+    ${mine ? `<p class="r-me ${mine === R.result ? "yes" : ""}">${mine === R.result ? S.show_you_right : S.show_you_wrong}</p>` : ""}
     <section class="r-pie">
-      <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><circle cx="60" cy="60" r="${R}" fill="none" stroke="var(--blue)" stroke-width="18"/>
-      <circle cx="60" cy="60" r="${R}" fill="none" stroke="var(--pink)" stroke-width="18" stroke-dasharray="${gLen} ${Cc}" transform="rotate(-90 60 60)" class="pie-g" style="--len:${gLen}"/></svg>
+      <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><circle cx="60" cy="60" r="${Rr}" fill="none" stroke="var(--blue)" stroke-width="18"/>
+      <circle cx="60" cy="60" r="${Rr}" fill="none" stroke="var(--pink)" stroke-width="18" stroke-dasharray="${gLen} ${Cc}" transform="rotate(-90 60 60)" class="pie-g"/></svg>
       <div><p class="r-pct">${fmt(S.r_pct, pct)}</p><p>🎀 ${S.girl} <b>${nG}</b> · 🎩 ${S.boy} <b>${nB}</b></p></div>
     </section>
     <section><h2>${fmt(S.r_right, right.length)}</h2>
@@ -442,25 +625,30 @@ function renderResult() {
       ${guesses.map(v => `<tr><td>${esc(v.name)}</td><td>${esc(shortDate(v.birth))}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td></tr>`).join("")}</tbody></table></section>` : ""}
     <section class="r-badges">
       ${scores[0] ? `<span>🏆 ${fmt(S.r_champ, esc(scores[0].name), scores[0].score)}</span>` : ""}
-      ${taps[0] ? `<span>👆 ${fmt(S.r_fastest, esc(room.guests[taps[0][0]]?.name || "?"), taps[0][1])}</span>` : ""}
-      ${tapTotal ? `<span>🎈 ${fmt(S.r_total_taps, tapTotal)}</span>` : ""}
+      ${taps[0] ? `<span>👆 ${fmt(S.r_fastest, esc(R.guests[taps[0][0]]?.name || "?"), taps[0][1])}</span>` : ""}
+      ${tapTotal ? `<span>🎈 ${fmt(rounds > 1 ? S.r_total_taps_rounds : S.r_total_taps, tapTotal, rounds)}</span>` : ""}
     </section>
     <footer class="r-maker"><img src="${ASSET}img/anbertech-ink.png" alt="" width="16" height="15">PinkOrBlue · ${S.brand_short}</footer>
   </article>
   <div class="r-actions">
-    <button class="btn btn-gold" id="replay">▶ ${S.r_replay}</button>
-    <button class="btn" id="rshare">${S.r_share}</button>
-    <a class="btn" href="${location.pathname}">${S.r_new}</a>
+    <button class="btn btn-gold" data-act="replay">▶ ${S.r_replay}</button>
+    <button class="btn" data-act="rshare">${S.r_share}</button>
+    <a class="btn" href="${CREATE}">${S.r_new}</a>
   </div>
   <p class="muted small center">${S.r_expire}</p>`;
-  $("#replay").onclick = () => { unlock(); runShow(true); };
-  $("#rshare").onclick = () => share(fmt(girl ? S.r_share_text_girl : S.r_share_text_boy, m.babyName), roomUrl(room.id));
+  app.querySelector('[data-act="replay"]').onclick = () => { unlock(); runShow(true); };
+  app.querySelector('[data-act="rshare"]').onclick = () => share(fmt(girl ? S.r_share_text_girl : S.r_share_text_boy, babyOf(m)) + "\n" + roomUrl(R.id));
 }
 
 // ---------------------------------------------------------------- yönlendirme
 function route(justCreated) {
+  routeGen++;
+  keepHashInLangLinks();
+  const hasR = /[#&]r=/.test(location.hash);
   const id = roomId();
-  if (id) viewRoom(id, justCreated === true);
+  if (id && /^[a-z0-9]{6,20}$/.test(id)) viewRoom(id, justCreated === true);
+  else if (hasR) { cleanupRoom(); document.body.dataset.view = "room"; renderMissing(); }
+  else if (window.POB_IS_INVITE) location.replace(CREATE);
   else { cleanupRoom(); viewCreate(); }
 }
 addEventListener("hashchange", () => route());
