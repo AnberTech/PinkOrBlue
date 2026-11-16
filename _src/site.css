@@ -29,7 +29,7 @@ img{max-width:100%;height:auto}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
 .muted{color:var(--ink-muted)}.small{font-size:.875rem}.center{text-align:center}
 .eyebrow{font:800 .8rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 10px}
-.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
+.skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.skip:focus{width:auto;height:auto;clip:auto;inset-inline-start:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
 /* ---- üst çubuk */
@@ -452,3 +452,14 @@ footer.mini nav a:hover{text-decoration:underline}
 @keyframes noteIn{from{opacity:0;transform:translateY(16px) rotate(calc(var(--rot) * 4)) scale(.9)}to{opacity:1;transform:rotate(var(--rot))}}
 @media(max-width:380px){.wall-grid{grid-template-columns:1fr 1fr;gap:10px}.note blockquote{font-size:.92rem}}
 .wnm-lbl{margin:12px 0 10px}
+/* sağdan sola diller (Arapça) */
+[dir=rtl] .lm-list{right:auto;left:0}
+[dir=rtl] .cal{left:auto;right:0}
+[dir=rtl] .dp-btn{text-align:right}
+[dir=rtl] .teambar b{text-align:left;padding-right:0;padding-left:16px}
+[dir=rtl] .teambar i{padding-left:0;padding-right:16px}
+[dir=rtl] .note-del{right:auto;left:6px}
+[dir=rtl] .g-close{margin-left:0}
+[dir=rtl] .game-hud .g-time{margin-left:0;margin-right:auto}
+.noflag{font-size:14px;line-height:1}
+html[lang=ar] body,html[lang=ar] input,html[lang=ar] textarea{font-family:"Baloo Bhaijaan 2",var(--f-body)}

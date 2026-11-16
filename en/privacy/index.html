@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -15,6 +15,19 @@
 <link rel="canonical" href="https://anbertech.github.io/PinkOrBlue/en/privacy/" />
 <link rel="alternate" hreflang="tr" href="https://anbertech.github.io/PinkOrBlue/gizlilik/" />
 <link rel="alternate" hreflang="en" href="https://anbertech.github.io/PinkOrBlue/en/privacy/" />
+<link rel="alternate" hreflang="ar" href="https://anbertech.github.io/PinkOrBlue/ar/privacy/" />
+<link rel="alternate" hreflang="de" href="https://anbertech.github.io/PinkOrBlue/de/privacy/" />
+<link rel="alternate" hreflang="es" href="https://anbertech.github.io/PinkOrBlue/es/privacy/" />
+<link rel="alternate" hreflang="fr" href="https://anbertech.github.io/PinkOrBlue/fr/privacy/" />
+<link rel="alternate" hreflang="id" href="https://anbertech.github.io/PinkOrBlue/id/privacy/" />
+<link rel="alternate" hreflang="it" href="https://anbertech.github.io/PinkOrBlue/it/privacy/" />
+<link rel="alternate" hreflang="ja" href="https://anbertech.github.io/PinkOrBlue/ja/privacy/" />
+<link rel="alternate" hreflang="ko" href="https://anbertech.github.io/PinkOrBlue/ko/privacy/" />
+<link rel="alternate" hreflang="ku" href="https://anbertech.github.io/PinkOrBlue/ku/privacy/" />
+<link rel="alternate" hreflang="nl" href="https://anbertech.github.io/PinkOrBlue/nl/privacy/" />
+<link rel="alternate" hreflang="pl" href="https://anbertech.github.io/PinkOrBlue/pl/privacy/" />
+<link rel="alternate" hreflang="pt" href="https://anbertech.github.io/PinkOrBlue/pt/privacy/" />
+<link rel="alternate" hreflang="ru" href="https://anbertech.github.io/PinkOrBlue/ru/privacy/" />
 <link rel="alternate" hreflang="x-default" href="https://anbertech.github.io/PinkOrBlue/en/privacy/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="PinkOrBlue" />
@@ -30,6 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap&subset=latin-ext" rel="stylesheet" />
+
 <style>:root{
   --pink:#FF8FB8;--pink-deep:#D6336C;--pink-soft:#FFE3EE;
   --blue:#7EC8FF;--blue-deep:#1C6FB8;--blue-soft:#E2F2FF;
@@ -61,7 +75,7 @@ img{max-width:100%;height:auto}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
 .muted{color:var(--ink-muted)}.small{font-size:.875rem}.center{text-align:center}
 .eyebrow{font:800 .8rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 10px}
-.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
+.skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.skip:focus{width:auto;height:auto;clip:auto;inset-inline-start:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
 /* ---- üst çubuk */
@@ -484,13 +498,24 @@ footer.mini nav a:hover{text-decoration:underline}
 @keyframes noteIn{from{opacity:0;transform:translateY(16px) rotate(calc(var(--rot) * 4)) scale(.9)}to{opacity:1;transform:rotate(var(--rot))}}
 @media(max-width:380px){.wall-grid{grid-template-columns:1fr 1fr;gap:10px}.note blockquote{font-size:.92rem}}
 .wnm-lbl{margin:12px 0 10px}
+/* sağdan sola diller (Arapça) */
+[dir=rtl] .lm-list{right:auto;left:0}
+[dir=rtl] .cal{left:auto;right:0}
+[dir=rtl] .dp-btn{text-align:right}
+[dir=rtl] .teambar b{text-align:left;padding-right:0;padding-left:16px}
+[dir=rtl] .teambar i{padding-left:0;padding-right:16px}
+[dir=rtl] .note-del{right:auto;left:6px}
+[dir=rtl] .g-close{margin-left:0}
+[dir=rtl] .game-hud .g-time{margin-left:0;margin-right:auto}
+.noflag{font-size:14px;line-height:1}
+html[lang=ar] body,html[lang=ar] input,html[lang=ar] textarea{font-family:"Baloo Bhaijaan 2",var(--f-body)}
 </style>
 </head>
 <body class="doc">
 <div id="splash" aria-hidden="true"><div class="sp-in"><img class="sp-b" src="../../assets/img/balloon-icon-180.png" alt="" width="120" height="120" /><p class="sp-w"><b>Pink</b>Or<i>Blue</i></p><p class="sp-by">by <img class="am-d" src="../../assets/img/anbertech.png" alt="" width="22" height="20" /><img class="am-l" src="../../assets/img/anbertech-ink.png" alt="" width="22" height="20" /><span>Anber<em>Tech</em></span></p></div></div>
 <script>(function(){var s=document.getElementById("splash");try{var r=document.referrer;if(r&&new URL(r).host===location.host&&sessionStorage.getItem("pob_sp")){s.remove();return}sessionStorage.setItem("pob_sp","1")}catch(e){}document.documentElement.classList.add("sp-on");setTimeout(function(){s.classList.add("out");document.documentElement.classList.remove("sp-on")},1250);setTimeout(function(){s.remove()},1750);s.onclick=function(){s.classList.add("out");document.documentElement.classList.remove("sp-on")}})();</script><header class="top"><div class="wrap">
   <a class="logo" href="../../en/"><img src="../../assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span><b>Pink</b>Or<i>Blue</i></span></a>
-  <span class="sp"></span><details class="lang-menu"><summary aria-label="Language"><img src="../../assets/img/flags/en.svg" alt="" width="20" height="14" /><b>EN</b></summary><nav class="lang lm-list" aria-label="Language"><a href="https://anbertech.github.io/PinkOrBlue/gizlilik/" hreflang="tr" lang="tr"><img src="../../assets/img/flags/tr.svg" alt="" width="20" height="14" /><span>Türkçe</span></a><a href="https://anbertech.github.io/PinkOrBlue/en/privacy/" hreflang="en" lang="en" aria-current="page"><img src="../../assets/img/flags/en.svg" alt="" width="20" height="14" /><span>English</span></a></nav></details><script>(function(d){var m=d.querySelector(".lang-menu");if(!m)return;d.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});d.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.open){m.open=false;m.querySelector("summary").focus()}})})(document);</script>
+  <span class="sp"></span><details class="lang-menu"><summary aria-label="Language"><img src="../../assets/img/flags/en.svg" alt="" width="20" height="14" /><b>EN</b></summary><nav class="lang lm-list" aria-label="Language"><a href="https://anbertech.github.io/PinkOrBlue/gizlilik/" hreflang="tr" lang="tr"><img src="../../assets/img/flags/tr.svg" alt="" width="20" height="14" /><span>Türkçe</span></a><a href="https://anbertech.github.io/PinkOrBlue/en/privacy/" hreflang="en" lang="en" aria-current="page"><img src="../../assets/img/flags/en.svg" alt="" width="20" height="14" /><span>English</span></a><a href="https://anbertech.github.io/PinkOrBlue/ar/privacy/" hreflang="ar" lang="ar"><img src="../../assets/img/flags/ar.svg" alt="" width="20" height="14" /><span>العربية</span></a><a href="https://anbertech.github.io/PinkOrBlue/de/privacy/" hreflang="de" lang="de"><img src="../../assets/img/flags/de.svg" alt="" width="20" height="14" /><span>Deutsch</span></a><a href="https://anbertech.github.io/PinkOrBlue/es/privacy/" hreflang="es" lang="es"><img src="../../assets/img/flags/es.png" alt="" width="20" height="14" /><span>Español</span></a><a href="https://anbertech.github.io/PinkOrBlue/fr/privacy/" hreflang="fr" lang="fr"><img src="../../assets/img/flags/fr.svg" alt="" width="20" height="14" /><span>Français</span></a><a href="https://anbertech.github.io/PinkOrBlue/id/privacy/" hreflang="id" lang="id"><img src="../../assets/img/flags/id.svg" alt="" width="20" height="14" /><span>Bahasa Indonesia</span></a><a href="https://anbertech.github.io/PinkOrBlue/it/privacy/" hreflang="it" lang="it"><img src="../../assets/img/flags/it.svg" alt="" width="20" height="14" /><span>Italiano</span></a><a href="https://anbertech.github.io/PinkOrBlue/ja/privacy/" hreflang="ja" lang="ja"><img src="../../assets/img/flags/ja.svg" alt="" width="20" height="14" /><span>日本語</span></a><a href="https://anbertech.github.io/PinkOrBlue/ko/privacy/" hreflang="ko" lang="ko"><img src="../../assets/img/flags/ko.svg" alt="" width="20" height="14" /><span>한국어</span></a><a href="https://anbertech.github.io/PinkOrBlue/ku/privacy/" hreflang="ku" lang="ku"><span class="noflag">🌐</span><span>Kurdî</span></a><a href="https://anbertech.github.io/PinkOrBlue/nl/privacy/" hreflang="nl" lang="nl"><img src="../../assets/img/flags/nl.svg" alt="" width="20" height="14" /><span>Nederlands</span></a><a href="https://anbertech.github.io/PinkOrBlue/pl/privacy/" hreflang="pl" lang="pl"><img src="../../assets/img/flags/pl.svg" alt="" width="20" height="14" /><span>Polski</span></a><a href="https://anbertech.github.io/PinkOrBlue/pt/privacy/" hreflang="pt" lang="pt"><img src="../../assets/img/flags/pt-br.svg" alt="" width="20" height="14" /><span>Português</span></a><a href="https://anbertech.github.io/PinkOrBlue/ru/privacy/" hreflang="ru" lang="ru"><img src="../../assets/img/flags/ru.svg" alt="" width="20" height="14" /><span>Русский</span></a></nav></details><script>(function(d){var m=d.querySelector(".lang-menu");if(!m)return;d.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});d.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.open){m.open=false;m.querySelector("summary").focus()}})})(document);</script>
 </div></header>
 <main><h1>Privacy Policy</h1><p class="muted">Last updated: November 16, 2026</p><div class="card"><h2>1. Overview</h2><p>PinkOrBlue is a free website that lets families reveal their baby's gender online, together with the people they love. A parent opens a party room and shares the link; guests vote and guess, and the reveal plays on everyone's screen at the same moment. This page explains what we store, why we store it and when it is deleted. PinkOrBlue is made by AnberTech.</p><h2>2. Data We Store</h2><p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the parents' names (if entered), the baby's nickname, the reveal date, the result the host enters secretly, the guest list and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions, plus the number of taps during the reveal show and whether someone is currently in the room.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p><h2>3. Identity and Accounts</h2><p>There is no sign-up and no account. When you open the site, Firebase Anonymous Authentication creates a random, anonymous ID for you. It is used only to link your vote to you and to let you pick up where you left off if you come back to the room in the same browser. The ID does not contain your name, e-mail or anything else that identifies you. This anonymous session is kept in your browser's local storage and is never used for tracking.</p><h2>4. Where Data Is Stored</h2><p>Room details, names, votes, guesses and scores are stored in Firebase Realtime Database, a service provided by Google. This data is shown only to people who have the link to that room. It is never sold, rented or shared with anyone for advertising. Firebase processes the data under Google's own privacy and security terms. The page fonts are loaded from Google Fonts, so your browser connects to Google's servers for them.</p><p>When you connect to the site, the hosting service (GitHub Pages) and Firebase servers may process technical information such as your IP address in order to deliver the page. We do not collect or keep this information.</p><h2>5. Deletion</h2><p><b>All data belonging to a room is deleted automatically 7 days after the party date.</b></p><ul><li>The host can delete the room at any time; all names, votes, guesses and scores in it are then removed immediately.</li><li>If you are a guest and would like your name or vote removed sooner, ask the host or e-mail us at the address below.</li></ul><p>Deletion is done by a scheduled server task (Firebase Cloud Functions) twice a day; nobody can access an expired room in the meantime. Deleted data cannot be recovered.</p><h2>6. Ads, Analytics and Cookies</h2><p>PinkOrBlue shows no ads. It uses no third-party analytics, statistics, advertising or tracking services, and no tracking cookies.</p><h2>7. Children&#x27;s Privacy</h2><p>PinkOrBlue is made for expecting families and their adult friends and relatives. It is not directed at children under 13. If you notice that a child under 13 has entered information, please let us know and we will delete it.</p><h2>8. Changes</h2><p>If this policy changes, the new version will be posted on this page and the date at the top will be updated.</p><h2>9. Contact</h2><p>For questions or deletion requests, you can contact us at:</p><p><a href="mailto:destek.anbertech@gmail.com">destek.anbertech@gmail.com</a></p></div></main>
 <footer class="mini"><div class="wrap">

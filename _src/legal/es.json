@@ -1,0 +1,48 @@
+{
+ "pv_title": "Política de privacidad",
+ "pv_desc": "Privacidad en PinkOrBlue: solo guardamos los nombres, votos y apuestas que necesita la fiesta. Sin anuncios ni rastreo; los datos se borran a los 7 días.",
+ "pv_updated": "Última actualización:",
+ "pv_date": "16 de noviembre de 2026",
+ "pv_sections": [
+  [
+   "1. Información general",
+   "<p>PinkOrBlue es un sitio web gratuito con el que las familias pueden revelar online el sexo de su bebé junto a sus seres queridos. La familia abre una sala de fiesta y comparte el enlace con sus invitados; los invitados votan y hacen sus apuestas, y la revelación aparece en todas las pantallas al mismo tiempo. En esta página explicamos qué datos guardamos, por qué y cuándo se borran. PinkOrBlue está desarrollado por AnberTech.</p>"
+  ],
+  [
+   "2. Datos que guardamos",
+   "<p><b>PinkOrBlue solo guarda la información necesaria para que la fiesta funcione.</b></p><ul><li>Datos de la sala: los nombres de la mamá y el papá (si se han introducido), el apodo del bebé, la fecha de la revelación, el resultado que el anfitrión introduce en secreto, la lista de invitados y los ajustes de la sala.</li><li>El nombre que escribe el invitado: se muestra a las demás personas de la sala para que todos vean quién ha votado. No tienes que usar tu nombre real; basta con un apodo.</li><li>Votos y apuestas: el voto Niña/Niño y las apuestas del invitado, además del número de toques durante el espectáculo de la revelación y si una persona está en la sala en ese momento.</li><li>Puntuación del minijuego: se usa para mostrar la clasificación de la sala.</li></ul><p>No pedimos ni recogemos direcciones de correo, números de teléfono, contraseñas, ubicación, fotos ni contactos.</p>"
+  ],
+  [
+   "3. Identidad y cuenta",
+   "<p>No hay registro ni cuenta. Al abrir el sitio, Firebase Anonymous Authentication crea para ti un identificador aleatorio y anónimo. Solo se usa para asociar tu voto contigo y para que puedas seguir donde lo dejaste si vuelves a la sala desde el mismo navegador. El identificador no contiene tu nombre, tu correo ni ningún otro dato que te identifique. Esta sesión anónima se guarda en el almacenamiento local de tu navegador y nunca se usa para rastrearte.</p>"
+  ],
+  [
+   "4. Dónde se guardan los datos",
+   "<p>Los datos de la sala, los nombres, los votos, las apuestas y las puntuaciones se guardan en Firebase Realtime Database, un servicio de Google. Estos datos solo se muestran a las personas que tienen el enlace de esa sala. No se venden, no se alquilan y no se comparten con nadie con fines publicitarios. Firebase trata los datos según las condiciones de privacidad y seguridad de Google. Las fuentes de la página se cargan desde Google Fonts; para ello tu navegador se conecta a servidores de Google.</p><p>Al conectarte al sitio, el servicio de alojamiento (GitHub Pages) y los servidores de Firebase pueden tratar información técnica, como tu dirección IP, para establecer la conexión. Nosotros no recogemos ni guardamos esta información.</p>"
+  ],
+  [
+   "5. Borrado de los datos",
+   "<p><b>Todos los datos de una sala se borran automáticamente 7 días después de la fecha de la fiesta.</b></p><ul><li>El anfitrión puede borrar la sala en cualquier momento; en ese caso, todos los nombres, votos, apuestas y puntuaciones de la sala se eliminan de inmediato.</li><li>Si eres invitado y quieres que tu nombre o tu voto se borren antes, pídeselo al anfitrión o escríbenos a la dirección de abajo.</li></ul><p>El borrado lo realiza dos veces al día una tarea programada en el servidor (Firebase Cloud Functions); mientras tanto, nadie puede acceder a una sala caducada. Los datos borrados no se pueden recuperar.</p>"
+  ],
+  [
+   "6. Publicidad, analítica y cookies",
+   "<p>PinkOrBlue no muestra anuncios. No usa ningún servicio de terceros de analítica, estadísticas, publicidad o rastreo, ni cookies de rastreo.</p>"
+  ],
+  [
+   "7. Privacidad de los niños",
+   "<p>PinkOrBlue está pensado para familias que esperan un bebé y sus familiares y amigos adultos; no está dirigido a menores de 13 años. Si ves que un menor de 13 años ha introducido información, escríbenos y borraremos esos datos.</p>"
+  ],
+  [
+   "8. Cambios",
+   "<p>Si esta política se actualiza, el nuevo texto se publicará en esta página y se cambiará la fecha que aparece arriba.</p>"
+  ],
+  [
+   "9. Contacto",
+   "<p>Para preguntas o solicitudes de borrado, puedes escribirnos a:</p>"
+  ]
+ ],
+ "sp_title": "Ayuda",
+ "sp_desc": "Ayuda de PinkOrBlue: escríbenos por correo con tus preguntas, comentarios, solicitudes de borrado o problemas técnicos.",
+ "sp_text": "Para cualquier pregunta, comentario, solicitud de borrado de datos o ayuda técnica sobre PinkOrBlue, puedes escribirnos a la dirección de correo de abajo. Si incluyes el enlace de tu sala, podremos ayudarte más rápido:",
+ "sp_faq": "Preguntas frecuentes"
+}

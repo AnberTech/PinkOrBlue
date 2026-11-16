@@ -1,0 +1,48 @@
+{
+ "pv_title": "Privacybeleid",
+ "pv_desc": "Privacy bij PinkOrBlue: we bewaren alleen de namen, stemmen en voorspellingen die het feest nodig heeft. Geen reclame, geen tracking, na 7 dagen gewist.",
+ "pv_updated": "Laatst bijgewerkt:",
+ "pv_date": "16 november 2026",
+ "pv_sections": [
+  [
+   "1. Algemeen",
+   "<p>PinkOrBlue is een gratis website waarop gezinnen het geslacht van hun baby online samen met hun dierbaren kunnen onthullen. Het gezin opent een feestkamer en deelt de link met de gasten; de gasten stemmen en doen hun voorspellingen, en de onthulling verschijnt op hetzelfde moment op ieders scherm. Op deze pagina leggen we uit welke gegevens we bewaren, waarom, en wanneer ze worden verwijderd. PinkOrBlue is ontwikkeld door AnberTech.</p>"
+  ],
+  [
+   "2. Gegevens die we bewaren",
+   "<p><b>PinkOrBlue bewaart alleen de gegevens die nodig zijn om het feest te laten werken.</b></p><ul><li>Kamergegevens: de namen van mama en papa (als die zijn ingevuld), de bijnaam van de baby, de onthullingsdatum, de uitslag die de organisator in het geheim invult, de gastenlijst en de instellingen van de kamer.</li><li>De naam die een gast invult: die wordt aan de anderen in de kamer getoond, zodat iedereen ziet wie er gestemd heeft. Je hoeft je echte naam niet te gebruiken; een bijnaam is ook goed.</li><li>Stemmen en voorspellingen: de stem Meisje/Jongen en de voorspellingen van de gast, plus het aantal tikken tijdens de onthullingsshow en of iemand op dat moment in de kamer is.</li><li>Score in de minigame: wordt gebruikt om de ranglijst van de kamer te tonen.</li></ul><p>Er wordt niet gevraagd om een e-mailadres, telefoonnummer, wachtwoord, locatie, foto's of contacten, en die worden ook niet verzameld.</p>"
+  ],
+  [
+   "3. Identiteit en account",
+   "<p>Er is geen registratie en geen account. Als je de site opent, maakt Firebase Anonymous Authentication een willekeurige, anonieme ID voor je aan. Die wordt alleen gebruikt om je stem aan jou te koppelen en om je verder te laten gaan waar je was als je in dezelfde browser terugkeert naar de kamer. De ID bevat niet je naam, je e-mailadres of andere gegevens die jou identificeren. Deze anonieme sessie wordt bewaard in de lokale opslag van je browser en wordt nooit gebruikt voor tracking.</p>"
+  ],
+  [
+   "4. Waar de gegevens worden bewaard",
+   "<p>Kamergegevens, namen, stemmen, voorspellingen en scores worden opgeslagen in Firebase Realtime Database, een dienst van Google. Deze gegevens worden alleen getoond aan mensen die de link van die kamer hebben. Ze worden niet verkocht, niet verhuurd en met niemand gedeeld voor reclamedoeleinden. Firebase verwerkt de gegevens volgens de eigen privacy- en beveiligingsvoorwaarden van Google. De lettertypen van de pagina worden geladen via Google Fonts; je browser maakt daarbij verbinding met servers van Google.</p><p>Wanneer je de site bezoekt, kunnen de hostingdienst (GitHub Pages) en de Firebase-servers technische gegevens zoals je IP-adres verwerken om de verbinding tot stand te brengen. Wij verzamelen of bewaren deze gegevens niet.</p>"
+  ],
+  [
+   "5. Verwijdering van gegevens",
+   "<p><b>Alle gegevens van een kamer worden 7 dagen na de feestdatum automatisch verwijderd.</b></p><ul><li>De organisator kan de kamer op elk moment verwijderen; alle namen, stemmen, voorspellingen en scores van de kamer worden dan direct gewist.</li><li>Wil je als gast dat je naam of stem eerder wordt verwijderd? Vraag het de organisator of mail ons op het adres hieronder.</li></ul><p>De verwijdering gebeurt twee keer per dag door een geplande taak op de server (Firebase Cloud Functions); in de tussentijd heeft niemand toegang tot een verlopen kamer. Verwijderde gegevens kunnen niet worden hersteld.</p>"
+  ],
+  [
+   "6. Reclame, analytics en cookies",
+   "<p>PinkOrBlue toont geen reclame. Het gebruikt geen diensten van derden voor analyse, statistieken, reclame of tracking, en geen trackingcookies.</p>"
+  ],
+  [
+   "7. Privacy van kinderen",
+   "<p>PinkOrBlue is bedoeld voor gezinnen die een baby verwachten en hun volwassen familie en vrienden; het is niet gericht op kinderen onder de 13 jaar. Merk je dat een kind onder de 13 gegevens heeft ingevuld? Laat het ons weten, dan verwijderen we die gegevens.</p>"
+  ],
+  [
+   "8. Wijzigingen",
+   "<p>Als dit beleid wordt bijgewerkt, wordt de nieuwe tekst op deze pagina gepubliceerd en wordt de datum bovenaan aangepast.</p>"
+  ],
+  [
+   "9. Contact",
+   "<p>Voor vragen of verzoeken tot verwijdering kun je contact met ons opnemen via:</p>"
+  ]
+ ],
+ "sp_title": "Support",
+ "sp_desc": "PinkOrBlue-support: mail ons met je vragen, feedback, verwijderverzoeken of technische problemen.",
+ "sp_text": "Voor alle vragen, feedback, verzoeken tot gegevensverwijdering en technische ondersteuning rond PinkOrBlue kun je ons bereiken via het e-mailadres hieronder. Als je de link van je kamer meestuurt, kunnen we je sneller helpen:",
+ "sp_faq": "Veelgestelde vragen"
+}

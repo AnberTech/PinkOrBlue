@@ -1,0 +1,48 @@
+{
+ "pv_title": "Siyaseta Nepeniyê",
+ "pv_desc": "Siyaseta nepeniyê ya PinkOrBlue: tenê nav, deng û texmînên ku şahî hewce dike tên tomarkirin. Reklam û şopandin tune; dane piştî 7 rojan tên jêbirin.",
+ "pv_updated": "Nûkirina dawî:",
+ "pv_date": "16ê Mijdarê 2026",
+ "pv_sections": [
+  [
+   "1. Agahiyên Giştî",
+   "<p>PinkOrBlue malpereke belaş e ku malbat pê dikarin zayenda pitika xwe bi kesên ku jê hez dikin re bi awayekî online eşkere bikin. Malbat odeyeke şahiyê vedike û lînkê bi mêvanan re parve dike; mêvan deng didin û texmîn dikin, û eşkerekirin di heman kêliyê de li ser ekrana herkesî tê nîşandan. Ev rûpel rave dike ka em kîjan daneyan tomar dikin, çima û kengî tên jêbirin. PinkOrBlue ji aliyê AnberTech ve hatiye pêşxistin.</p>"
+  ],
+  [
+   "2. Daneyên Tên Tomarkirin",
+   "<p><b>PinkOrBlue tenê agahiyên ku ji bo xebitîna şahiyê pêwîst in tomar dike.</b></p><ul><li>Agahiyên odeyê: navê dayik û bav (heke hatibin nivîsandin), navê pitikê yê hezkirinê, dîroka eşkerekirinê, encama ku mazûvan bi dizî dinivîse, lîsteya mêvanan û mîhengên odeyê.</li><li>Navê ku mêvan dinivîse: ji kesên din ên odeyê re tê nîşandan da ku herkes bibîne kê deng daye. Ne mecbûr e tu navê xwe yê rastîn binivîsî; nasnavek jî bes e.</li><li>Deng û texmîn: dengê keç an kur yê her mêvanî û texmînên wî/wê; herwiha hejmara tikandinan di dema pêşandana eşkerekirinê de û agahiya ka kes niha di odeyê de ye an na.</li><li>Pûanên lîstika biçûk: ji bo nîşandana tabloya pûanan a odeyê tên bikaranîn.</li></ul><p>Navnîşana e-nameyê, hejmara telefonê, şîfre, cih, wêne an rêhevokê qet nayên xwestin û nayên berhevkirin.</p>"
+  ],
+  [
+   "3. Nasname û Hesab",
+   "<p>Endamtî an vekirina hesab tune ye. Dema tu malperê vedikî, Firebase Anonymous Authentication ji bo te nasnameyeke rasthatî û anonîm çêdike. Ev nasname tenê ji bo girêdana dengê te bi te re û ji bo ku tu dema vegerî odeyê di heman gerokê de ji cihê ku lê mayî bidomînî tê bikaranîn. Di nasnameyê de navê te, e-nameya te an agahiyeke din a ku te dide naskirin tune ye. Ev danişîna anonîm di bîrgeha herêmî ya geroka te de tê hilanîn û qet ji bo şopandinê nayê bikaranîn.</p>"
+  ],
+  [
+   "4. Cihê Hilanîna Daneyan",
+   "<p>Agahiyên odeyê, nav, deng, texmîn û pûan di Firebase Realtime Database de, ku xizmeteke Google e, tên hilanîn. Ev dane tenê ji kesên ku lînka wê odeyê li ba wan heye re tên nîşandan. Ew qet nayên firotin, kirêkirin an ji bo reklamê bi kesî re nayên parvekirin. Firebase daneyan li gorî mercên nepenî û ewlehiyê yên Google bixwe pêvajo dike. Fontên rûpelê ji Google Fonts tên barkirin; ji ber vê yekê geroka te ji bo wan bi serverên Google ve girê dibe.</p><p>Dema tu bi malperê ve girê dibî, xizmeta hostingê (GitHub Pages) û serverên Firebase dikarin ji bo gihandina rûpelê agahiyên teknîkî yên wek navnîşana IP ya te pêvajo bikin. Em van agahiyan berhev nakin û tomar nakin.</p>"
+  ],
+  [
+   "5. Jêbirina Daneyan",
+   "<p><b>Hemû daneyên odeyekê 7 roj piştî dîroka şahiyê bixweber tên jêbirin.</b></p><ul><li>Mazûvan dikare odeyê kengî bixwaze jê bibe; wê demê hemû nav, deng, texmîn û pûanên odeyê tavilê tên jêbirin.</li><li>Heke tu mêvan î û dixwazî navê te an dengê te zûtir were jêbirin, ji mazûvan bixwaze an jî ji navnîşana jêrîn ji me re binivîse.</li></ul><p>Jêbirinê karekî demsazkirî yê serverê (Firebase Cloud Functions) rojê du caran dike; di vê navberê de jî kes nikare bigihîje odeyeke ku dema wê qediyaye. Daneyên jêbirî nayên vegerandin.</p>"
+  ],
+  [
+   "6. Reklam, Analîtîk û Cookie",
+   "<p>PinkOrBlue reklaman nîşan nade. Ew ti xizmeteke aliyê sêyem a analîtîk, statîstîk, reklam an şopandinê bikar nayîne û cookieyên şopandinê bikar nayîne.</p>"
+  ],
+  [
+   "7. Nepeniya Zarokan",
+   "<p>PinkOrBlue ji bo malbatên ku li benda pitikê ne û heval û xizmên wan ên mezin hatiye çêkirin. Ew ne ji bo zarokên di bin 13 saliyê de ye. Heke tu bibînî ku zarokekî di bin 13 saliyê de agahî nivîsandiye, ji me re binivîse; em ê wan daneyan jê bibin.</p>"
+  ],
+  [
+   "8. Guhertin",
+   "<p>Heke ev siyaset biguhere, guhertoya nû li ser vê rûpelê tê weşandin û dîroka li jorê rûpelê tê nûkirin.</p>"
+  ],
+  [
+   "9. Têkilî",
+   "<p>Ji bo pirs û daxwazên jêbirinê tu dikarî bi me re têkilî daynî:</p>"
+  ]
+ ],
+ "sp_title": "Piştgirî",
+ "sp_desc": "Piştgiriya PinkOrBlue: pirs, nêrîn, daxwazên jêbirinê û daxwazên piştgiriya teknîkî bi e-nameyê ji me re bişîne.",
+ "sp_text": "Ji bo her pirs, nêrîn, daxwaza jêbirina daneyan an piştgiriya teknîkî ya derbarê PinkOrBlue de, tu dikarî bi navnîşana e-nameyê ya jêrîn bigihîjî me. Heke tu lînka odeya xwe jî lê zêde bikî, em dikarin zûtir alîkariya te bikin:",
+ "sp_faq": "Pirsên pir tên pirsîn"
+}

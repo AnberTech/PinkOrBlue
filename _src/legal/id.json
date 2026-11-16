@@ -1,0 +1,48 @@
+{
+ "pv_title": "Kebijakan Privasi",
+ "pv_desc": "Kebijakan privasi PinkOrBlue: kami hanya menyimpan nama, pilihan, dan tebakan yang dibutuhkan pesta. Tanpa iklan dan pelacakan; data dihapus setelah 7 hari.",
+ "pv_updated": "Terakhir diperbarui:",
+ "pv_date": "16 November 2026",
+ "pv_sections": [
+  [
+   "1. Gambaran Umum",
+   "<p>PinkOrBlue adalah situs gratis yang memungkinkan keluarga mengungkapkan jenis kelamin bayi mereka secara online, bersama orang-orang tersayang. Keluarga membuka ruang pesta dan membagikan tautannya kepada tamu; tamu memilih dan menebak, lalu pengungkapan tampil di layar semua orang pada saat yang sama. Halaman ini menjelaskan data apa yang kami simpan, mengapa, dan kapan data itu dihapus. PinkOrBlue dikembangkan oleh AnberTech.</p>"
+  ],
+  [
+   "2. Data yang Kami Simpan",
+   "<p><b>PinkOrBlue hanya menyimpan data yang dibutuhkan agar pesta berjalan.</b></p><ul><li>Data ruangan: nama ibu dan ayah (jika diisi), nama panggilan bayi, tanggal pengungkapan, hasil yang dimasukkan tuan rumah secara rahasia, daftar tamu, dan pengaturan ruangan.</li><li>Nama yang diketik tamu: ditampilkan kepada orang lain di ruangan agar semua bisa melihat siapa yang sudah memilih. Kamu tidak harus memakai nama asli; nama panggilan pun cukup.</li><li>Pilihan dan tebakan: pilihan cewek atau cowok dari setiap tamu dan tebakan mereka, ditambah jumlah ketukan selama pertunjukan pengungkapan dan apakah seseorang sedang berada di ruangan.</li><li>Skor mini game: dipakai untuk menampilkan papan skor ruangan.</li></ul><p>Kami tidak pernah meminta atau mengumpulkan alamat email, nomor telepon, kata sandi, lokasi, foto, atau kontak.</p>"
+  ],
+  [
+   "3. Identitas dan Akun",
+   "<p>Tidak ada pendaftaran dan tidak ada akun. Saat kamu membuka situs, Firebase Anonymous Authentication membuat ID acak dan anonim untukmu. ID ini hanya dipakai untuk mengaitkan pilihanmu denganmu dan agar kamu bisa melanjutkan dari posisi terakhir saat kembali ke ruangan di browser yang sama. ID tersebut tidak berisi namamu, emailmu, atau informasi lain yang bisa mengenalimu. Sesi anonim ini disimpan di penyimpanan lokal browsermu dan tidak pernah dipakai untuk pelacakan.</p>"
+  ],
+  [
+   "4. Tempat Data Disimpan",
+   "<p>Data ruangan, nama, pilihan, tebakan, dan skor disimpan di Firebase Realtime Database, layanan yang disediakan oleh Google. Data ini hanya ditampilkan kepada orang yang memiliki tautan ruangan tersebut. Data tidak pernah dijual, disewakan, atau dibagikan kepada siapa pun untuk keperluan iklan. Firebase memproses data sesuai ketentuan privasi dan keamanan Google sendiri. Font halaman dimuat dari Google Fonts, sehingga browsermu terhubung ke server Google untuk mengambilnya.</p><p>Saat kamu mengakses situs, layanan hosting (GitHub Pages) dan server Firebase dapat memproses informasi teknis seperti alamat IP-mu untuk menampilkan halaman. Kami tidak mengumpulkan atau menyimpan informasi ini.</p>"
+  ],
+  [
+   "5. Penghapusan",
+   "<p><b>Semua data milik sebuah ruangan dihapus otomatis 7 hari setelah tanggal pesta.</b></p><ul><li>Tuan rumah bisa menghapus ruangan kapan saja; semua nama, pilihan, tebakan, dan skor di dalamnya langsung dihapus.</li><li>Jika kamu tamu dan ingin nama atau pilihanmu dihapus lebih cepat, minta kepada tuan rumah atau kirim email ke alamat di bawah.</li></ul><p>Penghapusan dilakukan oleh tugas terjadwal di server (Firebase Cloud Functions) dua kali sehari; sementara itu, tidak ada yang bisa mengakses ruangan yang sudah kedaluwarsa. Data yang sudah dihapus tidak bisa dipulihkan.</p>"
+  ],
+  [
+   "6. Iklan, Analitik, dan Cookie",
+   "<p>PinkOrBlue tidak menampilkan iklan. Situs ini tidak memakai layanan pihak ketiga untuk analitik, statistik, iklan, atau pelacakan, dan tidak memakai cookie pelacak.</p>"
+  ],
+  [
+   "7. Privasi Anak",
+   "<p>PinkOrBlue dibuat untuk keluarga yang sedang menanti bayi serta teman dan kerabat dewasa mereka. Situs ini tidak ditujukan untuk anak di bawah 13 tahun. Jika kamu melihat ada anak di bawah 13 tahun yang memasukkan informasi, beri tahu kami dan kami akan menghapusnya.</p>"
+  ],
+  [
+   "8. Perubahan",
+   "<p>Jika kebijakan ini berubah, versi barunya akan dipublikasikan di halaman ini dan tanggal di bagian atas akan diperbarui.</p>"
+  ],
+  [
+   "9. Kontak",
+   "<p>Untuk pertanyaan atau permintaan penghapusan, kamu bisa menghubungi kami di:</p>"
+  ]
+ ],
+ "sp_title": "Bantuan",
+ "sp_desc": "Bantuan PinkOrBlue: kirim pertanyaan, masukan, permintaan penghapusan data, dan permintaan bantuan teknis lewat email.",
+ "sp_text": "Untuk pertanyaan, masukan, permintaan penghapusan data, atau bantuan teknis seputar PinkOrBlue, hubungi kami lewat alamat email di bawah. Sertakan tautan ruanganmu agar kami bisa membantu lebih cepat:",
+ "sp_faq": "Pertanyaan yang sering diajukan"
+}

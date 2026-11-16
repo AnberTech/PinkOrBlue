@@ -6,8 +6,21 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 
 ## Start a reveal room (web, free, no sign-up)
 
-- English: https://anbertech.github.io/PinkOrBlue/en/virtual-gender-reveal/
-- Turkish / Türkçe: https://anbertech.github.io/PinkOrBlue/cinsiyet-partisi/
+- Türkçe (tr): https://anbertech.github.io/PinkOrBlue/cinsiyet-partisi/
+- English (en): https://anbertech.github.io/PinkOrBlue/en/virtual-gender-reveal/
+- العربية (ar): https://anbertech.github.io/PinkOrBlue/ar/gender-reveal-party/
+- Deutsch (de): https://anbertech.github.io/PinkOrBlue/de/gender-reveal-party-online/
+- Español (es): https://anbertech.github.io/PinkOrBlue/es/revelacion-de-genero-online/
+- Français (fr): https://anbertech.github.io/PinkOrBlue/fr/gender-reveal-en-ligne/
+- Bahasa Indonesia (id): https://anbertech.github.io/PinkOrBlue/id/gender-reveal-online/
+- Italiano (it): https://anbertech.github.io/PinkOrBlue/it/gender-reveal-online/
+- 日本語 (ja): https://anbertech.github.io/PinkOrBlue/ja/gender-reveal-party/
+- 한국어 (ko): https://anbertech.github.io/PinkOrBlue/ko/gender-reveal-party/
+- Kurdî (ku): https://anbertech.github.io/PinkOrBlue/ku/sahiya-zayende-online/
+- Nederlands (nl): https://anbertech.github.io/PinkOrBlue/nl/online-gender-reveal/
+- Polski (pl): https://anbertech.github.io/PinkOrBlue/pl/gender-reveal-online/
+- Português (pt): https://anbertech.github.io/PinkOrBlue/pt/cha-revelacao-online/
+- Русский (ru): https://anbertech.github.io/PinkOrBlue/ru/gender-party-online/
 
 ## How it works
 
@@ -29,6 +42,19 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 
 - Türkçe: https://anbertech.github.io/PinkOrBlue/
 - English: https://anbertech.github.io/PinkOrBlue/en/
+- العربية: https://anbertech.github.io/PinkOrBlue/ar/
+- Deutsch: https://anbertech.github.io/PinkOrBlue/de/
+- Español: https://anbertech.github.io/PinkOrBlue/es/
+- Français: https://anbertech.github.io/PinkOrBlue/fr/
+- Bahasa Indonesia: https://anbertech.github.io/PinkOrBlue/id/
+- Italiano: https://anbertech.github.io/PinkOrBlue/it/
+- 日本語: https://anbertech.github.io/PinkOrBlue/ja/
+- 한국어: https://anbertech.github.io/PinkOrBlue/ko/
+- Kurdî: https://anbertech.github.io/PinkOrBlue/ku/
+- Nederlands: https://anbertech.github.io/PinkOrBlue/nl/
+- Polski: https://anbertech.github.io/PinkOrBlue/pl/
+- Português: https://anbertech.github.io/PinkOrBlue/pt/
+- Русский: https://anbertech.github.io/PinkOrBlue/ru/
 - Privacy (EN): https://anbertech.github.io/PinkOrBlue/en/privacy/
 - Gizlilik (TR): https://anbertech.github.io/PinkOrBlue/gizlilik/
 

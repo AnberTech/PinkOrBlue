@@ -1,0 +1,48 @@
+{
+ "pv_title": "Informativa sulla privacy",
+ "pv_desc": "Privacy di PinkOrBlue: conserviamo solo nomi, voti e pronostici necessari alla festa. Niente pubblicità né tracciamento, dati cancellati dopo 7 giorni.",
+ "pv_updated": "Ultimo aggiornamento:",
+ "pv_date": "16 novembre 2026",
+ "pv_sections": [
+  [
+   "1. Informazioni generali",
+   "<p>PinkOrBlue è un sito web gratuito che permette alle famiglie di rivelare online il sesso del loro bebè insieme alle persone care. La famiglia apre una stanza della festa e condivide il link con gli invitati; gli invitati votano e fanno i loro pronostici, e la rivelazione compare su tutti gli schermi nello stesso momento. In questa pagina spieghiamo quali dati conserviamo, perché e quando vengono cancellati. PinkOrBlue è sviluppato da AnberTech.</p>"
+  ],
+  [
+   "2. Dati conservati",
+   "<p><b>PinkOrBlue conserva solo le informazioni necessarie al funzionamento della festa.</b></p><ul><li>Dati della stanza: i nomi di mamma e papà (se inseriti), il soprannome del bebè, la data della rivelazione, il risultato inserito in segreto dall'organizzatore, la lista invitati e le impostazioni della stanza.</li><li>Il nome inserito dall'invitato: viene mostrato agli altri nella stanza per far vedere chi ha votato. Non devi usare il tuo vero nome; basta un soprannome.</li><li>Voti e pronostici: il voto Femmina/Maschio e i pronostici dell'invitato, oltre al numero di tocchi durante lo spettacolo della rivelazione e all'informazione se una persona è presente nella stanza in quel momento.</li><li>Punteggio del minigioco: serve a mostrare la classifica della stanza.</li></ul><p>Non chiediamo né raccogliamo indirizzi e-mail, numeri di telefono, password, posizione, foto o contatti.</p>"
+  ],
+  [
+   "3. Identità e account",
+   "<p>Non c'è registrazione né account. Quando apri il sito, Firebase Anonymous Authentication crea per te un identificativo casuale e anonimo. Serve solo ad associare il tuo voto a te e a farti riprendere da dove avevi lasciato se torni nella stanza dallo stesso browser. L'identificativo non contiene il tuo nome, la tua e-mail o altre informazioni che ti identificano. Questa sessione anonima è conservata nella memoria locale del tuo browser e non viene mai usata per il tracciamento.</p>"
+  ],
+  [
+   "4. Dove sono conservati i dati",
+   "<p>I dati della stanza, i nomi, i voti, i pronostici e i punteggi sono conservati in Firebase Realtime Database, un servizio fornito da Google. Questi dati sono mostrati solo a chi ha il link della stanza. Non vengono venduti, affittati né condivisi con nessuno a fini pubblicitari. Firebase tratta i dati secondo i termini di privacy e sicurezza di Google. I caratteri della pagina vengono caricati da Google Fonts; in quel momento il tuo browser si collega ai server di Google.</p><p>Quando ti colleghi al sito, il servizio di hosting (GitHub Pages) e i server di Firebase possono trattare informazioni tecniche, come il tuo indirizzo IP, per stabilire la connessione. Noi non raccogliamo né conserviamo queste informazioni.</p>"
+  ],
+  [
+   "5. Cancellazione dei dati",
+   "<p><b>Tutti i dati di una stanza vengono cancellati automaticamente 7 giorni dopo la data della festa.</b></p><ul><li>L'organizzatore può eliminare la stanza in qualsiasi momento; in quel caso tutti i nomi, i voti, i pronostici e i punteggi della stanza vengono rimossi subito.</li><li>Se sei un invitato e vuoi che il tuo nome o il tuo voto vengano cancellati prima, chiedilo all'organizzatore o scrivici all'indirizzo qui sotto.</li></ul><p>La cancellazione viene eseguita due volte al giorno da un'attività pianificata sul server (Firebase Cloud Functions); nel frattempo nessuno può accedere a una stanza scaduta. I dati cancellati non possono essere recuperati.</p>"
+  ],
+  [
+   "6. Pubblicità, analisi e cookie",
+   "<p>PinkOrBlue non mostra pubblicità. Non usa servizi di terze parti per analisi, statistiche, pubblicità o tracciamento, né cookie di tracciamento.</p>"
+  ],
+  [
+   "7. Privacy dei minori",
+   "<p>PinkOrBlue è pensato per le famiglie in attesa e per i loro parenti e amici adulti; non è rivolto ai minori di 13 anni. Se ti accorgi che un minore di 13 anni ha inserito dei dati, scrivici e li cancelleremo.</p>"
+  ],
+  [
+   "8. Modifiche",
+   "<p>Se questa informativa viene aggiornata, il nuovo testo sarà pubblicato in questa pagina e la data in alto verrà modificata.</p>"
+  ],
+  [
+   "9. Contatti",
+   "<p>Per domande o richieste di cancellazione puoi contattarci qui:</p>"
+  ]
+ ],
+ "sp_title": "Assistenza",
+ "sp_desc": "Assistenza PinkOrBlue: scrivici via e-mail per domande, opinioni, richieste di cancellazione e supporto tecnico.",
+ "sp_text": "Per qualsiasi domanda, opinione, richiesta di cancellazione dei dati o supporto tecnico su PinkOrBlue, puoi scriverci all'indirizzo e-mail qui sotto. Se aggiungi il link della tua stanza, potremo aiutarti più in fretta:",
+ "sp_faq": "Domande frequenti"
+}

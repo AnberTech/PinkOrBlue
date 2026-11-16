@@ -1,0 +1,48 @@
+{
+ "pv_title": "Politique de confidentialité",
+ "pv_desc": "Confidentialité PinkOrBlue : seuls les prénoms, votes et pronostics utiles à la fête sont conservés. Ni pub ni pistage, données supprimées après 7 jours.",
+ "pv_updated": "Dernière mise à jour :",
+ "pv_date": "16 novembre 2026",
+ "pv_sections": [
+  [
+   "1. Présentation",
+   "<p>PinkOrBlue est un site web gratuit qui permet aux familles de révéler en ligne le sexe de leur bébé, avec les personnes qu'elles aiment. La famille ouvre une salle de fête et partage le lien avec ses invités ; les invités votent et font leurs pronostics, et la révélation s'affiche sur tous les écrans au même moment. Cette page explique quelles données sont conservées, pourquoi, et quand elles sont supprimées. PinkOrBlue est développé par AnberTech.</p>"
+  ],
+  [
+   "2. Données conservées",
+   "<p><b>PinkOrBlue conserve uniquement les informations nécessaires au fonctionnement de la fête.</b></p><ul><li>Informations de la salle : les prénoms de la maman et du papa (s'ils ont été saisis), le surnom du bébé, la date de la révélation, le résultat saisi en secret par l'organisateur, la liste des invités et les réglages de la salle.</li><li>Le prénom saisi par l'invité : il est affiché aux autres personnes de la salle pour que chacun voie qui a voté. Tu n'es pas obligé(e) d'utiliser ton vrai prénom ; un surnom suffit.</li><li>Votes et pronostics : le vote Fille/Garçon et les pronostics de l'invité, ainsi que le nombre de tapes pendant le spectacle de révélation et le fait qu'une personne soit présente ou non dans la salle.</li><li>Score du mini-jeu : il sert à afficher le classement de la salle.</li></ul><p>Aucune adresse e-mail, aucun numéro de téléphone, mot de passe, position, photo ni contact n'est demandé ou collecté.</p>"
+  ],
+  [
+   "3. Identité et compte",
+   "<p>Il n'y a ni inscription ni compte. Quand tu ouvres le site, Firebase Anonymous Authentication crée pour toi un identifiant aléatoire et anonyme. Il sert uniquement à rattacher ton vote à toi et à te permettre de reprendre là où tu t'étais arrêté(e) si tu reviens dans la salle depuis le même navigateur. Cet identifiant ne contient ni ton nom, ni ton e-mail, ni aucune autre information qui t'identifie. Cette session anonyme est conservée dans le stockage local de ton navigateur et n'est jamais utilisée à des fins de pistage.</p>"
+  ],
+  [
+   "4. Lieu de conservation des données",
+   "<p>Les informations de la salle, les prénoms, les votes, les pronostics et les scores sont conservés dans Firebase Realtime Database, un service fourni par Google. Ces données ne sont montrées qu'aux personnes qui ont le lien de la salle concernée. Elles ne sont ni vendues, ni louées, ni partagées avec qui que ce soit à des fins publicitaires. Firebase traite les données conformément aux conditions de confidentialité et de sécurité de Google. Les polices de la page sont chargées depuis Google Fonts ; ton navigateur se connecte alors aux serveurs de Google.</p><p>Lors de la connexion au site, le service d'hébergement (GitHub Pages) et les serveurs Firebase peuvent traiter des informations techniques comme ton adresse IP afin d'établir la connexion. Nous ne collectons ni ne conservons ces informations.</p>"
+  ],
+  [
+   "5. Suppression des données",
+   "<p><b>Toutes les données d'une salle sont supprimées automatiquement 7 jours après la date de la fête.</b></p><ul><li>L'organisateur peut supprimer la salle à tout moment ; tous les prénoms, votes, pronostics et scores de la salle sont alors effacés immédiatement.</li><li>Si, en tant qu'invité, tu souhaites que ton prénom ou ton vote soit supprimé plus tôt, demande-le à l'organisateur ou écris-nous à l'adresse ci-dessous.</li></ul><p>La suppression est effectuée deux fois par jour par une tâche planifiée sur le serveur (Firebase Cloud Functions) ; entre-temps, personne ne peut accéder à une salle expirée. Les données supprimées ne peuvent pas être récupérées.</p>"
+  ],
+  [
+   "6. Publicité, statistiques et cookies",
+   "<p>PinkOrBlue n'affiche aucune publicité. Il n'utilise aucun service tiers d'analyse, de statistiques, de publicité ou de pistage, ni aucun cookie de pistage.</p>"
+  ],
+  [
+   "7. Confidentialité des enfants",
+   "<p>PinkOrBlue est conçu pour les familles qui attendent un bébé et leurs proches adultes ; il ne s'adresse pas aux enfants de moins de 13 ans. Si tu remarques qu'un enfant de moins de 13 ans a saisi des informations, écris-nous ; nous supprimerons les données concernées.</p>"
+  ],
+  [
+   "8. Modifications",
+   "<p>Si cette politique est mise à jour, la nouvelle version sera publiée sur cette page et la date en haut de page sera modifiée.</p>"
+  ],
+  [
+   "9. Contact",
+   "<p>Pour toute question ou demande de suppression, tu peux nous contacter :</p>"
+  ]
+ ],
+ "sp_title": "Assistance",
+ "sp_desc": "Assistance PinkOrBlue : écris-nous par e-mail pour tes questions, avis, demandes de suppression et besoins d'aide technique.",
+ "sp_text": "Pour toute question, tout avis, toute demande de suppression de données ou d'aide technique concernant PinkOrBlue, tu peux nous joindre à l'adresse e-mail ci-dessous. Si tu ajoutes le lien de ta salle, nous pourrons t'aider plus vite :",
+ "sp_faq": "Questions fréquentes"
+}

@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162046";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162046";
-import { playGame } from "./game.js?v=202611162046";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162046";
+import * as fb from "./fb.js?v=202611162152";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162152";
+import { playGame } from "./game.js?v=202611162152";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162152";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -874,7 +874,8 @@ async function storyCanvas(R, girl) {
     g.fillStyle = color; g.fillText(txt, W / 2, y);
   };
   const tr = LANG === "tr";
-  const who = m.parents ? (tr ? genitiveTr(m.parents.split(" & ").pop()).replace(/^/, m.parents.includes(" & ") ? m.parents.split(" & ")[0] + " & " : "") : m.parents + "'s") : "";
+  // Türkçe: ünlü uyumlu ek (Ali'nin); İngilizce: 's; diğer diller: çeviri kalıbı ismi eksiz kullanır
+  const who = !m.parents ? "" : tr ? (m.parents.includes(" & ") ? m.parents.split(" & ")[0] + " & " : "") + genitiveTr(m.parents.split(" & ").pop()) : LANG === "en" ? m.parents + "'s" : m.parents;
   g.shadowColor = "rgba(0,0,0,.18)"; g.shadowBlur = 24;
   T(who ? fmt(S.st_baby_of, who) : S.st_its, 860, 64, "#fff", 800, 'Nunito');
   g.shadowBlur = 40; g.shadowOffsetY = 18;

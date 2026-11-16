@@ -332,7 +332,12 @@ export function playShow(opts) {
         const big = girl ? S.girl_big : S.boy_big;
         const size = Math.min(130, FW * (big.length > 5 ? .2 : .24));
         const yy = H * .4 - clamp((pt - 3) / .6) * H * .06;
-        // harf harf zıplayan dev yazı
+        // harf harf zıplayan dev yazı (Arapça/Hintçe gibi bitişik yazılarda bütün kelime)
+        if (/[\u0590-\u08FF\u0900-\u0DFF]/.test(big)) {
+          const kk = clamp((pt - .3) / .6), s2 = reduced ? 1 : .3 + easeBack(kk) * .7;
+          g.save(); g.shadowColor = "rgba(0,0,0,.2)"; g.shadowBlur = 26; g.shadowOffsetY = 14;
+          text(big, cx, yy + 7, size, resDeep, 800, kk * 3, s2); g.shadowColor = "transparent"; text(big, cx, yy, size, "#fff", 800, kk * 3, s2); g.restore();
+        } else {
         g.save();
         g.font = `800 ${size}px "Baloo 2", system-ui`; g.textAlign = "left"; g.textBaseline = "middle";
         const tw = g.measureText(big).width, sc = Math.min(1, W * .9 / tw);
@@ -352,6 +357,7 @@ export function playShow(opts) {
           x += cw * sc;
         }
         g.restore();
+        }
         text(fmt(girl ? S.show_girl_line : S.show_boy_line, opts.babyName), cx, yy + size * .72, Math.min(26, FW * .062), "#fff", 800, (pt - 1) / .5);
         if (opts.parents) text(fmt(S.show_congrats, opts.parents), cx, yy + size * .72 + 36, Math.min(18, FW * .046), "rgba(255,255,255,.92)", 700, (pt - 1.4) / .5);
       }

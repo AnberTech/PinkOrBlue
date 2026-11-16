@@ -1,0 +1,48 @@
+{
+ "pv_title": "Polityka prywatności",
+ "pv_desc": "Polityka prywatności PinkOrBlue: przechowujemy tylko imiona, głosy i typy potrzebne do imprezy. Bez reklam i śledzenia, dane znikają po 7 dniach.",
+ "pv_updated": "Ostatnia aktualizacja:",
+ "pv_date": "16 listopada 2026",
+ "pv_sections": [
+  [
+   "1. Informacje ogólne",
+   "<p>PinkOrBlue to darmowa strona, dzięki której rodziny mogą online, razem z bliskimi, odkryć płeć swojego dziecka. Rodzina otwiera pokój imprezy i udostępnia link gościom; goście głosują i typują, a odsłonięcie pojawia się na ekranach wszystkich w tej samej chwili. Na tej stronie wyjaśniamy, jakie dane przechowujemy, dlaczego i kiedy je usuwamy. Twórcą PinkOrBlue jest AnberTech.</p>"
+  ],
+  [
+   "2. Przechowywane dane",
+   "<p><b>PinkOrBlue przechowuje tylko to, czego potrzebuje impreza, aby działać.</b></p><ul><li>Dane pokoju: imiona mamy i taty (jeśli zostały podane), pieszczotliwe imię dziecka, data odsłonięcia, wynik, który organizator wpisuje w tajemnicy, lista gości i ustawienia pokoju.</li><li>Imię wpisane przez gościa: widoczne dla innych osób w pokoju, aby wszyscy wiedzieli, kto zagłosował. Nie musisz podawać prawdziwego imienia; wystarczy pseudonim.</li><li>Głosy i typy: głos każdego gościa (chłopiec lub dziewczynka) i jego typy, a także liczba dotknięć podczas pokazu odsłonięcia oraz informacja, czy dana osoba jest w tej chwili w pokoju.</li><li>Wyniki minigry: służą do wyświetlania tabeli wyników pokoju.</li></ul><p>Nigdy nie prosimy o adres e-mail, numer telefonu, hasło, lokalizację, zdjęcia ani kontakty i ich nie zbieramy.</p>"
+  ],
+  [
+   "3. Tożsamość i konto",
+   "<p>Nie ma rejestracji ani kont. Gdy otwierasz stronę, Firebase Anonymous Authentication tworzy dla Ciebie losowy, anonimowy identyfikator. Służy on wyłącznie do przypisania Twojego głosu do Ciebie oraz do tego, abyś po powrocie do pokoju w tej samej przeglądarce mógł(-a) kontynuować od miejsca, w którym skończyłeś(-aś). Identyfikator nie zawiera Twojego imienia, adresu e-mail ani żadnych innych danych, które Cię identyfikują. Ta anonimowa sesja jest przechowywana w pamięci lokalnej przeglądarki i nigdy nie służy do śledzenia.</p>"
+  ],
+  [
+   "4. Gdzie przechowywane są dane",
+   "<p>Dane pokoju, imiona, głosy, typy i wyniki są przechowywane w Firebase Realtime Database, usłudze dostarczanej przez Google. Te dane są pokazywane tylko osobom, które mają link do danego pokoju. Nigdy nie są sprzedawane, wynajmowane ani udostępniane nikomu w celach reklamowych. Firebase przetwarza dane zgodnie z własnymi warunkami prywatności i bezpieczeństwa Google. Czcionki strony są ładowane z Google Fonts, więc Twoja przeglądarka łączy się w tym celu z serwerami Google.</p><p>Gdy łączysz się ze stroną, usługa hostingowa (GitHub Pages) i serwery Firebase mogą przetwarzać informacje techniczne, takie jak Twój adres IP, aby dostarczyć stronę. My tych informacji nie zbieramy ani nie przechowujemy.</p>"
+  ],
+  [
+   "5. Usuwanie danych",
+   "<p><b>Wszystkie dane pokoju są automatycznie usuwane 7 dni po dacie imprezy.</b></p><ul><li>Organizator może usunąć pokój w dowolnym momencie; wtedy wszystkie imiona, głosy, typy i wyniki w nim są usuwane natychmiast.</li><li>Jeśli jesteś gościem i chcesz, aby Twoje imię lub głos zostały usunięte wcześniej, poproś organizatora albo napisz do nas na adres podany poniżej.</li></ul><p>Usuwanie wykonuje zaplanowane zadanie na serwerze (Firebase Cloud Functions) dwa razy dziennie; w międzyczasie nikt nie ma dostępu do wygasłego pokoju. Usuniętych danych nie da się odzyskać.</p>"
+  ],
+  [
+   "6. Reklamy, analityka i pliki cookie",
+   "<p>PinkOrBlue nie wyświetla reklam. Nie korzysta z żadnych zewnętrznych usług analitycznych, statystycznych, reklamowych ani śledzących i nie używa śledzących plików cookie.</p>"
+  ],
+  [
+   "7. Prywatność dzieci",
+   "<p>PinkOrBlue jest przeznaczony dla rodzin spodziewających się dziecka oraz ich dorosłych przyjaciół i krewnych. Nie jest skierowany do dzieci poniżej 13 roku życia. Jeśli zauważysz, że dziecko poniżej 13 lat wpisało jakieś dane, daj nam znać, a je usuniemy.</p>"
+  ],
+  [
+   "8. Zmiany",
+   "<p>Jeśli ta polityka się zmieni, nowa wersja zostanie opublikowana na tej stronie, a data na górze zostanie zaktualizowana.</p>"
+  ],
+  [
+   "9. Kontakt",
+   "<p>W sprawie pytań lub próśb o usunięcie danych możesz skontaktować się z nami pod adresem:</p>"
+  ]
+ ],
+ "sp_title": "Pomoc",
+ "sp_desc": "Pomoc PinkOrBlue: pytania, opinie, prośby o usunięcie danych i zgłoszenia techniczne wyślij do nas e-mailem.",
+ "sp_text": "W razie pytań, opinii, próśb o usunięcie danych lub problemów technicznych dotyczących PinkOrBlue napisz do nas na adres e-mail poniżej. Jeśli dołączysz link do swojego pokoju, pomożemy szybciej:",
+ "sp_faq": "Najczęściej zadawane pytania"
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html lang="tr" dir="ltr">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -15,6 +15,19 @@
 <link rel="canonical" href="https://anbertech.github.io/PinkOrBlue/destek/" />
 <link rel="alternate" hreflang="tr" href="https://anbertech.github.io/PinkOrBlue/destek/" />
 <link rel="alternate" hreflang="en" href="https://anbertech.github.io/PinkOrBlue/en/support/" />
+<link rel="alternate" hreflang="ar" href="https://anbertech.github.io/PinkOrBlue/ar/support/" />
+<link rel="alternate" hreflang="de" href="https://anbertech.github.io/PinkOrBlue/de/support/" />
+<link rel="alternate" hreflang="es" href="https://anbertech.github.io/PinkOrBlue/es/support/" />
+<link rel="alternate" hreflang="fr" href="https://anbertech.github.io/PinkOrBlue/fr/support/" />
+<link rel="alternate" hreflang="id" href="https://anbertech.github.io/PinkOrBlue/id/support/" />
+<link rel="alternate" hreflang="it" href="https://anbertech.github.io/PinkOrBlue/it/support/" />
+<link rel="alternate" hreflang="ja" href="https://anbertech.github.io/PinkOrBlue/ja/support/" />
+<link rel="alternate" hreflang="ko" href="https://anbertech.github.io/PinkOrBlue/ko/support/" />
+<link rel="alternate" hreflang="ku" href="https://anbertech.github.io/PinkOrBlue/ku/support/" />
+<link rel="alternate" hreflang="nl" href="https://anbertech.github.io/PinkOrBlue/nl/support/" />
+<link rel="alternate" hreflang="pl" href="https://anbertech.github.io/PinkOrBlue/pl/support/" />
+<link rel="alternate" hreflang="pt" href="https://anbertech.github.io/PinkOrBlue/pt/support/" />
+<link rel="alternate" hreflang="ru" href="https://anbertech.github.io/PinkOrBlue/ru/support/" />
 <link rel="alternate" hreflang="x-default" href="https://anbertech.github.io/PinkOrBlue/en/support/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="PinkOrBlue" />
@@ -30,6 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap&subset=latin-ext" rel="stylesheet" />
+
 <style>:root{
   --pink:#FF8FB8;--pink-deep:#D6336C;--pink-soft:#FFE3EE;
   --blue:#7EC8FF;--blue-deep:#1C6FB8;--blue-soft:#E2F2FF;
@@ -61,7 +75,7 @@ img{max-width:100%;height:auto}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
 .muted{color:var(--ink-muted)}.small{font-size:.875rem}.center{text-align:center}
 .eyebrow{font:800 .8rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 10px}
-.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
+.skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.skip:focus{width:auto;height:auto;clip:auto;inset-inline-start:16px;top:16px;z-index:99;background:var(--surface);padding:8px 12px;border-radius:8px}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
 /* ---- üst çubuk */
@@ -484,13 +498,24 @@ footer.mini nav a:hover{text-decoration:underline}
 @keyframes noteIn{from{opacity:0;transform:translateY(16px) rotate(calc(var(--rot) * 4)) scale(.9)}to{opacity:1;transform:rotate(var(--rot))}}
 @media(max-width:380px){.wall-grid{grid-template-columns:1fr 1fr;gap:10px}.note blockquote{font-size:.92rem}}
 .wnm-lbl{margin:12px 0 10px}
+/* sağdan sola diller (Arapça) */
+[dir=rtl] .lm-list{right:auto;left:0}
+[dir=rtl] .cal{left:auto;right:0}
+[dir=rtl] .dp-btn{text-align:right}
+[dir=rtl] .teambar b{text-align:left;padding-right:0;padding-left:16px}
+[dir=rtl] .teambar i{padding-left:0;padding-right:16px}
+[dir=rtl] .note-del{right:auto;left:6px}
+[dir=rtl] .g-close{margin-left:0}
+[dir=rtl] .game-hud .g-time{margin-left:0;margin-right:auto}
+.noflag{font-size:14px;line-height:1}
+html[lang=ar] body,html[lang=ar] input,html[lang=ar] textarea{font-family:"Baloo Bhaijaan 2",var(--f-body)}
 </style>
 </head>
 <body class="doc">
 <div id="splash" aria-hidden="true"><div class="sp-in"><img class="sp-b" src="../assets/img/balloon-icon-180.png" alt="" width="120" height="120" /><p class="sp-w"><b>Pink</b>Or<i>Blue</i></p><p class="sp-by">by <img class="am-d" src="../assets/img/anbertech.png" alt="" width="22" height="20" /><img class="am-l" src="../assets/img/anbertech-ink.png" alt="" width="22" height="20" /><span>Anber<em>Tech</em></span></p></div></div>
 <script>(function(){var s=document.getElementById("splash");try{var r=document.referrer;if(r&&new URL(r).host===location.host&&sessionStorage.getItem("pob_sp")){s.remove();return}sessionStorage.setItem("pob_sp","1")}catch(e){}document.documentElement.classList.add("sp-on");setTimeout(function(){s.classList.add("out");document.documentElement.classList.remove("sp-on")},1250);setTimeout(function(){s.remove()},1750);s.onclick=function(){s.classList.add("out");document.documentElement.classList.remove("sp-on")}})();</script><header class="top"><div class="wrap">
   <a class="logo" href="../"><img src="../assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span><b>Pink</b>Or<i>Blue</i></span></a>
-  <span class="sp"></span><details class="lang-menu"><summary aria-label="Language"><img src="../assets/img/flags/tr.svg" alt="" width="20" height="14" /><b>TR</b></summary><nav class="lang lm-list" aria-label="Language"><a href="https://anbertech.github.io/PinkOrBlue/destek/" hreflang="tr" lang="tr" aria-current="page"><img src="../assets/img/flags/tr.svg" alt="" width="20" height="14" /><span>Türkçe</span></a><a href="https://anbertech.github.io/PinkOrBlue/en/support/" hreflang="en" lang="en"><img src="../assets/img/flags/en.svg" alt="" width="20" height="14" /><span>English</span></a></nav></details><script>(function(d){var m=d.querySelector(".lang-menu");if(!m)return;d.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});d.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.open){m.open=false;m.querySelector("summary").focus()}})})(document);</script>
+  <span class="sp"></span><details class="lang-menu"><summary aria-label="Language"><img src="../assets/img/flags/tr.svg" alt="" width="20" height="14" /><b>TR</b></summary><nav class="lang lm-list" aria-label="Language"><a href="https://anbertech.github.io/PinkOrBlue/destek/" hreflang="tr" lang="tr" aria-current="page"><img src="../assets/img/flags/tr.svg" alt="" width="20" height="14" /><span>Türkçe</span></a><a href="https://anbertech.github.io/PinkOrBlue/en/support/" hreflang="en" lang="en"><img src="../assets/img/flags/en.svg" alt="" width="20" height="14" /><span>English</span></a><a href="https://anbertech.github.io/PinkOrBlue/ar/support/" hreflang="ar" lang="ar"><img src="../assets/img/flags/ar.svg" alt="" width="20" height="14" /><span>العربية</span></a><a href="https://anbertech.github.io/PinkOrBlue/de/support/" hreflang="de" lang="de"><img src="../assets/img/flags/de.svg" alt="" width="20" height="14" /><span>Deutsch</span></a><a href="https://anbertech.github.io/PinkOrBlue/es/support/" hreflang="es" lang="es"><img src="../assets/img/flags/es.png" alt="" width="20" height="14" /><span>Español</span></a><a href="https://anbertech.github.io/PinkOrBlue/fr/support/" hreflang="fr" lang="fr"><img src="../assets/img/flags/fr.svg" alt="" width="20" height="14" /><span>Français</span></a><a href="https://anbertech.github.io/PinkOrBlue/id/support/" hreflang="id" lang="id"><img src="../assets/img/flags/id.svg" alt="" width="20" height="14" /><span>Bahasa Indonesia</span></a><a href="https://anbertech.github.io/PinkOrBlue/it/support/" hreflang="it" lang="it"><img src="../assets/img/flags/it.svg" alt="" width="20" height="14" /><span>Italiano</span></a><a href="https://anbertech.github.io/PinkOrBlue/ja/support/" hreflang="ja" lang="ja"><img src="../assets/img/flags/ja.svg" alt="" width="20" height="14" /><span>日本語</span></a><a href="https://anbertech.github.io/PinkOrBlue/ko/support/" hreflang="ko" lang="ko"><img src="../assets/img/flags/ko.svg" alt="" width="20" height="14" /><span>한국어</span></a><a href="https://anbertech.github.io/PinkOrBlue/ku/support/" hreflang="ku" lang="ku"><span class="noflag">🌐</span><span>Kurdî</span></a><a href="https://anbertech.github.io/PinkOrBlue/nl/support/" hreflang="nl" lang="nl"><img src="../assets/img/flags/nl.svg" alt="" width="20" height="14" /><span>Nederlands</span></a><a href="https://anbertech.github.io/PinkOrBlue/pl/support/" hreflang="pl" lang="pl"><img src="../assets/img/flags/pl.svg" alt="" width="20" height="14" /><span>Polski</span></a><a href="https://anbertech.github.io/PinkOrBlue/pt/support/" hreflang="pt" lang="pt"><img src="../assets/img/flags/pt-br.svg" alt="" width="20" height="14" /><span>Português</span></a><a href="https://anbertech.github.io/PinkOrBlue/ru/support/" hreflang="ru" lang="ru"><img src="../assets/img/flags/ru.svg" alt="" width="20" height="14" /><span>Русский</span></a></nav></details><script>(function(d){var m=d.querySelector(".lang-menu");if(!m)return;d.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});d.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.open){m.open=false;m.querySelector("summary").focus()}})})(document);</script>
 </div></header>
 <main><h1>Destek</h1><div class="card"><p>PinkOrBlue ile ilgili her türlü soru, görüş, veri silme ve teknik destek talebiniz için aşağıdaki e-posta adresi üzerinden bizimle iletişime geçebilirsiniz. Yazarken odanızın bağlantısını eklerseniz size daha hızlı yardımcı olabiliriz:</p><p><a class="btn btn-gold" href="mailto:destek.anbertech@gmail.com">✉️ destek.anbertech@gmail.com</a></p></div><section class="faq"><h2>Sıkça sorulan sorular</h2><details class="qa"><summary>Kişisel bilgilerimiz güvende mi?</summary><p>Yalnızca partinin çalışması için gerekenler saklanır: oda bilgisi, misafirin yazdığı ad, oylar, tahminler ve mini oyun skoru. E-posta, telefon numarası ya da şifre istenmez. Reklam, analitik ve takip çerezi kullanılmaz. Ayrıntılar gizlilik politikasında.</p></details><details class="qa"><summary>Veriler ne zaman siliniyor?</summary><p>Odaya ait tüm veriler parti tarihinden 7 gün sonra otomatik olarak silinir. Odayı kuran kişi isterse odayı daha önce, istediği an silebilir.</p></details><details class="qa"><summary>PinkOrBlue ücretli mi?</summary><p>Hayır, tamamen ücretsiz. Gizli ücret, abonelik ya da reklam yok.</p></details><details class="qa"><summary>Bir odaya kaç kişi katılabilir?</summary><p>PinkOrBlue, yaklaşık 30 kişilik bir aile ve arkadaş grubu düşünülerek tasarlandı. Yakın çevrenizin tamamını rahatça davet edebilirsiniz.</p></details><details class="qa"><summary>Uzaktaki ailemiz de katılabilir mi?</summary><p>Elbette, PinkOrBlue zaten bunun için var. Başka şehirde ya da başka ülkede olan herkes linke dokunarak aynı odaya katılır ve açılışı sizinle aynı saniyede izler.</p></details><details class="qa"><summary>Sonucu kim girer?</summary><p>Varsayılan olarak odayı kuran kişi girer. İsterse bu yetkiyi listeden güvendiği birine devreder; o zaman kendisi de sonucu bilmez ve açılışta herkesle birlikte şaşırır. Sonuç, açılış başlatılana kadar misafirlerin ekranında görünmez.</p></details><details class="qa"><summary>Uygulama indirmek gerekir mi?</summary><p>Gerekmez. PinkOrBlue telefon, tablet ya da bilgisayardaki tarayıcıda çalışır. Misafirlerin linke dokunması ve adını yazması yeterli; üyelik de yok.</p></details><details class="qa"><summary>Aynı anda birden fazla aile kullanabilir mi?</summary><p>Evet. Her aile kendi odasını açar ve her odanın kendi linki vardır. Odalar birbirinden tamamen ayrıdır; bir odadaki oylar ve sonuç başka odada görünmez.</p></details></section></main>
 <footer class="mini"><div class="wrap">

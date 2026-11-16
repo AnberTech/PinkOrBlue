@@ -15,13 +15,28 @@ SRC = os.path.join(ROOT, '_src')
 SITE = 'https://anbertech.github.io/PinkOrBlue/'
 EMAIL = 'destek.anbertech@gmail.com'
 DB_URL = 'https://pinkorblue-128d4-default-rtdb.europe-west1.firebasedatabase.app'
-LANGS = [('tr', 'Türkçe', 'tr_TR'), ('en', 'English', 'en_US')]
-DOC_SLUGS = {'tr': ('gizlilik', 'destek'), 'en': ('privacy', 'support')}
-INVITE_SLUG = {'tr': 'parti', 'en': 'party'}   # davet linkleri: önizlemesi davete özel, arama dışı
+# kod, yerel ad, og:locale, yön, bayrak dosyası (NotHesaplayici/Kuafix ile aynı 17 dil)
+ALL_LANGS = [
+    ('tr', 'Türkçe', 'tr_TR', 'ltr', 'tr.svg'), ('en', 'English', 'en_US', 'ltr', 'en.svg'),
+    ('ar', 'العربية', 'ar_AR', 'rtl', 'ar.svg'), ('de', 'Deutsch', 'de_DE', 'ltr', 'de.svg'),
+    ('es', 'Español', 'es_ES', 'ltr', 'es.png'), ('fr', 'Français', 'fr_FR', 'ltr', 'fr.svg'),
+    ('hi', 'हिन्दी', 'hi_IN', 'ltr', 'hi.svg'), ('id', 'Bahasa Indonesia', 'id_ID', 'ltr', 'id.svg'),
+    ('it', 'Italiano', 'it_IT', 'ltr', 'it.svg'), ('ja', '日本語', 'ja_JP', 'ltr', 'ja.svg'),
+    ('ko', '한국어', 'ko_KR', 'ltr', 'ko.svg'), ('ku', 'Kurdî', 'ku_TR', 'ltr', None),
+    ('nl', 'Nederlands', 'nl_NL', 'ltr', 'nl.svg'), ('pl', 'Polski', 'pl_PL', 'ltr', 'pl.svg'),
+    ('pt', 'Português', 'pt_BR', 'ltr', 'pt-br.svg'), ('ru', 'Русский', 'ru_RU', 'ltr', 'ru.svg'),
+    ('zh-Hans', '简体中文', 'zh_CN', 'ltr', 'zh-hans.svg'),
+]
+# Yalnızca üç dosyası da hazır olan diller üretilir (yarım çeviri yayına çıkmaz)
+LANGS = [l for l in ALL_LANGS if all(os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), k, l[0] + '.json')) for k in ('i18n', 'ui', 'legal'))]
+LANG_INFO = {l[0]: l for l in ALL_LANGS}
+DOC_SLUGS = {c: ('gizlilik', 'destek') if c == 'tr' else ('privacy', 'support') for c, *_ in ALL_LANGS}
+INVITE_SLUG = {c: 'parti' if c == 'tr' else 'party' for c, *_ in ALL_LANGS}   # davet linkleri: önizlemesi davete özel, arama dışı
 FEAT_ICONS = ['🎈', '🤫', '👆', '🔮', '🎮', '🔒']
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com" />\n'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n'
          '<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap&subset=latin-ext" rel="stylesheet" />')
+FONTS_AR = '<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;800&display=swap" rel="stylesheet" />'
 VER = datetime.datetime.now().strftime('%Y%m%d%H%M')
 
 
@@ -46,7 +61,11 @@ def load(kind, code):
 
 
 def ldir(code):
-    return '' if code == 'tr' else code + '/'
+    return '' if code == 'tr' else code.lower() + '/'
+
+
+def html_attrs(c):
+    return f'lang="{c}" dir="{LANG_INFO[c][3]}"'
 
 
 def url_home(c): return SITE + ldir(c)
@@ -112,12 +131,13 @@ def head(c, title, desc, url, base, alts, noindex=False, og_img='og.jpg'):
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="{og}" />
 {FONTS}
+{FONTS_AR if c == 'ar' else ''}
 <style>{read(os.path.join(SRC, 'site.css'))}</style>'''
 
 
 def topbar(c, base, T, alts, sound=False):
     names = dict((l[0], l[1]) for l in LANGS)
-    flag = lambda k: f'<img src="{base}assets/img/flags/{k.lower()}.svg" alt="" width="20" height="14" />'
+    flag = lambda k: f'<img src="{base}assets/img/flags/{LANG_INFO[k][4]}" alt="" width="20" height="14" />' if LANG_INFO[k][4] else '<span class="noflag">🌐</span>'
     items = ''.join(f'<a href="{e(alts[k])}" hreflang="{k}" lang="{k}"{" aria-current=\"page\"" if k == c else ""}>{flag(k)}<span>{e(names[k])}</span></a>' for k, *_ in LANGS if k in alts)
     lang = (f'<details class="lang-menu"><summary aria-label="Language">{flag(c)}<b>{c.upper()}</b></summary><nav class="lang lm-list" aria-label="Language">{items}</nav></details>'
             '<script>(function(d){var m=d.querySelector(".lang-menu");if(!m)return;d.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});'
@@ -171,7 +191,7 @@ def page_home(c, T, L):
                  webapp(c, T), {'@type': 'WebPage', 'name': t['title'], 'url': url_home(c), 'inLanguage': c, 'isPartOf': {'@id': SITE + '#site'}, 'about': {'@id': SITE + '#app'}},
                  {'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in t['faq_home']]}])
     return f'''<!doctype html>
-<html lang="{c}">
+<html {html_attrs(c)}>
 <head>
 {head(c, t['title'], t['meta_desc'], url_home(c), base, alts)}
 {ld}
@@ -212,7 +232,7 @@ def page_app(c, T, U, L, fbcfg, invite=False):
     t, base = T[c], ('../' if c == 'tr' else '../../')
     if invite:
         alts = {k: url_invite(k) for k, *_ in LANGS}
-        title, desc, url, og = t['inv_title'], t['inv_desc'], url_invite(c), f'og-invite-{c}.jpg'
+        title, desc, url, og = t['inv_title'], t['inv_desc'], url_invite(c), f'og-invite-{c.lower()}.jpg'
     else:
         alts = {k: url_app(k, T) for k, *_ in LANGS}
         title, desc, url, og = t['fx_title'], t['fx_desc'], url_app(c, T), 'og.jpg'
@@ -229,7 +249,7 @@ def page_app(c, T, U, L, fbcfg, invite=False):
   </div>'''
     seo = '' if invite else f'<div class="seo">\n{how_html(t)}\n{faq_html(t)}\n</div>'
     return f'''<!doctype html>
-<html lang="{c}">
+<html {html_attrs(c)}>
 <head>
 {head(c, title, desc, url, base, alts, noindex=invite, og_img=og)}
 {ld}
@@ -263,7 +283,7 @@ def page_doc(c, i, T, L):
         qa = ''.join(f'<details class="qa"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in t['faq_home'])
         body = f'<h1>{e(title)}</h1><div class="card"><p>{e(l["sp_text"])}</p><p><a class="btn btn-gold" href="mailto:{EMAIL}">✉️ {EMAIL}</a></p></div><section class="faq"><h2>{e(l["sp_faq"])}</h2>{qa}</section>'
     return f'''<!doctype html>
-<html lang="{c}">
+<html {html_attrs(c)}>
 <head>
 {head(c, title + ' – PinkOrBlue', desc, url_doc(c, i), base, alts)}
 </head>
@@ -285,8 +305,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 
 ## Start a reveal room (web, free, no sign-up)
 
-- English: {url_app('en', T)}
-- Turkish / Türkçe: {url_app('tr', T)}
+{chr(10).join(f"- {LANG_INFO[c][1]} ({c}): {url_app(c, T)}" for c, *_ in LANGS)}
 
 ## How it works
 
@@ -306,8 +325,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 
 ## Pages
 
-- Türkçe: {url_home('tr')}
-- English: {url_home('en')}
+{chr(10).join(f"- {LANG_INFO[c][1]}: {url_home(c)}" for c, *_ in LANGS)}
 - Privacy (EN): {url_doc('en', 0)}
 - Gizlilik (TR): {url_doc('tr', 0)}
 

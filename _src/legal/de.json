@@ -1,0 +1,48 @@
+{
+ "pv_title": "Datenschutzerklärung",
+ "pv_desc": "Datenschutz bei PinkOrBlue: Gespeichert werden nur Namen, Stimmen und Tipps, die die Party braucht. Keine Werbung, kein Tracking, Löschung nach 7 Tagen.",
+ "pv_updated": "Zuletzt aktualisiert:",
+ "pv_date": "16. November 2026",
+ "pv_sections": [
+  [
+   "1. Allgemeines",
+   "<p>PinkOrBlue ist eine kostenlose Website, auf der Familien das Geschlecht ihres Babys online gemeinsam mit ihren Liebsten enthüllen können. Die Familie öffnet einen Partyraum und teilt den Link mit ihren Gästen; die Gäste stimmen ab und geben Tipps ab, und die Enthüllung erscheint auf allen Bildschirmen im selben Moment. Auf dieser Seite erklären wir, welche Daten wir aus welchem Grund speichern und wann sie gelöscht werden. PinkOrBlue wird von AnberTech entwickelt.</p>"
+  ],
+  [
+   "2. Gespeicherte Daten",
+   "<p><b>PinkOrBlue speichert nur die Daten, die für die Party nötig sind.</b></p><ul><li>Raumdaten: die Namen von Mama und Papa (falls eingegeben), der Spitzname des Babys, das Enthüllungsdatum, das vom Gastgeber heimlich eingegebene Ergebnis, die Gästeliste und die Raumeinstellungen.</li><li>Der Name, den ein Gast eingibt: Er wird den anderen im Raum angezeigt, damit alle sehen, wer abgestimmt hat. Du musst nicht deinen echten Namen verwenden; ein Spitzname genügt.</li><li>Stimmen und Tipps: die Stimme für Mädchen oder Junge und die Tipps der Gäste, außerdem, wie oft während der Enthüllungsshow getippt wurde, und ob jemand gerade im Raum ist.</li><li>Punkte im Minispiel: Sie dienen der Bestenliste im Raum.</li></ul><p>E-Mail-Adresse, Telefonnummer, Passwort, Standort, Fotos oder Kontakte werden weder abgefragt noch erhoben.</p>"
+  ],
+  [
+   "3. Identität und Konto",
+   "<p>Es gibt keine Anmeldung und kein Konto. Wenn du die Seite öffnest, erstellt Firebase Anonymous Authentication eine zufällige, anonyme Kennung für dich. Sie dient nur dazu, deine Stimme dir zuzuordnen und dich dort weitermachen zu lassen, wo du aufgehört hast, wenn du im selben Browser in den Raum zurückkehrst. Die Kennung enthält weder deinen Namen noch deine E-Mail-Adresse noch andere Angaben, die dich identifizieren. Diese anonyme Sitzung wird im lokalen Speicher deines Browsers abgelegt und nicht zum Tracking verwendet.</p>"
+  ],
+  [
+   "4. Speicherort der Daten",
+   "<p>Raumdaten, Namen, Stimmen, Tipps und Punkte werden in der Firebase Realtime Database gespeichert, einem Dienst von Google. Diese Daten werden nur Personen angezeigt, die den Link zum jeweiligen Raum haben. Sie werden nicht verkauft, nicht vermietet und an niemanden zu Werbezwecken weitergegeben. Firebase verarbeitet die Daten gemäß den Datenschutz- und Sicherheitsbedingungen von Google. Die Schriftarten der Seite werden über Google Fonts geladen; dabei verbindet sich dein Browser mit Servern von Google.</p><p>Beim Aufruf der Seite können der Hosting-Dienst (GitHub Pages) und die Firebase-Server technische Informationen wie deine IP-Adresse verarbeiten, um die Verbindung herzustellen. Diese Informationen werden von uns weder erhoben noch gespeichert.</p>"
+  ],
+  [
+   "5. Löschung der Daten",
+   "<p><b>Alle Daten eines Raums werden 7 Tage nach dem Partydatum automatisch gelöscht.</b></p><ul><li>Der Gastgeber kann den Raum jederzeit löschen; dann werden alle Namen, Stimmen, Tipps und Punkte des Raums sofort entfernt.</li><li>Wenn du als Gast möchtest, dass dein Name oder deine Stimme früher gelöscht wird, wende dich an den Gastgeber oder schreib uns an die unten stehende Adresse.</li></ul><p>Die Löschung übernimmt zweimal täglich eine geplante Aufgabe auf dem Server (Firebase Cloud Functions); auf einen abgelaufenen Raum kann in der Zwischenzeit niemand zugreifen. Gelöschte Daten können nicht wiederhergestellt werden.</p>"
+  ],
+  [
+   "6. Werbung, Analyse und Cookies",
+   "<p>PinkOrBlue zeigt keine Werbung. Es nutzt keine Drittanbieterdienste für Analyse, Statistik, Werbung oder Tracking und keine Tracking-Cookies.</p>"
+  ],
+  [
+   "7. Datenschutz für Kinder",
+   "<p>PinkOrBlue ist für werdende Familien und ihre erwachsenen Freunde und Angehörigen gedacht und richtet sich nicht an Kinder unter 13 Jahren. Wenn du bemerkst, dass ein Kind unter 13 Jahren Daten eingegeben hat, schreib uns bitte; wir löschen die betreffenden Daten.</p>"
+  ],
+  [
+   "8. Änderungen",
+   "<p>Wenn sich diese Erklärung ändert, wird die neue Fassung auf dieser Seite veröffentlicht und das Datum oben auf der Seite aktualisiert.</p>"
+  ],
+  [
+   "9. Kontakt",
+   "<p>Bei Fragen oder Löschanfragen kannst du uns hier erreichen:</p>"
+  ]
+ ],
+ "sp_title": "Support",
+ "sp_desc": "PinkOrBlue-Support: Schreib uns per E-Mail bei Fragen, Feedback, Löschanfragen oder technischen Problemen.",
+ "sp_text": "Für alle Fragen, Feedback, Anfragen zur Datenlöschung und technischen Support rund um PinkOrBlue erreichst du uns unter der folgenden E-Mail-Adresse. Wenn du den Link zu deinem Raum mitschickst, können wir dir schneller helfen:",
+ "sp_faq": "Häufig gestellte Fragen"
+}

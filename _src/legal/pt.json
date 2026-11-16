@@ -1,0 +1,48 @@
+{
+ "pv_title": "Política de Privacidade",
+ "pv_desc": "Política de privacidade do PinkOrBlue: guardamos só os nomes, votos e palpites que a festa precisa. Sem anúncios nem rastreamento; tudo é apagado após 7 dias.",
+ "pv_updated": "Última atualização:",
+ "pv_date": "16 de novembro de 2026",
+ "pv_sections": [
+  [
+   "1. Visão geral",
+   "<p>O PinkOrBlue é um site gratuito que permite às famílias revelar o sexo do bebê online, junto com as pessoas que amam. A família abre uma sala de festa e compartilha o link com os convidados; os convidados votam e dão palpites, e a revelação aparece na tela de todos ao mesmo tempo. Esta página explica quais dados guardamos, por que e quando eles são apagados. O PinkOrBlue é desenvolvido pela AnberTech.</p>"
+  ],
+  [
+   "2. Dados que guardamos",
+   "<p><b>O PinkOrBlue guarda apenas o que é necessário para a festa funcionar.</b></p><ul><li>Dados da sala: o nome da mãe e do pai (se informados), o apelido do bebê, a data da revelação, o resultado que o anfitrião insere em segredo, a lista de convidados e as configurações da sala.</li><li>O nome que o convidado digita: mostrado às outras pessoas da sala para que todos vejam quem votou. Você não precisa usar seu nome verdadeiro; um apelido serve.</li><li>Votos e palpites: o voto menino ou menina de cada convidado e seus palpites, além do número de toques durante o show da revelação e se a pessoa está na sala naquele momento.</li><li>Pontuações do minijogo: usadas para mostrar o placar da sala.</li></ul><p>Nunca pedimos nem coletamos e-mail, número de telefone, senha, localização, fotos ou contatos.</p>"
+  ],
+  [
+   "3. Identidade e conta",
+   "<p>Não há cadastro nem conta. Quando você abre o site, o Firebase Anonymous Authentication cria um identificador aleatório e anônimo para você. Ele é usado apenas para vincular o seu voto a você e para que você continue de onde parou ao voltar à sala no mesmo navegador. O identificador não contém seu nome, e-mail nem qualquer outra informação que identifique você. Essa sessão anônima fica no armazenamento local do seu navegador e nunca é usada para rastreamento.</p>"
+  ],
+  [
+   "4. Onde os dados ficam",
+   "<p>Os dados da sala, nomes, votos, palpites e pontuações ficam no Firebase Realtime Database, um serviço do Google. Esses dados são mostrados apenas a quem tem o link daquela sala. Eles nunca são vendidos, alugados ou compartilhados com ninguém para fins de publicidade. O Firebase processa os dados de acordo com os próprios termos de privacidade e segurança do Google. As fontes da página são carregadas do Google Fonts, então seu navegador se conecta aos servidores do Google para buscá-las.</p><p>Quando você acessa o site, o serviço de hospedagem (GitHub Pages) e os servidores do Firebase podem processar informações técnicas, como o seu endereço IP, para entregar a página. Nós não coletamos nem guardamos essas informações.</p>"
+  ],
+  [
+   "5. Exclusão",
+   "<p><b>Todos os dados de uma sala são apagados automaticamente 7 dias depois da data da festa.</b></p><ul><li>Quem criou a sala pode apagá-la a qualquer momento; nesse caso, todos os nomes, votos, palpites e pontuações dela são removidos na hora.</li><li>Se você é convidado e quer que seu nome ou voto seja apagado antes, peça a quem criou a sala ou escreva para nós no endereço abaixo.</li></ul><p>A exclusão é feita por uma tarefa agendada no servidor (Firebase Cloud Functions) duas vezes por dia; enquanto isso, ninguém consegue acessar uma sala expirada. Dados apagados não podem ser recuperados.</p>"
+  ],
+  [
+   "6. Anúncios, analytics e cookies",
+   "<p>O PinkOrBlue não mostra anúncios. Não usa nenhum serviço de terceiros de análise, estatística, publicidade ou rastreamento, nem cookies de rastreamento.</p>"
+  ],
+  [
+   "7. Privacidade de crianças",
+   "<p>O PinkOrBlue foi feito para famílias que esperam um bebê e para seus amigos e parentes adultos. Ele não se destina a crianças menores de 13 anos. Se você perceber que uma criança menor de 13 anos inseriu informações, fale com a gente e vamos apagá-las.</p>"
+  ],
+  [
+   "8. Alterações",
+   "<p>Se esta política mudar, a nova versão será publicada nesta página e a data no topo será atualizada.</p>"
+  ],
+  [
+   "9. Contato",
+   "<p>Para dúvidas ou pedidos de exclusão, fale com a gente em:</p>"
+  ]
+ ],
+ "sp_title": "Suporte",
+ "sp_desc": "Suporte do PinkOrBlue: envie suas dúvidas, comentários, pedidos de exclusão e de suporte técnico por e-mail.",
+ "sp_text": "Para qualquer dúvida, comentário, pedido de exclusão de dados ou suporte técnico sobre o PinkOrBlue, fale com a gente pelo e-mail abaixo. Se você incluir o link da sua sala, conseguimos ajudar mais rápido:",
+ "sp_faq": "Perguntas frequentes"
+}
