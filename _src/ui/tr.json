@@ -198,5 +198,11 @@
  "r_names": "İsim önerileri",
  "r_congrats": "Tebrikler %s!",
  "r_congrats_np": "Tebrikler!",
- "show_fail_sub2": "Daha güçlü, daha hızlı! 💪"
+ "show_fail_sub2": "Daha güçlü, daha hızlı! 💪",
+ "r_story": "Hikâyede paylaş",
+ "st_baby_of": "%s bebeği",
+ "st_its": "Ve sonuç…",
+ "st_coming_girl": "%s geliyor 💗",
+ "st_coming_boy": "%s geliyor 💙",
+ "st_saved": "Kart indirildi 📸"
 }

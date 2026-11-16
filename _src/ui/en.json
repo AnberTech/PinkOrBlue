@@ -198,5 +198,11 @@
  "r_names": "Name ideas",
  "r_congrats": "Congratulations %s!",
  "r_congrats_np": "Congratulations!",
- "show_fail_sub2": "Harder, faster! 💪"
+ "show_fail_sub2": "Harder, faster! 💪",
+ "r_story": "Share to your story",
+ "st_baby_of": "%s baby is a",
+ "st_its": "And it's a…",
+ "st_coming_girl": "%s is on the way 💗",
+ "st_coming_boy": "%s is on the way 💙",
+ "st_saved": "Card downloaded 📸"
 }

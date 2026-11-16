@@ -761,6 +761,7 @@ function renderResult() {
       ${guesses.map(v => `<div class="rg ${v.parent ? "parent" : ""}">${v.parent ? `<span class="av crown">👑</span>` : av(v.name)}<div><b>${esc(v.name)}${v.parent ? ` <em>${v.tag || S.r_parents_tag}</em>` : ""}</b><span>${[v.birth ? "📅 " + esc(shortDate(v.birth)) : "", v.weight ? "⚖️ " + v.weight + " g" : "", v.letter ? "🔤 " + esc(v.letter) : ""].filter(Boolean).join(" · ")}</span></div>${v.pick ? `<i class="${v.pick}">${v.pick === "girl" ? "🎀" : "🎩"}</i>` : ""}</div>`).join("")}</div>
       <button class="btn pdf-btn" data-act="pdf">📄 ${S.r_pdf}</button></section>` : ""}
   </article>
+  <button class="btn story-btn ${girl ? "g" : "b"}" data-act="story">📸 ${S.r_story}</button>
   <div class="r-actions">
     <button class="btn btn-gold" data-act="replay">▶ ${S.r_replay}</button>
     <button class="btn" data-act="rshare">${S.r_share}</button>
@@ -770,8 +771,93 @@ function renderResult() {
   const pdfBtn = app.querySelector('[data-act="pdf"]');
   if (pdfBtn) pdfBtn.onclick = () => printGuesses(R, guesses, girl);
   app.querySelector('[data-act="replay"]').onclick = () => { unlock(); runShow(true); };
+  app.querySelector('[data-act="story"]').onclick = (ev) => shareStory(R, girl, ev.currentTarget);
   app.querySelector('[data-act="rshare"]').onclick = () => share(fmt(girl ? S.r_share_text_girl : S.r_share_text_boy, babyOf(m)) + "\n" + roomUrl(R.id));
 }
+
+// Türkçe ilgi hâli eki: Ali → Ali'nin, Mehmet → Mehmet'in, Burak → Burak'ın, Can → Can'ın
+function genitiveTr(name) {
+  const w = name.trim(), low = w.toLocaleLowerCase("tr");
+  const vs = [...low].filter(c => "aeıioöuü".includes(c)), last = vs[vs.length - 1] || "e";
+  const v = { a: "ı", ı: "ı", e: "i", i: "i", o: "u", u: "u", ö: "ü", ü: "ü" }[last];
+  return w + "'" + ("aeıioöuü".includes(low[low.length - 1]) ? "n" : "") + v + "n";
+}
+const loadImg = (src) => new Promise(res => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+
+// Instagram hikâyesi boyutunda (1080×1920) sonuç kartı
+async function storyCanvas(R, girl) {
+  const m = R.meta, W = 1080, H = 1920;
+  try { await Promise.all([document.fonts.load('800 100px "Baloo 2"'), document.fonts.load('800 40px Nunito')]); } catch (e) {}
+  const [stork, bal, icon, ab] = await Promise.all([loadImg(ASSET + "img/stork.png"), loadImg(ASSET + "img/balloon-" + (girl ? "pink" : "blue") + ".png"), loadImg(ASSET + "img/balloon-icon-180.png"), loadImg(ASSET + "img/anbertech.png")]);
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const g = cv.getContext("2d");
+  const c1 = girl ? "#FFD3E3" : "#D4EDFF", c2 = girl ? "#FF8FB8" : "#6DB9F5", c3 = girl ? "#D94C84" : "#2E7FCF", deep = girl ? "#B0175A" : "#0F4C91";
+  const bg = g.createRadialGradient(W / 2, H * .42, 40, W / 2, H * .45, H * .8);
+  bg.addColorStop(0, c1); bg.addColorStop(.5, c2); bg.addColorStop(1, c3);
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  // ışık hüzmeleri
+  g.save(); g.translate(W / 2, H * .44);
+  for (let i = 0; i < 20; i++) { g.rotate(Math.PI / 10); const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, "rgba(255,255,255,.22)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.beginPath(); g.moveTo(0, 0); g.lineTo(-60, H); g.lineTo(60, H); g.fill(); }
+  g.restore();
+  const glow = g.createRadialGradient(W / 2, H * .44, 0, W / 2, H * .44, 520); glow.addColorStop(0, "rgba(255,255,255,.55)"); glow.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = glow; g.fillRect(0, 0, W, H);
+  // konfeti (sabit tohumlu, her seferinde aynı güzel dağılım)
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const cols = ["#fff", "#F2B93B", "#FFE08A", deep, "#fff"];
+  for (let i = 0; i < 140; i++) { g.save(); g.translate(rnd() * W, rnd() * H); g.rotate(rnd() * 6.3); g.globalAlpha = .55 + rnd() * .45; g.fillStyle = cols[i % cols.length]; g.fillRect(-9, -15, 18, 30); g.restore(); }
+  // balonlar
+  if (bal) [[70, 1180, 230], [880, 1060, 200], [760, 1450, 260], [-10, 1500, 240], [900, 1650, 180]].forEach(([x, y, sz]) => { g.globalAlpha = .95; g.drawImage(bal, x - sz / 2 + sz / 2, y, sz, sz); });
+  g.globalAlpha = 1;
+  if (stork) g.drawImage(stork, W / 2 - 300, 170, 600, 600);
+  const T = (txt, y, size, color, weight = 800, font = '"Baloo 2"', shadow = null) => {
+    g.font = `${weight} ${size}px ${font}, system-ui`; g.textAlign = "center"; g.textBaseline = "middle";
+    let sz = size; while (g.measureText(txt).width > W * .88 && sz > 20) { sz -= 4; g.font = `${weight} ${sz}px ${font}, system-ui`; }
+    if (shadow) { g.fillStyle = shadow; g.fillText(txt, W / 2, y + sz * .07); }
+    g.fillStyle = color; g.fillText(txt, W / 2, y);
+  };
+  const tr = LANG === "tr";
+  const who = m.parents ? (tr ? genitiveTr(m.parents.split(" & ").pop()).replace(/^/, m.parents.includes(" & ") ? m.parents.split(" & ")[0] + " & " : "") : m.parents + "'s") : "";
+  g.shadowColor = "rgba(0,0,0,.18)"; g.shadowBlur = 24;
+  T(who ? fmt(S.st_baby_of, who) : S.st_its, 860, 64, "#fff", 800, 'Nunito');
+  g.shadowBlur = 40; g.shadowOffsetY = 18;
+  T(girl ? S.girl_big : S.boy_big, 1040, 300, "#fff", 800, '"Baloo 2"', deep);
+  g.shadowBlur = 20; g.shadowOffsetY = 6;
+  T(fmt(girl ? S.st_coming_girl : S.st_coming_boy, babyOf(m)), 1250, 70, "#fff");
+  g.shadowBlur = 0; g.shadowOffsetY = 0;
+  const today = new Intl.DateTimeFormat(LANG, { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+  // tarih rozeti
+  g.font = '800 46px Nunito, system-ui'; const dw = g.measureText(today).width + 80;
+  g.fillStyle = "rgba(255,255,255,.92)"; roundRectPath(g, W / 2 - dw / 2, 1335, dw, 84, 42); g.fill();
+  g.fillStyle = deep; g.textAlign = "center"; g.fillText(today, W / 2, 1379);
+  // alt marka şeridi
+  g.fillStyle = "rgba(255,255,255,.94)"; roundRectPath(g, 150, 1690, W - 300, 150, 75); g.fill();
+  if (icon) g.drawImage(icon, 205, 1712, 106, 106);
+  g.textAlign = "left"; g.textBaseline = "middle";
+  g.font = '800 66px "Baloo 2", system-ui';
+  let x = 330; [["Pink", "#D6336C"], ["Or", "#2B2140"], ["Blue", "#1C6FB8"]].forEach(([t, c]) => { g.fillStyle = c; g.fillText(t, x, 1752); x += g.measureText(t).width; });
+  g.font = '800 34px Nunito, system-ui'; g.fillStyle = "#6E6380"; g.fillText("by", 332, 1806);
+  if (ab) g.drawImage(ab, 380, 1788, 38, 35);
+  g.fillStyle = "#2B2140"; g.fillText("Anber", 426, 1806); const aw = g.measureText("Anber").width; g.fillStyle = "#B8962E"; g.fillText("Tech", 426 + aw, 1806);
+  return cv;
+}
+function roundRectPath(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+
+async function shareStory(R, girl, btn) {
+  btn.disabled = true; const old = btn.textContent; btn.textContent = S.wait;
+  try {
+    const cv = await storyCanvas(R, girl);
+    const blob = await new Promise(res => cv.toBlob(res, "image/png"));
+    const file = new File([blob], "pinkorblue-" + (girl ? "kiz" : "erkek") + ".png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: "PinkOrBlue 🎈" }); return; } catch (e) { if (e.name === "AbortError") return; }
+    }
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast(S.st_saved);
+  } catch (e) { console.error(e); toast(S.err_generic); }
+  finally { btn.disabled = false; btn.textContent = old; }
+}
+window.__pobStory = async () => { const R = room; return (await storyCanvas(R, R.result === "girl")).toDataURL("image/png"); };   // test için
 
 // Tahmin listesini yazdırılabilir sayfa olarak aç → "PDF olarak kaydet"
 function printGuesses(R, guesses, girl) {
