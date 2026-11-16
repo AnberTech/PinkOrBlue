@@ -132,7 +132,8 @@ def head(c, title, desc, url, base, alts, noindex=False, og_img='og.jpg'):
 <meta name="twitter:image" content="{og}" />
 {FONTS}
 {FONTS_AR if c == 'ar' else ''}
-<style>{read(os.path.join(SRC, 'site.css'))}</style>'''
+<style>{read(os.path.join(SRC, 'site.css'))}</style>
+<script data-goatcounter="https://anbertech.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'''
 
 
 def topbar(c, base, T, alts, sound=False):
@@ -205,7 +206,7 @@ def page_home(c, T, L):
     <p class="eyebrow">{e(t['hero_eyebrow'])}</p>
     <h1>{t['hero_h1_html']}</h1>
     <p class="sub">{e(t['hero_sub'])}</p>
-    <div class="cta"><a class="btn btn-gold" href="{app_href}">🎈 {e(t['hero_cta'])}</a><span class="muted small">{e(t['hero_note'])}</span></div>
+    <div class="cta"><a class="btn btn-gold" data-goatcounter-click="pob/{c.lower()}/ana-cta" href="{app_href}">🎈 {e(t['hero_cta'])}</a><span class="muted small">{e(t['hero_note'])}</span></div>
   </div>
   <div class="hero-art" aria-hidden="true">
     <img class="bp" src="{base}assets/img/balloon-pink.png" alt="" width="300" height="300" />
@@ -216,7 +217,7 @@ def page_home(c, T, L):
 </div></section>
 {how_html(t)}
 <section class="sec" aria-labelledby="ft-h"><div class="wrap"><p class="eyebrow">{e(t['feats_eyebrow'])}</p><h2 class="h2" id="ft-h">{e(t['feats_h2'])}</h2><div class="feats">{feats}</div></div></section>
-<section class="sec"><div class="wrap"><div class="band"><h2>{e(t['fx_name'])}</h2><p class="muted">{e(t['fx_sub'])}</p><a class="btn btn-gold" href="{app_href}">🎈 {e(t['hero_cta'])}</a></div></div></section>
+<section class="sec"><div class="wrap"><div class="band"><h2>{e(t['fx_name'])}</h2><p class="muted">{e(t['fx_sub'])}</p><a class="btn btn-gold" data-goatcounter-click="pob/{c.lower()}/ana-cta2" href="{app_href}">🎈 {e(t['hero_cta'])}</a></div></div></section>
 {faq_html(t)}
 </main>
 {footer(c, base, T, L)}
@@ -320,7 +321,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 - No account and no e-mail; guests only type a name (a nickname is fine).
 - Works in any modern browser on phone, tablet or computer; nothing to download.
 - Each family's room is separate with its own link; many families can use it at the same time.
-- Privacy: stores only room details, guest names, votes, guesses and mini-game scores (Firebase Realtime Database, anonymous authentication). No analytics or tracking cookies. All room data is deleted 7 days after the party date; the host can delete the room at any time.
+- Privacy: stores only room details, guest names, votes, guesses and mini-game scores (Firebase Realtime Database, anonymous authentication). No ads or tracking cookies; only cookieless, anonymous visit counting (GoatCounter) with no names, votes or room data. All room data is deleted 7 days after the party date; the host can delete the room at any time.
 - Not directed at children under 13.
 
 ## Pages

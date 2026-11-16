@@ -35,7 +35,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 - No account and no e-mail; guests only type a name (a nickname is fine).
 - Works in any modern browser on phone, tablet or computer; nothing to download.
 - Each family's room is separate with its own link; many families can use it at the same time.
-- Privacy: stores only room details, guest names, votes, guesses and mini-game scores (Firebase Realtime Database, anonymous authentication). No analytics or tracking cookies. All room data is deleted 7 days after the party date; the host can delete the room at any time.
+- Privacy: stores only room details, guest names, votes, guesses and mini-game scores (Firebase Realtime Database, anonymous authentication). No ads or tracking cookies; only cookieless, anonymous visit counting (GoatCounter) with no names, votes or room data. All room data is deleted 7 days after the party date; the host can delete the room at any time.
 - Not directed at children under 13.
 
 ## Pages

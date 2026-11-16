@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162215";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162215";
-import { playGame } from "./game.js?v=202611162215";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162215";
+import * as fb from "./fb.js?v=202611162251";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162251";
+import { playGame } from "./game.js?v=202611162251";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162251";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -93,6 +93,8 @@ function roomId() {
   return m[1].toLowerCase();
 }
 const babyOf = (m) => m.babyName || S.default_baby;
+// GoatCounter olay sayımı: dil koduyla ("pob/de/oda-acildi"); isim, oda kodu, oy asla gönderilmez
+function track(ev) { try { window.goatcounter?.count?.({ path: "pob/" + LANG.toLowerCase() + "/" + ev, title: ev, event: true }); } catch (e) {} }
 const ls = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
 const hostLink = (id, key) => location.origin + INVITE + "#r=" + id + "&k=" + key;
 function shareText(m) {
@@ -245,6 +247,7 @@ function viewCreate() {
     try {
       const { id, hostKey } = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: [], hostName: host, password: pw || null });
       ls.set("pob_hk_" + id, hostKey); if (pw) ls.set("pob_pw_" + id, pw);
+      track(pw ? "oda-acildi-sifreli" : "oda-acildi");
       history.replaceState(null, "", INVITE + "#r=" + id);
       route(true);
     } catch (e) {
@@ -402,7 +405,7 @@ function renderJoin() {
       if (same.some(([u]) => online.has(u))) { toast(S.j_err_taken); inp.focus(); return; }
       if (!confirm(fmt(S.j_rejoin, n))) return;
     }
-    try { await fb.join(R.id, n); if (room !== R) return; delete R.drafts.n; sfx.plop(); document.activeElement?.blur(); render(); }
+    try { await fb.join(R.id, n); if (room !== R) return; delete R.drafts.n; sfx.plop(); track("katildi"); document.activeElement?.blur(); render(); }
     catch (e) { console.error(e); toast(S.err_generic); }
   };
 }
@@ -544,7 +547,7 @@ function bindLobby() {
   app.querySelectorAll(".balloon").forEach(b => b.onclick = () => { toast(b.dataset.tip); b.classList.remove("hop"); void b.offsetWidth; b.classList.add("hop"); });
   app.querySelectorAll(".cast .vb").forEach(b => b.onclick = async () => {
     const next = Object.assign({}, R.mine || {}, { pick: b.dataset.p });
-    try { await fb.vote(R.id, clean(next)); if (room !== R) return; R.mine = next; sfx.plop(); toast(next.pick === "girl" ? S.v_done_girl : S.v_done_boy); render(); }
+    try { const first = !R.mine?.pick; await fb.vote(R.id, clean(next)); if (room !== R) return; R.mine = next; sfx.plop(); if (first) track("oy"); toast(next.pick === "girl" ? S.v_done_girl : S.v_done_boy); render(); }
     catch (e) { console.error(e); toast(S.err_generic); }
   });
   app.querySelectorAll(".seal .vb").forEach(b => b.onclick = async () => {
@@ -577,6 +580,7 @@ function bindLobby() {
     R.starting = true;   // yerel "reveal" olayı sunucu onayı gelmeden şovu başlatmasın
     try {
       await fb.startReveal(R.id, R.sealed, SHOW_LEAD, onlineUids().length || 1);
+      track("acilis");
       R.starting = false;
       if (room === R && R.meta?.status === "reveal") onReveal();
     } catch (e) {
@@ -596,8 +600,10 @@ function bindLobby() {
   });
   act("copy", () => copy(roomUrl(R.id)));
   act("copykey", () => copy(hostLink(R.id, ls.get("pob_hk_" + R.id))));
-  act("share", () => share(shareText(R.meta)));
+  act("share", () => { track("davet-paylas"); share(shareText(R.meta)); });
+  app.querySelectorAll(".btn-wa").forEach(a => a.addEventListener("click", () => track("davet-whatsapp")));
   act("play", () => {
+    track("oyun");
     const names = [...new Set([...Object.values(R.guests).map(g => g.name), ...Object.values(R.invitees)].map(n => n.trim().split(/\s+/)[0]).filter(Boolean))];
     R.game = playGame({ root: document.body, S, names, baby: babyOf(R.meta), onEnd: async (score) => {
       R.game = null;
@@ -802,15 +808,16 @@ function renderResult() {
     b.disabled = true;
     try {
       await fb.postWall(R.id, { name, ...(msg ? { msg } : {}), ...(nm ? { nm } : {}) });
+      track(nm ? "mesaj-isim" : "mesaj");
       ["wmsg", "wnm"].forEach(k => { box.querySelector(`[name=${k}]`).value = ""; delete R.drafts[k]; });
       sfx.plop(); toast(S.w_sent);
     } catch (e) { console.error(e); toast(S.err_generic); }
     b.disabled = false;
   };
   const pdfBtn = app.querySelector('[data-act="pdf"]');
-  if (pdfBtn) pdfBtn.onclick = () => printGuesses(R, guesses, girl);
+  if (pdfBtn) pdfBtn.onclick = () => { track("pdf"); printGuesses(R, guesses, girl); };
   app.querySelector('[data-act="replay"]').onclick = () => { unlock(); runShow(true); };
-  app.querySelector('[data-act="story"]').onclick = (ev) => shareStory(R, girl, ev.currentTarget);
+  app.querySelector('[data-act="story"]').onclick = (ev) => { track("hikaye"); shareStory(R, girl, ev.currentTarget); };
   app.querySelector('[data-act="rshare"]').onclick = () => share(fmt(girl ? S.r_share_text_girl : S.r_share_text_boy, babyOf(m)) + "\n" + roomUrl(R.id));
 }
 
