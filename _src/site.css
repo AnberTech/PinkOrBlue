@@ -415,3 +415,18 @@ footer.mini nav a:hover{text-decoration:underline}
 .rg b em{font-style:normal;font-size:.75rem;font-weight:800;color:var(--gold-deep);margin-left:4px}
 .pdf-btn{margin-top:12px;width:100%}
 .pw-box input{margin-top:0}
+/* bayraklı dil menüsü (tek düğme) */
+.lang-menu{position:relative}
+.lang-menu summary{list-style:none;display:flex;align-items:center;gap:6px;min-height:44px;padding:0 12px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1);cursor:pointer;font:800 .82rem/1 var(--f-body);color:var(--ink)}
+.lang-menu summary::-webkit-details-marker{display:none}
+.lang-menu summary::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg);opacity:.6;transition:transform .2s}
+.lang-menu[open] summary::after{transform:translateY(1px) rotate(-135deg)}
+.lang-menu img{width:20px;height:14px;border-radius:3px;object-fit:cover;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.lm-list{position:absolute;right:0;top:calc(100% + 8px);z-index:60;display:grid;gap:2px;min-width:180px;padding:6px;border-radius:18px;background:var(--surface);box-shadow:var(--sh-2);animation:rise .2s var(--ease-out)}
+.lm-list a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:12px;color:var(--ink);text-decoration:none;font-weight:700}
+.lm-list a:hover{background:var(--cream)}
+.lm-list a[aria-current]{background:var(--gold-soft)}
+.res-names{display:flex;flex-wrap:wrap;gap:8px}
+.nmchip{display:inline-flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:16px;background:var(--soft);color:var(--deep)}
+.nmchip b{font:800 1.1rem/1.1 var(--f-head)}.nmchip small{font-weight:700;color:var(--ink-muted);font-size:.72rem}
+.res-parents{font-size:1.1rem!important}

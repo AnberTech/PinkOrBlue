@@ -3,7 +3,7 @@
 // Zaman: t = ms (revealAt'ten itibaren, sunucu saatine sabitlenmiş). Tur k: S(k) = 3 + 15k sn.
 //   S..S+10 şişirme · S+10..S+11.5 "yetti mi?" · başarısız: S+11.5..S+15 sönme → S(k+1)
 //   başarılı: S+11.5..S+14.5 gerilim · S+14.5..S+15.5 sessizlik · S+15.5 PAT · S+20.5 bitiş
-import { sfx, vib, unlock, running } from "./sfx.js?v=202611161946";
+import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162005";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",
@@ -141,6 +141,7 @@ export function playShow(opts) {
   const easeBack = (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
   const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 
+  preloadReveal(); setTimeout(preloadReveal, 4000);   // ses açıldıysa müzik dosyasını önceden yükle
   let raf = 0, ended = false;
   function frame() {
     const st = state();
@@ -148,7 +149,7 @@ export function playShow(opts) {
     const need = Math.max(1, opts.need(k));
     const tp = opts.getTaps(k);           // {round, people, top}
     shown += (tp.round - shown) * .25;
-    const fill = clamp(shown / need);
+    const fill = opts.hideCount?.(k) ? clamp(shown / Math.max(need, 1) * .85, 0, .85) : clamp(shown / need);
     const cx = W / 2, cy = H * .45, baseR = Math.min(W, H) * .24;
     const FW = Math.min(W, H * .62);     // yazı ölçeği: yatay ekranda taşmasın/binmesin
     const yB = (r) => Math.min(H * r, H - (1 - r) * 700);  // alt satırlar: yatayda alttan sabit uzaklık
@@ -193,18 +194,17 @@ export function playShow(opts) {
       bounce *= .85;
       balloon(cx, cy, baseR * (.4 + .6 * fill) * (1 + bounce * .03), reduced ? 0 : bounce);
       text(k ? fmt(S.show_round, k + 1) : S.show_tap, cx, H * .09, Math.min(30, FW * .075), C.goldHi);
-      text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff");
+      if (!opts.hideCount?.(k)) text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff");
       text(tp.people ? fmt(S.show_people_tapping, tp.people, Math.max(0, Math.ceil(10 - tl))) : fmt(S.show_secs, Math.max(0, Math.ceil(10 - tl))), cx, yB(.872), Math.min(15, FW * .04), "rgba(255,255,255,.7)", 700);
-      bar(fill, yB(.9));
-      if (tl >= 4 && tp.top && tp.top.length) text(S.show_fastest + " " + tp.top.slice(0, 3).map(x => `${x[0]} ${x[1]}`).join(" · "), cx, H * .145, Math.min(15, FW * .04), "rgba(255,255,255,.8)", 700);
+      if (!opts.hideCount?.(k)) bar(fill, yB(.9));
+      if (!opts.hideCount?.(k) && tl >= 4 && tp.top && tp.top.length) text(S.show_fastest + " " + tp.top.slice(0, 3).map(x => `${x[0]} ${x[1]}`).join(" · "), cx, H * .145, Math.min(15, FW * .04), "rgba(255,255,255,.8)", 700);
     } else if (!out || tl < 11.5) {
       // ---- yetti mi?
       if (tl >= 10.6) opts.decide(k);
       once("yetti" + k, t, roundStart(k) + 10, () => { sfx.snare(.2); live.textContent = S.show_check; });
       balloon(cx, cy, baseR * (.4 + .6 * fill), reduced ? 0 : Math.sin(t * 20) * .25);
       text(S.show_check, cx, H * .12, Math.min(30, FW * .075), "#fff");
-      text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff");
-      bar(fill, yB(.9));
+      if (!opts.hideCount?.(k)) { text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff"); bar(fill, yB(.9)); }
     } else if (out.o === "fail") {
       // ---- havası söndü, uçup gidiyor
       if (failAnchor[k] == null) {
@@ -220,7 +220,7 @@ export function playShow(opts) {
       balloon(cx + zx, cy + zy, baseR * sc, 0, reduced ? 0 : Math.sin(ft * 18) * .6 * p, p);
       if (!reduced && ft < 2.2) sparks.push({ x: cx + zx, y: cy + zy + baseR * sc * 1.1, vx: (Math.random() - .5) * 2, vy: 2 + Math.random() * 2, life: .6, puff: 1 });
       text(S.show_fail, cx, H * .3, Math.min(40, FW * .1), "#fff", 800, ft * 3);
-      text(fmt(S.show_fail_sub, Math.round(shown), need), cx, H * .3 + 44, Math.min(18, FW * .045), "rgba(255,255,255,.8)", 700, ft * 3 - .5);
+      text(opts.hideCount?.(k) ? S.show_fail_sub2 : fmt(S.show_fail_sub, Math.round(shown), need), cx, H * .3 + 44, Math.min(18, FW * .045), "rgba(255,255,255,.8)", 700, ft * 3 - .5);
       const left = roundStart(k + 1) - t;
       if (left < 1.6) text(fmt(S.show_again, Math.max(1, Math.ceil(left))), cx, H * .62, Math.min(34, FW * .085), C.goldHi, 800, 1);
     } else if (tp0 == null || t < tp0) {
@@ -250,10 +250,10 @@ export function playShow(opts) {
       // ---- PAT ve sonuç
       const pt = t - tp0;
       once("boom", t, tp0, () => {
-        sfx.boom(); vib([200, 50, 100]);
+        sfx.boom(); playReveal(girl); vib([200, 50, 100]);
         if (!reduced) for (let i = 0; i < 10; i++) { const a = Math.random() * Math.PI * 2; shards.push({ x: cx, y: cy, vx: Math.cos(a) * 9, vy: Math.sin(a) * 9, r: Math.random() * 6, vr: (Math.random() - .5) * .5, s: 10 + Math.random() * 14 }); }
       });
-      once("conf1", t, tp0 + .3, () => { burst(reduced ? 20 : 150, false, resColor, resDeep); sfx.celebrate(girl); live.textContent = (girl ? S.girl_big : S.boy_big) + " " + opts.babyName; });
+      once("conf1", t, tp0 + .3, () => { burst(reduced ? 20 : 150, false, resColor, resDeep); live.textContent = (girl ? S.girl_big : S.boy_big) + " " + opts.babyName; });
       once("conf2", t, tp0 + 1.5, () => burst(reduced ? 15 : 100, true, resColor, resDeep));
       once("rise", t, tp0 + .4, () => {
         const n = reduced ? 4 : 14;

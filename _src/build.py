@@ -116,13 +116,18 @@ def head(c, title, desc, url, base, alts, noindex=False, og_img='og.jpg'):
 
 
 def topbar(c, base, T, alts, sound=False):
-    lang = ''.join(f'<a href="{e(alts[k])}" hreflang="{k}" lang="{k}"{" aria-current=\"page\"" if k == c else ""}>{k.upper()}</a>' for k, *_ in LANGS if k in alts)
+    names = dict((l[0], l[1]) for l in LANGS)
+    flag = lambda k: f'<img src="{base}assets/img/flags/{k.lower()}.svg" alt="" width="20" height="14" />'
+    items = ''.join(f'<a href="{e(alts[k])}" hreflang="{k}" lang="{k}"{" aria-current=\"page\"" if k == c else ""}>{flag(k)}<span>{e(names[k])}</span></a>' for k, *_ in LANGS if k in alts)
+    lang = (f'<details class="lang-menu"><summary aria-label="Language">{flag(c)}<b>{c.upper()}</b></summary><nav class="lang lm-list" aria-label="Language">{items}</nav></details>'
+            '<script>(function(d){var m=d.querySelector(".lang-menu");if(!m)return;d.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});'
+            'd.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.open){m.open=false;m.querySelector("summary").focus()}})})(document);</script>')
     snd = '<button class="icon-btn" id="sound" type="button">🔊</button>' if sound else ''
     splash = f'''<div id="splash" aria-hidden="true"><div class="sp-in"><img class="sp-b" src="{base}assets/img/balloon-icon-180.png" alt="" width="120" height="120" /><p class="sp-w"><b>Pink</b>Or<i>Blue</i></p><p class="sp-by">by <img class="am-d" src="{base}assets/img/anbertech.png" alt="" width="22" height="20" /><img class="am-l" src="{base}assets/img/anbertech-ink.png" alt="" width="22" height="20" /><span>Anber<em>Tech</em></span></p></div></div>
-<script>(function(){{var s=document.getElementById("splash");try{{if(sessionStorage.getItem("pob_sp")){{s.remove();return}}sessionStorage.setItem("pob_sp","1")}}catch(e){{}}document.documentElement.classList.add("sp-on");setTimeout(function(){{s.classList.add("out");document.documentElement.classList.remove("sp-on")}},950);setTimeout(function(){{s.remove()}},1450);s.onclick=function(){{s.classList.add("out");document.documentElement.classList.remove("sp-on")}}}})();</script>'''
+<script>(function(){{var s=document.getElementById("splash");try{{if(sessionStorage.getItem("pob_sp")){{s.remove();return}}sessionStorage.setItem("pob_sp","1")}}catch(e){{}}document.documentElement.classList.add("sp-on");setTimeout(function(){{s.classList.add("out");document.documentElement.classList.remove("sp-on")}},1250);setTimeout(function(){{s.remove()}},1750);s.onclick=function(){{s.classList.add("out");document.documentElement.classList.remove("sp-on")}}}})();</script>'''
     return f'''{splash}<header class="top"><div class="wrap">
   <a class="logo" href="{base}{ldir(c)}"><img src="{base}assets/img/balloon-icon-180.png" alt="" width="34" height="34" /><span><b>Pink</b>Or<i>Blue</i></span></a>
-  <span class="sp"></span><nav class="lang" aria-label="Language">{lang}</nav>{snd}
+  <span class="sp"></span>{lang}{snd}
 </div></header>'''
 
 
@@ -215,6 +220,8 @@ def page_app(c, T, U, L, fbcfg, invite=False):
     cfg = dict(fbcfg); cfg['databaseURL'] = DB_URL
     cfg = {k: cfg[k] for k in ('apiKey', 'authDomain', 'databaseURL', 'projectId', 'appId', 'messagingSenderId')}
     paths = {'POB_INVITE': '../' + INVITE_SLUG[c] + '/', 'POB_CREATE': '../' + t['fx_slug'] + '/', 'POB_IS_INVITE': invite}
+    adir = os.path.join(ROOT, 'assets', 'audio')
+    paths['POB_AUDIO'] = sorted(f[:-4] for f in os.listdir(adir) if f.endswith('.mp3')) if os.path.isdir(adir) else []
     intro = '' if invite else f'''<div class="app-intro">
     <img src="{base}assets/img/stork.png" alt="" width="560" height="560" />
     <h1>{t['fx_h1_html']}</h1>

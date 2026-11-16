@@ -192,5 +192,11 @@
  "c_other_ph": "Senin adın (ör. Zeynep Teyze)",
  "c_err_who": "Odayı kuran kişinin adını yazmadın.",
  "c_err_other": "Odayı kuran kişi olarak adını yaz.",
- "r_keeper_tag": "sırrı tutan"
+ "r_keeper_tag": "sırrı tutan",
+ "v_name": "İsim önerin",
+ "v_name_ph": "ör. Defne",
+ "r_names": "İsim önerileri",
+ "r_congrats": "Tebrikler %s!",
+ "r_congrats_np": "Tebrikler!",
+ "show_fail_sub2": "Daha güçlü, daha hızlı! 💪"
 }

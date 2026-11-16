@@ -127,7 +127,7 @@
           "$uid": {
             ".read": "auth != null && auth.uid == $uid && root.child('rooms/' + $roomId + '/meta/expiresAt').val() > now && (!root.child('rooms/' + $roomId + '/locked').exists() || root.child('rooms/' + $roomId + '/members/' + auth.uid).exists())",
             ".write": "auth != null && auth.uid == $uid && root.child('rooms/' + $roomId + '/guests/' + $uid).exists() && root.child('rooms/' + $roomId + '/meta/status').val() == 'open' && root.child('rooms/' + $roomId + '/meta/expiresAt').val() > now",
-            ".validate": "newData.getPriority() == null && (newData.hasChildren(['pick']) || newData.hasChildren(['birth']) || newData.hasChildren(['weight']) || newData.hasChildren(['letter']))",
+            ".validate": "newData.getPriority() == null && (newData.hasChildren(['pick']) || newData.hasChildren(['birth']) || newData.hasChildren(['weight']) || newData.hasChildren(['letter']) || newData.hasChildren(['nm']))",
             "pick": {
               ".validate": "newData.val() == 'girl' || newData.val() == 'boy'"
             },
@@ -142,6 +142,9 @@
             },
             "$other": {
               ".validate": false
+            },
+            "nm": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 24"
             }
           }
         },
