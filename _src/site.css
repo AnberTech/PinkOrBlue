@@ -390,3 +390,19 @@ footer.mini nav a:hover{text-decoration:underline}
 .rg>i{font-style:normal;font-size:20px}
 @media (prefers-reduced-motion:reduce){.res-conf{display:none}}
 .res-stats b{font-size:clamp(1.2rem,6vw,1.6rem);white-space:nowrap}
+.dp-btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-btn::before{flex-shrink:0}
+/* kalabalık oda: balonlar küçülür */
+.sky[data-n="m"] .balloon{width:50px}
+.sky[data-n="m"] .bb{width:40px;height:47px}
+.sky[data-n="m"] .av{width:26px;height:26px;font-size:.72rem}
+.sky[data-n="m"] .nm{font-size:.66rem;max-width:50px}
+.sky[data-n="l"]{gap:2px}
+.sky[data-n="l"] .balloon{width:36px}
+.sky[data-n="l"] .bb{width:32px;height:38px}
+.sky[data-n="l"] .av{width:22px;height:22px;font-size:.62rem}
+.sky[data-n="l"] .str{height:8px}
+.sky[data-n="l"] .nm{display:none}
+.show-ui{flex-direction:column;align-items:center;gap:10px}
+.show-force{background:rgba(255,255,255,.92);color:#2B2140;min-height:52px;padding:0 22px}
+.show-force:disabled{opacity:.85}

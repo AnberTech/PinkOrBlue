@@ -11,7 +11,10 @@ const C = {
 };
 export const roundStart = (k) => 3 + 15 * k;          // sn
 export const popTime = (k) => roundStart(k) + 15.5;   // sn
-export const showEnd = (k) => popTime(k) + 5;         // sn
+export const showEnd = (k) => popTime(k) + 6;         // sn
+
+const IMG_BASE = new URL("../img/", import.meta.url).href;
+function img(n) { const i = new Image(); i.src = IMG_BASE + n; return i; }
 
 export function playShow(opts) {
   // opts: { root, getT, S, babyName, parents, getShow, getTaps(k), need(k), getResult, decide(k), onTap, myPick, correctCount, onEnd, soundWanted }
@@ -21,7 +24,7 @@ export function playShow(opts) {
   const wrap = document.createElement("div");
   wrap.className = "show";
   wrap.innerHTML = `<canvas></canvas>
-    <div class="show-ui"><button class="btn btn-gold show-sound" hidden>${S.show_sound}</button></div>
+    <div class="show-ui"><button class="btn btn-gold show-sound" hidden>${S.show_sound}</button><button class="btn show-force" hidden>🎉 ${S.show_force}</button></div>
     <p class="show-live" aria-live="assertive"></p>`;
   root.appendChild(wrap);
   document.body.classList.add("noscroll");
@@ -29,6 +32,9 @@ export function playShow(opts) {
   const soundBtn = wrap.querySelector(".show-sound");
   const live = wrap.querySelector(".show-live");
   soundBtn.onclick = (e) => { e.stopPropagation(); unlock(true); soundBtn.hidden = true; };
+  const forceBtn = wrap.querySelector(".show-force");
+  forceBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
+  forceBtn.onclick = (e) => { e.stopPropagation(); opts.onForce && opts.onForce(state().k); forceBtn.disabled = true; forceBtn.textContent = "✓ " + S.show_force_set; };
 
   let W = 0, H = 0;
   function resize() {
@@ -44,7 +50,9 @@ export function playShow(opts) {
   // Bir olayı tam zamanında ya da en fazla 0,6 sn gecikmeyle bir kez tetikle (geç gelen, geçmiş olayları duymasın)
   const once = (key, t, at, fn) => { if (fired.has(key)) return; if (t >= at && t < at + 0.6) { fired.add(key); fn(); } else if (t >= at + 0.6) fired.add(key); };
   let tapTimes = [], bounce = 0, lastKick = -1, lastSnare = -1, lastHeart = -1;
-  const sparks = [], plus = [], shards = [], confetti = [];
+  const sparks = [], plus = [], shards = [], confetti = [], risers = [], stars = [];
+  const IM = { stork: img("stork.png"), pink: img("balloon-pink.png"), blue: img("balloon-blue.png") };
+  const ok = (i) => i.complete && i.naturalWidth > 0;
   let shown = 0, popAnchor = null;
   const failAnchor = {}, flyFrom = {};
 
@@ -81,7 +89,7 @@ export function playShow(opts) {
       const a = Math.random() * Math.PI * 2, sp = 4 + Math.random() * 10;
       confetti.push(fromTop
         ? { x: Math.random() * W, y: -20 - Math.random() * H * .3, vx: (Math.random() - .5) * 2, vy: 1 + Math.random() * 3, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: cols[i % cols.length], w: 6 + Math.random() * 6, h: 10 + Math.random() * 8 }
-        : { x: W / 2, y: H * .45, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 4, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], w: 6 + Math.random() * 6, h: 10 + Math.random() * 8 });
+        : { x: W / 2, y: H * .45, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 4, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], w: 6 + Math.random() * 6, h: 10 + Math.random() * 8, rib: i % 5 === 0 });
     }
   }
 
@@ -164,6 +172,7 @@ export function playShow(opts) {
     }
 
     soundBtn.hidden = running() || !(opts.soundWanted ?? true) || (tp0 != null);
+    forceBtn.hidden = !(opts.canForce && opts.canForce(k) && !isPop && t >= 3 && (tl < 10 || (out && out.o === "fail")));
 
     if (t < 0) {
       text(S.show_ready, cx, H * .3, Math.min(34, FW * .08), "#fff");
@@ -246,42 +255,97 @@ export function playShow(opts) {
       });
       once("conf1", t, tp0 + .3, () => { burst(reduced ? 20 : 150, false, resColor, resDeep); sfx.celebrate(girl); live.textContent = (girl ? S.girl_big : S.boy_big) + " " + opts.babyName; });
       once("conf2", t, tp0 + 1.5, () => burst(reduced ? 15 : 100, true, resColor, resDeep));
+      once("rise", t, tp0 + .4, () => {
+        const n = reduced ? 4 : 14;
+        for (let i = 0; i < n; i++) risers.push({ x: (i + .5) / n * W + (Math.random() - .5) * 40, y: H + 60 + Math.random() * H * .6, s: 60 + Math.random() * 50, v: 1.4 + Math.random() * 1.6, ph: Math.random() * 6 });
+        if (!reduced) for (let i = 0; i < 26; i++) stars.push({ x: Math.random() * W, y: Math.random() * H * .8, s: 4 + Math.random() * 8, ph: Math.random() * 6, sp: 2 + Math.random() * 3 });
+      });
       const k2 = clamp(pt / .6), ease = 1 - Math.pow(1 - k2, 4);
-      const bg = g.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, girl ? "#FFB3CF" : "#A6D9FF"); bg.addColorStop(1, resColor);
+      const bg = g.createRadialGradient(cx, H * .36, 10, cx, H * .4, Math.hypot(W, H) * .7);
+      bg.addColorStop(0, girl ? "#FFD3E3" : "#CDEBFF"); bg.addColorStop(.55, resColor); bg.addColorStop(1, girl ? "#E8608F" : "#3F95DB");
       g.fillStyle = bg;
       if (reduced) { g.globalAlpha = k2; g.fillRect(0, 0, W, H); g.globalAlpha = 1; }
       else { g.beginPath(); g.arc(cx, cy, ease * Math.hypot(W, H), 0, Math.PI * 2); g.fill(); }
       if (!reduced && pt < .25) { g.fillStyle = `rgba(255,255,255,${1 - pt / .25})`; g.fillRect(0, 0, W, H); }
       if (!reduced) {
-        g.save(); g.translate(cx, H * .36); g.rotate(t * .15);
-        g.fillStyle = "rgba(255,255,255,.14)";
-        for (let i = 0; i < 12; i++) { g.rotate(Math.PI / 6); g.beginPath(); g.moveTo(0, 0); g.lineTo(-40, Math.max(W, H)); g.lineTo(40, Math.max(W, H)); g.fill(); }
+        // ince, yavaş dönen ışık hüzmeleri + nabız gibi atan parıltı
+        g.save(); g.translate(cx, H * .38); g.rotate(t * .08);
+        for (let i = 0; i < 18; i++) {
+          g.rotate(Math.PI / 9);
+          const gr = g.createLinearGradient(0, 0, 0, Math.max(W, H));
+          gr.addColorStop(0, "rgba(255,255,255,.22)"); gr.addColorStop(1, "rgba(255,255,255,0)");
+          g.fillStyle = gr; g.beginPath(); g.moveTo(0, 0); g.lineTo(-22, Math.max(W, H)); g.lineTo(22, Math.max(W, H)); g.fill();
+        }
+        g.restore();
+        const pulse = .35 + .15 * Math.sin(pt * 3);
+        const gl = g.createRadialGradient(cx, H * .38, 0, cx, H * .38, Math.min(W, H) * .55);
+        gl.addColorStop(0, `rgba(255,255,255,${pulse})`); gl.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = gl; g.fillRect(0, 0, W, H);
+      }
+      // yükselen balonlar (sonuç renginde)
+      const bimg = girl ? IM.pink : IM.blue;
+      for (const b of risers) {
+        b.y -= b.v * (H / 700) * 2.2; b.ph += .03;
+        if (b.y < -b.s * 1.6) b.y = H + b.s;
+        const x = b.x + Math.sin(b.ph) * 14;
+        if (ok(bimg)) { g.globalAlpha = .92; g.drawImage(bimg, x - b.s / 2, b.y - b.s / 2, b.s, b.s); g.globalAlpha = 1; }
+        else { g.fillStyle = resColor; g.beginPath(); g.ellipse(x, b.y, b.s * .35, b.s * .42, 0, 0, 7); g.fill(); }
+      }
+      // parlayan yıldızlar
+      for (const z of stars) {
+        const a = Math.sin(pt * z.sp + z.ph);
+        if (a <= 0) continue;
+        g.save(); g.translate(z.x, z.y); g.rotate(pt); g.globalAlpha = a; g.fillStyle = "#fff";
+        g.beginPath();
+        for (let i = 0; i < 8; i++) { const r = i % 2 ? z.s * .25 : z.s, an = i * Math.PI / 4; g.lineTo(Math.cos(an) * r, Math.sin(an) * r); }
+        g.fill(); g.restore();
+      }
+      // leylek ekranın üstünden süzülür
+      if (!reduced && ok(IM.stork) && pt > .8) {
+        const p = clamp((pt - .8) / 4.2), sz = Math.min(W, H) * .34;
+        g.save(); g.globalAlpha = Math.min(1, (1 - p) * 4, p * 6);
+        g.drawImage(IM.stork, -sz * 1.2 + p * (W + sz * 2.4), H * .05 + Math.sin(pt * 2.4) * 10, sz, sz);
         g.restore();
       }
       if (pt >= .3) {
-        const k3 = clamp((pt - .3) / .7);
         const big = girl ? S.girl_big : S.boy_big;
         const size = Math.min(130, FW * (big.length > 5 ? .2 : .24));
-        const yy = H * .36 - clamp((pt - 3) / .6) * H * .06;
-        g.save(); g.shadowColor = "rgba(43,33,64,.25)"; g.shadowBlur = 20; g.shadowOffsetY = 8;
-        text(big, cx, yy, size, "#fff", 800, k3 * 3, reduced ? 1 : .3 + easeBack(k3) * .7);
+        const yy = H * .4 - clamp((pt - 3) / .6) * H * .06;
+        // harf harf zıplayan dev yazı
+        g.save();
+        g.font = `800 ${size}px "Baloo 2", system-ui`; g.textAlign = "left"; g.textBaseline = "middle";
+        const tw = g.measureText(big).width, sc = Math.min(1, W * .9 / tw);
+        let x = cx - tw * sc / 2;
+        for (let i = 0; i < big.length; i++) {
+          const ch = big[i], cw = g.measureText(ch).width;
+          const kk = clamp((pt - .3 - i * .08) / .5);
+          if (kk > 0) {
+            const s2 = reduced ? 1 : .2 + easeBack(kk) * .8;
+            g.save(); g.translate(x + cw * sc / 2, yy - (reduced ? 0 : Math.sin(kk * Math.PI) * 18)); g.scale(s2 * sc, s2 * sc);
+            g.globalAlpha = Math.min(1, kk * 3);
+            g.shadowColor = "rgba(0,0,0,.2)"; g.shadowBlur = 26; g.shadowOffsetY = 14;
+            g.fillStyle = resDeep; g.fillText(ch, -cw / 2, 7);
+            g.shadowColor = "transparent"; g.fillStyle = "#fff"; g.fillText(ch, -cw / 2, 0);
+            g.restore();
+          }
+          x += cw * sc;
+        }
         g.restore();
-        text(fmt(girl ? S.show_girl_line : S.show_boy_line, opts.babyName), cx, yy + size * .7, Math.min(24, FW * .058), resDeep, 800, (pt - .8) / .5);
-        if (opts.parents) text(fmt(S.show_congrats, opts.parents), cx, yy + size * .7 + 34, Math.min(18, FW * .045), C.ink, 700, (pt - 1.2) / .5);
+        text(fmt(girl ? S.show_girl_line : S.show_boy_line, opts.babyName), cx, yy + size * .72, Math.min(26, FW * .062), "#fff", 800, (pt - 1) / .5);
+        if (opts.parents) text(fmt(S.show_congrats, opts.parents), cx, yy + size * .72 + 36, Math.min(18, FW * .046), "rgba(255,255,255,.92)", 700, (pt - 1.4) / .5);
       }
       if (pt >= 3) {
         const a = clamp((pt - 3) / .5);
         const yC = Math.max(H * .64, H * .36 + Math.min(130, FW * .24) * .7 + 70);
-        text(fmt(S.show_correct, Math.round(opts.correctCount() * clamp((pt - 3) / .8))), cx, Math.min(yC, H - 60), Math.min(26, FW * .065), C.ink, 800, a);
+        text(fmt(S.show_correct, Math.round(opts.correctCount() * clamp((pt - 3) / .8))), cx, Math.min(yC, H - 60), Math.min(26, FW * .065), "#fff", 800, a);
         const mp = opts.myPick;
         if (mp) {
           const right = mp === result;
           once("me", t, tp0 + 3, () => { if (right) { sfx.ding(); vib(80); } });
-          text(right ? S.show_you_right : S.show_you_wrong, cx, Math.min(yC, H - 60) + 34, Math.min(20, FW * .05), right ? resDeep : C.ink, 700, a);
+          text(right ? S.show_you_right : S.show_you_wrong, cx, Math.min(yC, H - 60) + 34, Math.min(20, FW * .05), "#fff", 700, a);
         }
       }
-      if (pt >= 5 && !ended) { ended = true; draw(); finish(); return; }
+      if (pt >= 6 && !ended) { ended = true; draw(); finish(); return; }
     }
     draw();
     raf = requestAnimationFrame(frame);
@@ -308,7 +372,10 @@ export function playShow(opts) {
       const p = confetti[i]; p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy = p.vy * .985 + .18; p.r += p.vr;
       if (p.y > H + 30) { confetti.splice(i, 1); continue; }
       g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.scale(1, Math.cos(p.r * 2));
-      g.fillStyle = p.c; g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); g.restore();
+      g.fillStyle = p.c;
+      if (p.rib) { g.beginPath(); g.moveTo(-p.w, 0); g.bezierCurveTo(-p.w / 2, -8, p.w / 2, 8, p.w, 0); g.lineWidth = 4; g.strokeStyle = p.c; g.stroke(); }
+      else g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      g.restore();
     }
   }
   function roundRect(x, y, w, h, r) {

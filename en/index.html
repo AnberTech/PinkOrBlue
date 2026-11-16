@@ -422,6 +422,22 @@ footer.mini nav a:hover{text-decoration:underline}
 .rg>i{font-style:normal;font-size:20px}
 @media (prefers-reduced-motion:reduce){.res-conf{display:none}}
 .res-stats b{font-size:clamp(1.2rem,6vw,1.6rem);white-space:nowrap}
+.dp-btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-btn::before{flex-shrink:0}
+/* kalabalık oda: balonlar küçülür */
+.sky[data-n="m"] .balloon{width:50px}
+.sky[data-n="m"] .bb{width:40px;height:47px}
+.sky[data-n="m"] .av{width:26px;height:26px;font-size:.72rem}
+.sky[data-n="m"] .nm{font-size:.66rem;max-width:50px}
+.sky[data-n="l"]{gap:2px}
+.sky[data-n="l"] .balloon{width:36px}
+.sky[data-n="l"] .bb{width:32px;height:38px}
+.sky[data-n="l"] .av{width:22px;height:22px;font-size:.62rem}
+.sky[data-n="l"] .str{height:8px}
+.sky[data-n="l"] .nm{display:none}
+.show-ui{flex-direction:column;align-items:center;gap:10px}
+.show-force{background:rgba(255,255,255,.92);color:#2B2140;min-height:52px;padding:0 22px}
+.show-force:disabled{opacity:.85}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://anbertech.github.io/#org","name":"AnberTech","url":"https://anbertech.github.io/","email":"destek.anbertech@gmail.com"},{"@type":"WebSite","@id":"https://anbertech.github.io/PinkOrBlue/#site","name":"PinkOrBlue","url":"https://anbertech.github.io/PinkOrBlue/","publisher":{"@id":"https://anbertech.github.io/#org"},"inLanguage":["tr","en"]},{"@type":"WebApplication","@id":"https://anbertech.github.io/PinkOrBlue/#app","name":"PinkOrBlue","url":"https://anbertech.github.io/PinkOrBlue/en/virtual-gender-reveal/","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","inLanguage":"en","description":"Share one link, let family and friends vote boy or girl and make their guesses, then reveal it live on every screen at once. Free, no sign-up, no ads.","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://anbertech.github.io/#org"}},{"@type":"WebPage","name":"PinkOrBlue – Virtual Gender Reveal Party & Boy or Girl Poll","url":"https://anbertech.github.io/PinkOrBlue/en/","inLanguage":"en","isPartOf":{"@id":"https://anbertech.github.io/PinkOrBlue/#site"},"about":{"@id":"https://anbertech.github.io/PinkOrBlue/#app"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is our information private?","acceptedAnswer":{"@type":"Answer","text":"We keep only what the party needs: the room details, the names guests type in, their votes and guesses, and mini-game scores. We never ask for an e-mail, phone number or password, and there are no ads, analytics or tracking cookies. The privacy policy has the details."}},{"@type":"Question","name":"When is our data deleted?","acceptedAnswer":{"@type":"Answer","text":"Everything in a room is deleted automatically 7 days after the party date. The host can also delete the room at any time before that."}},{"@type":"Question","name":"Is PinkOrBlue really free?","acceptedAnswer":{"@type":"Answer","text":"Yes, completely free. No hidden fees, no subscription and no ads."}},{"@type":"Question","name":"How many people can join?","acceptedAnswer":{"@type":"Answer","text":"PinkOrBlue is designed for a family-and-friends crowd of around 30 people, so you can comfortably invite your whole circle."}},{"@type":"Question","name":"Can family who live far away join?","acceptedAnswer":{"@type":"Answer","text":"Absolutely, that's what PinkOrBlue is for. Anyone in another city or country can join the same room from the link and watch the reveal at the same second you do."}},{"@type":"Question","name":"Who enters the result?","acceptedAnswer":{"@type":"Answer","text":"By default the host enters it. The host can also hand the secret to a trusted guest, so the host is surprised along with everyone else. Guests can't see the result until the reveal starts."}},{"@type":"Question","name":"Do we need to download an app?","acceptedAnswer":{"@type":"Answer","text":"No. PinkOrBlue runs in the browser on any phone, tablet or computer. Guests just tap the link and type their name; no sign-up needed."}},{"@type":"Question","name":"Can several families use it at the same time?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each family opens its own room with its own link. Rooms are completely separate, so votes and results never show up in anyone else's party."}}]}]}</script>
 </head>
@@ -438,7 +454,7 @@ footer.mini nav a:hover{text-decoration:underline}
     <p class="eyebrow">Virtual gender reveal party</p>
     <h1>Boy or girl?<br>Find out <em>together</em>.</h1>
     <p class="sub">Open a room, share the link with family and friends, and let everyone cast their vote. When you hit reveal, the big moment lands on every screen at the very same second, so Grandma across the country and your best friend overseas are right there with you.</p>
-    <div class="cta"><a class="btn btn-gold" href="virtual-gender-reveal/">🎈 Start a free reveal room</a><span class="muted small">No sign-up, no app, no ads.</span></div>
+    <div class="cta"><a class="btn btn-gold" href="virtual-gender-reveal/">🎈 Start a free reveal room</a><span class="muted small">No Sign-up · No App · No Ads</span></div>
   </div>
   <div class="hero-art" aria-hidden="true">
     <img class="bp" src="../assets/img/balloon-pink.png" alt="" width="300" height="300" />

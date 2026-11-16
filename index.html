@@ -422,6 +422,22 @@ footer.mini nav a:hover{text-decoration:underline}
 .rg>i{font-style:normal;font-size:20px}
 @media (prefers-reduced-motion:reduce){.res-conf{display:none}}
 .res-stats b{font-size:clamp(1.2rem,6vw,1.6rem);white-space:nowrap}
+.dp-btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-btn::before{flex-shrink:0}
+/* kalabalık oda: balonlar küçülür */
+.sky[data-n="m"] .balloon{width:50px}
+.sky[data-n="m"] .bb{width:40px;height:47px}
+.sky[data-n="m"] .av{width:26px;height:26px;font-size:.72rem}
+.sky[data-n="m"] .nm{font-size:.66rem;max-width:50px}
+.sky[data-n="l"]{gap:2px}
+.sky[data-n="l"] .balloon{width:36px}
+.sky[data-n="l"] .bb{width:32px;height:38px}
+.sky[data-n="l"] .av{width:22px;height:22px;font-size:.62rem}
+.sky[data-n="l"] .str{height:8px}
+.sky[data-n="l"] .nm{display:none}
+.show-ui{flex-direction:column;align-items:center;gap:10px}
+.show-force{background:rgba(255,255,255,.92);color:#2B2140;min-height:52px;padding:0 22px}
+.show-force:disabled{opacity:.85}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://anbertech.github.io/#org","name":"AnberTech","url":"https://anbertech.github.io/","email":"destek.anbertech@gmail.com"},{"@type":"WebSite","@id":"https://anbertech.github.io/PinkOrBlue/#site","name":"PinkOrBlue","url":"https://anbertech.github.io/PinkOrBlue/","publisher":{"@id":"https://anbertech.github.io/#org"},"inLanguage":["tr","en"]},{"@type":"WebApplication","@id":"https://anbertech.github.io/PinkOrBlue/#app","name":"PinkOrBlue","url":"https://anbertech.github.io/PinkOrBlue/cinsiyet-partisi/","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","inLanguage":"tr","description":"Linki paylaşın; sevdikleriniz kız mı erkek mi oylasın, tahmin etsin, açılışı herkes aynı anda canlı izlesin. Ücretsiz, kayıtsız, reklamsız.","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://anbertech.github.io/#org"}},{"@type":"WebPage","name":"PinkOrBlue – Online Cinsiyet Partisi: Kız mı Erkek mi?","url":"https://anbertech.github.io/PinkOrBlue/","inLanguage":"tr","isPartOf":{"@id":"https://anbertech.github.io/PinkOrBlue/#site"},"about":{"@id":"https://anbertech.github.io/PinkOrBlue/#app"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Kişisel bilgilerimiz güvende mi?","acceptedAnswer":{"@type":"Answer","text":"Yalnızca partinin çalışması için gerekenler saklanır: oda bilgisi, misafirin yazdığı ad, oylar, tahminler ve mini oyun skoru. E-posta, telefon numarası ya da şifre istenmez. Reklam, analitik ve takip çerezi kullanılmaz. Ayrıntılar gizlilik politikasında."}},{"@type":"Question","name":"Veriler ne zaman siliniyor?","acceptedAnswer":{"@type":"Answer","text":"Odaya ait tüm veriler parti tarihinden 7 gün sonra otomatik olarak silinir. Odayı kuran kişi isterse odayı daha önce, istediği an silebilir."}},{"@type":"Question","name":"PinkOrBlue ücretli mi?","acceptedAnswer":{"@type":"Answer","text":"Hayır, tamamen ücretsiz. Gizli ücret, abonelik ya da reklam yok."}},{"@type":"Question","name":"Bir odaya kaç kişi katılabilir?","acceptedAnswer":{"@type":"Answer","text":"PinkOrBlue, yaklaşık 30 kişilik bir aile ve arkadaş grubu düşünülerek tasarlandı. Yakın çevrenizin tamamını rahatça davet edebilirsiniz."}},{"@type":"Question","name":"Uzaktaki ailemiz de katılabilir mi?","acceptedAnswer":{"@type":"Answer","text":"Elbette, PinkOrBlue zaten bunun için var. Başka şehirde ya da başka ülkede olan herkes linke dokunarak aynı odaya katılır ve açılışı sizinle aynı saniyede izler."}},{"@type":"Question","name":"Sonucu kim girer?","acceptedAnswer":{"@type":"Answer","text":"Varsayılan olarak odayı kuran kişi girer. İsterse bu yetkiyi listeden güvendiği birine devreder; o zaman kendisi de sonucu bilmez ve açılışta herkesle birlikte şaşırır. Sonuç, açılış başlatılana kadar misafirlerin ekranında görünmez."}},{"@type":"Question","name":"Uygulama indirmek gerekir mi?","acceptedAnswer":{"@type":"Answer","text":"Gerekmez. PinkOrBlue telefon, tablet ya da bilgisayardaki tarayıcıda çalışır. Misafirlerin linke dokunması ve adını yazması yeterli; üyelik de yok."}},{"@type":"Question","name":"Aynı anda birden fazla aile kullanabilir mi?","acceptedAnswer":{"@type":"Answer","text":"Evet. Her aile kendi odasını açar ve her odanın kendi linki vardır. Odalar birbirinden tamamen ayrıdır; bir odadaki oylar ve sonuç başka odada görünmez."}}]}]}</script>
 </head>
@@ -438,7 +454,7 @@ footer.mini nav a:hover{text-decoration:underline}
     <p class="eyebrow">Online cinsiyet partisi</p>
     <h1>Kız mı, erkek mi?<br><em>Hep birlikte</em> öğrenin.</h1>
     <p class="sub">Bir oda açın, linki aileyle ve dostlarla paylaşın. Herkes oyunu versin, tahminini yazsın; siz düğmeye bastığınızda büyük an herkesin ekranında aynı saniyede açılsın. Uzakta olan teyze de, yurt dışındaki kuzen de ilk anda yanınızda.</p>
-    <div class="cta"><a class="btn btn-gold" href="cinsiyet-partisi/">🎈 Ücretsiz parti odası aç</a><span class="muted small">Üyelik yok, uygulama yok, reklam yok.</span></div>
+    <div class="cta"><a class="btn btn-gold" href="cinsiyet-partisi/">🎈 Ücretsiz parti odası aç</a><span class="muted small">Üyelik Yok · Uygulama Yok · Reklam Yok</span></div>
   </div>
   <div class="hero-art" aria-hidden="true">
     <img class="bp" src="assets/img/balloon-pink.png" alt="" width="300" height="300" />

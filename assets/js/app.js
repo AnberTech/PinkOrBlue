@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611161856";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611161856";
-import { playGame } from "./game.js?v=202611161856";
-import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161856";
+import * as fb from "./fb.js?v=202611161921";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611161921";
+import { playGame } from "./game.js?v=202611161921";
+import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161921";
 window.__pob = { level, audioState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -50,7 +50,7 @@ async function share(text) {
 }
 const dtf = (o) => { try { return new Intl.DateTimeFormat(LANG, o); } catch (e) { return null; } };
 const DF_LONG = dtf({ dateStyle: "long", timeStyle: "short" }), DF_DAY = dtf({ day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
-const DF_PICK = dtf({ weekday: "short", day: "numeric", month: "long", year: "numeric" }), DF_SHORT = dtf({ day: "numeric", month: "short" });
+const DF_PICK = dtf({ weekday: "short", day: "numeric", month: "short", year: "numeric" }), DF_SHORT = dtf({ day: "numeric", month: "short" });
 const DF_MONTH = dtf({ month: "long", year: "numeric" }), DF_WD = dtf({ weekday: "narrow" });
 const fmtDate = (ms) => DF_LONG ? DF_LONG.format(new Date(ms)) : new Date(ms).toLocaleString(LANG);
 function countdown(ms) {
@@ -182,15 +182,7 @@ function viewCreate() {
       <label>${S.c_mom}<input name="mom" maxlength="40" autocapitalize="words" placeholder="${S.c_mom_ph}"></label>
       <label>${S.c_dad}<input name="dad" maxlength="40" autocapitalize="words" placeholder="${S.c_dad_ph}"></label>
     </div>
-    <div class="lbl">${S.c_who}
-      <div class="seg" role="radiogroup">
-        <label><input type="radio" name="who" value="mom" checked><span>${S.c_who_mom}</span></label>
-        <label><input type="radio" name="who" value="dad"><span>${S.c_who_dad}</span></label>
-        <label><input type="radio" name="who" value="other"><span>${S.c_who_other}</span></label>
-      </div>
-      <input name="other" maxlength="40" autocapitalize="words" placeholder="${S.c_other_ph}" hidden>
-    </div>
-    <label>${S.c_baby} <em>${S.optional}</em><input name="baby" maxlength="40" placeholder="${S.c_baby_ph}"></label>
+    <label>${S.c_baby} <em>${S.optional}</em><input name="baby" maxlength="40" autocapitalize="words" placeholder="${S.c_baby_ph}"></label>
     <div class="lbl">${S.c_date}
       <div class="dt">${dateField("date", ymd(def), { min: today, max: maxD })}
         <span class="tm"><select name="hh" aria-label="${S.c_hour}">${hours}</select><b>:</b><select name="mm" aria-label="${S.c_minute}">${mins}</select></span></div>
@@ -202,15 +194,14 @@ function viewCreate() {
   </form>`;
   const f = $("#cf");
   bindDates(f);
-  ["mom", "dad", "other"].forEach(n => f[n].addEventListener("blur", () => { f[n].value = titleCase(f[n].value); }));
-  const other = f.querySelector("[name=other]");
-  f.querySelectorAll("[name=who]").forEach(r => r.onchange = () => { other.hidden = f.who.value !== "other"; if (!other.hidden) other.focus(); });
+  ["mom", "dad", "baby"].forEach(n => f[n].addEventListener("blur", () => { f[n].value = titleCase(f[n].value); }));
   f.onsubmit = async (ev) => {
     ev.preventDefault();
     unlock();
-    const mom = titleCase(f.mom.value), dad = titleCase(f.dad.value), who = f.who.value;
-    const host = who === "mom" ? mom : who === "dad" ? dad : titleCase(other.value);
-    const err = !mom && !dad ? S.c_err_parent : !host ? (who === "other" ? S.c_err_other : S.c_err_who) : null;
+    const mom = titleCase(f.mom.value), dad = titleCase(f.dad.value);
+    const parents = [mom, dad].filter(Boolean).join(" & ");
+    const host = parents.slice(0, 40);            // kurucu odada anne-baba adıyla görünür
+    const err = !mom && !dad ? S.c_err_parent : null;
     if (err) return toast(err);
     const d = parseYmd(f.date.value);
     if (!d) return toast(S.c_err_date);
@@ -221,7 +212,7 @@ function viewCreate() {
       const seen = new Set([lower(host)]), invitees = [];
       String(f.inv.value || "").split(/[\n,]/).map(s => titleCase(s).slice(0, 40)).filter(Boolean)
         .forEach(n => { if (!seen.has(lower(n))) { seen.add(lower(n)); invitees.push(n); } });
-      const id = await fb.createRoom({ babyName: f.baby.value.trim() || S.default_baby, parents: [mom, dad].filter(Boolean).join(" & "), partyAt, lang: LANG, invitees: invitees.slice(0, 80), hostName: host });
+      const id = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: invitees.slice(0, 80), hostName: host });
       history.replaceState(null, "", INVITE + "#r=" + id);
       route(true);
     } catch (e) {
@@ -370,7 +361,7 @@ function renderLobby() {
   const sig = ps.map(p => `${p.uid}${+p.voted}${+p.online}${+p.keeper}`).join("|");
   app.innerHTML = `
   ${headHtml(m, S.lobby_eyebrow)}
-  <section class="sky" data-sig="${esc(sig)}" aria-label="${S.lobby_sky}">${ps.map(balloonHtml).join("")}</section>
+  <section class="sky" data-n="${ps.length > 30 ? "l" : ps.length > 16 ? "m" : "s"}" data-sig="${esc(sig)}" aria-label="${S.lobby_sky}">${ps.map(balloonHtml).join("")}</section>
   <p class="sky-stat"><b>${fmt(S.lobby_voted, votedN, expected)}</b> · ${fmt(S.lobby_online, onN)}</p>
   ${isHost() ? hostFlow(votedN, expected, onN) : isRevealer() ? keeperCard(votedN, expected, onN) : ""}
   ${!isRevealer() ? voteCard() : ""}
@@ -594,6 +585,9 @@ function runShow(local) {
     getShow: () => R.show,
     getResult: () => R.result,
     need: (k) => needFor(R, k),
+    // 3. turdan itibaren sır tutucu "bu turda patlat" diyebilir
+    canForce: (k) => !local && k >= 2 && room === R && R.meta?.revealerUid === R.uid && R.forceFrom == null,
+    onForce: (k) => { R.forceFrom = (R.show?.r?.[k]?.o === "fail") ? k + 1 : k; },
     get myPick() { return R.mine?.pick; },
     soundWanted: isOn(),
     correctCount: () => Object.entries(R.votes || {}).filter(([u, v]) => u !== m.revealerUid && v.pick === R.result).length,
@@ -616,7 +610,7 @@ function runShow(local) {
       if (!isRevealer() && tl < 11.3) return;                     // önce sır tutucu yazsın, gecikirse herkes
       R.decided[k] = true;
       const r = R.show?.r || {}, baseK = k ? (r[k - 1]?.t || 0) : 0, total = sumTaps(R);
-      const o = (k >= 4 || total - baseK >= needFor(R, k)) ? "pop" : "fail";
+      const o = (k >= 4 || (R.forceFrom != null && k >= R.forceFrom) || total - baseK >= needFor(R, k)) ? "pop" : "fail";
       fb.setRound(R.id, k, o, total).then(ok => { if (!ok) R.decided[k] = false; });
     },
     onTap: () => {
