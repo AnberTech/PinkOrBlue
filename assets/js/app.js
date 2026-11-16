@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611162251";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611162251";
-import { playGame } from "./game.js?v=202611162251";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162251";
+import * as fb from "./fb.js?v=202611162257";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611162257";
+import { playGame } from "./game.js?v=202611162257";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js?v=202611162257";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;

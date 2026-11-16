@@ -3,7 +3,7 @@
 // Zaman: t = ms (revealAt'ten itibaren, sunucu saatine sabitlenmiş). Tur k: S(k) = 3 + 15k sn.
 //   S..S+10 şişirme · S+10..S+11.5 "yetti mi?" · başarısız: S+11.5..S+15 sönme → S(k+1)
 //   başarılı: S+11.5..S+14.5 gerilim · S+14.5..S+15.5 sessizlik · S+15.5 PAT · S+20.5 bitiş
-import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162251";
+import { sfx, vib, unlock, running, preloadReveal, playReveal } from "./sfx.js?v=202611162257";
 
 const C = {
   pink: "#FF8FB8", pinkDeep: "#D6336C", blue: "#7EC8FF", blueDeep: "#1C6FB8",
@@ -63,7 +63,7 @@ export function playShow(opts) {
   }
   const IM = { stork: img("stork.png"), pink: img("balloon-pink.png"), blue: img("balloon-blue.png") };
   const ok = (i) => i.complete && i.naturalWidth > 0;
-  let shown = 0, popAnchor = null;
+  let shown = 0, popAnchor = null, outline = false;
   const failAnchor = {}, flyFrom = {};
 
   const state = () => {
@@ -138,6 +138,7 @@ export function playShow(opts) {
     g.font = `${weight} ${size}px "Baloo 2", system-ui`; g.textAlign = "center"; g.textBaseline = "middle";
     const mw = W * .92 / scale, tw = g.measureText(s).width;
     if (tw > mw) g.font = `${weight} ${size * mw / tw}px "Baloo 2", system-ui`;
+    if (outline) { g.lineWidth = 6; g.lineJoin = "round"; g.strokeStyle = "rgba(43,33,64,.55)"; g.strokeText(s, 0, 0); }
     g.fillStyle = color; g.fillText(s, 0, 0); g.restore();
   }
   function bar(fill, y, col = C.gold) {
@@ -159,7 +160,11 @@ export function playShow(opts) {
     shown += (tp.round - shown) * .25;
     const fill = opts.hideCount?.(k) ? clamp(shown / Math.max(need, 1) * .85, 0, .85) : clamp(shown / need);
     const cx = W / 2, cy = H * .45, baseR = Math.min(W, H) * .24;
-    const FW = Math.min(W, H * .62);     // yazı ölçeği: yatay ekranda taşmasın/binmesin
+    const FW = Math.min(W, H * .62);
+    const coverG = Math.hypot(W, H) / (1.7 * baseR);              // bu büyüklükte balon tüm ekranı kaplar
+    const maxG = k === 0 ? 1 : k === 1 ? 1.35 : coverG;
+    const growTarget = .18 + (maxG - .18) * fill;
+    outline = grow > 1.25 && !(popAnchor != null && t >= popAnchor);   // dev balonun üstünde yazılar okunsun     // yazı ölçeği: yatay ekranda taşmasın/binmesin
     const yB = (r) => Math.min(H * r, H - (1 - r) * 700);  // alt satırlar: yatayda alttan sabit uzaklık
     g.clearRect(0, 0, W, H);
 
@@ -208,7 +213,7 @@ export function playShow(opts) {
           spawnPuff(sx, sy, ev.name, false);
         }
       });
-      grow += ((.18 + .82 * fill) - grow) * .08;          // küçükten yumuşakça büyü
+      grow += (growTarget - grow) * .08;                  // küçükten yumuşakça büyü
       const Rb = baseR * grow * (1 + bounce * .06);
       nozzle = { x: cx, y: cy + Rb * 1.12 };
       balloon(cx, cy, Rb, reduced ? 0 : bounce);
@@ -221,7 +226,7 @@ export function playShow(opts) {
       // ---- yetti mi?
       if (tl >= 10.6) opts.decide(k);
       once("yetti" + k, t, roundStart(k) + 10, () => { sfx.snare(.2); live.textContent = S.show_check; });
-      grow += ((.18 + .82 * fill) - grow) * .08;
+      grow += (growTarget - grow) * .08;
       balloon(cx, cy, baseR * grow, reduced ? 0 : Math.sin(t * 20) * .25);
       text(S.show_check, cx, H * .12, Math.min(30, FW * .075), "#fff");
       if (!opts.hideCount?.(k)) { text(fmt(S.show_need, Math.round(shown), need), cx, yB(.835), Math.min(22, FW * .055), "#fff"); bar(fill, yB(.9)); }
@@ -255,7 +260,8 @@ export function playShow(opts) {
       }
       let ox = 0, oy = 0;
       if (!reduced && tt < 3) { const a = 3 + tt / 3 * 5; ox = (Math.random() - .5) * a * 2; oy = (Math.random() - .5) * a * 2; }
-      balloon(cx + ox, cy + oy, baseR * (1 + .08 * clamp(tt - 3)), 0);
+      grow += (maxG - grow) * .06;                         // başarılı turda tam boyuta tamamlanır
+      balloon(cx + ox, cy + oy, baseR * grow * (1 + .08 * clamp(tt - 3)), 0);
       if (tt < 3) {
         text(S.show_enough, cx, H * .12, Math.min(30, FW * .075), "#fff");
         const ph = Math.floor(tt / .75) % 2;
