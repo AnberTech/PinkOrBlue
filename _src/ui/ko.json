@@ -75,7 +75,7 @@
  "k_confirm": "공개를 시작할까요? 지금 페이지를 열어 둔 모든 사람이 동시에 보게 돼요. 되돌릴 수 없어요.",
  "share_h": "초대 링크",
  "share_more": "공유…",
- "share_text": "🎈 %s의 젠더리빌 파티 · 📅 %s\n",
+ "share_text": "%s의 젠더리빌 파티 · %s\n",
  "show_sound": "🔊 소리 켜고 참여하기",
  "show_ready": "공개가 시작돼요!",
  "show_ready_sub": "준비됐나요? 곧 다 함께 풍선을 불어요…",
@@ -127,7 +127,7 @@
  "f_need_seal": "먼저 결과를 입력하세요",
  "f_keeper_starts": "공개는 %s 님이 시작해요. 나도 모두와 함께 깜짝 놀라며 알게 돼요 🎉",
  "share_p_guest": "빠진 사람이 있나요? 직접 초대해 주세요.",
- "share_text_np": "🎈 우리 아기 젠더리빌 파티 · 📅 %s\n",
+ "share_text_np": "우리 아기 젠더리빌 파티 · %s\n",
  "show_need": "%d / %d 탭",
  "show_people_tapping": "%d명 탭하는 중 · %d초",
  "show_round": "%d라운드! 더 빨리 탭하세요!",
@@ -206,5 +206,12 @@
  "w_title": "메시지",
  "w_del": "삭제",
  "w_del_confirm": "이 메시지를 삭제할까요?",
- "w_nm_label": "이름 추천"
+ "w_nm_label": "이름 추천",
+ "cd_days": "일",
+ "cd_hours": "시간",
+ "cd_mins": "분",
+ "cd_secs": "초",
+ "cd_opens": "파티 방은 공개 30분 전에 열려요 🎈",
+ "cd_hint": "그때 이 링크를 다시 눌러 이름을 쓰고 투표하세요.",
+ "cd_cal": "캘린더에 추가"
 }

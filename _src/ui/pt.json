@@ -75,7 +75,7 @@
  "k_confirm": "Iniciar a revelação? Todos com a página aberta vão assistir ao mesmo tempo. Não dá para desfazer.",
  "share_h": "Link do convite",
  "share_more": "Compartilhar…",
- "share_text": "🎈 Chá revelação de %s · 📅 %s\n",
+ "share_text": "Chá revelação de %s · %s\n",
  "show_sound": "🔊 Ligar o som e entrar",
  "show_ready": "A revelação vai começar!",
  "show_ready_sub": "Prepare-se, já já vamos encher o balão juntos…",
@@ -127,7 +127,7 @@
  "f_need_seal": "insira o resultado primeiro",
  "f_keeper_starts": "%s vai iniciar a revelação. Você vai descobrir junto com todo mundo 🎉",
  "share_p_guest": "Falta alguém? Convide também.",
- "share_text_np": "🎈 Nosso chá revelação · 📅 %s\n",
+ "share_text_np": "Nosso chá revelação · %s\n",
  "show_need": "%d / %d toques",
  "show_people_tapping": "%d tocando · %d s",
  "show_round": "Rodada %d! Toque mais rápido!",
@@ -206,5 +206,12 @@
  "w_title": "Mensagens",
  "w_del": "Apagar",
  "w_del_confirm": "Apagar esta mensagem?",
- "w_nm_label": "Sugestão de nome"
+ "w_nm_label": "Sugestão de nome",
+ "cd_days": "Dias",
+ "cd_hours": "Horas",
+ "cd_mins": "Minutos",
+ "cd_secs": "Segundos",
+ "cd_opens": "A sala abre 30 minutos antes da revelação 🎈",
+ "cd_hint": "Na hora, toque neste link de novo, escreva seu nome e vote.",
+ "cd_cal": "Adicionar à agenda"
 }

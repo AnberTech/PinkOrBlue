@@ -75,7 +75,7 @@
  "k_confirm": "Mulai pengungkapan? Semua orang yang membuka halaman akan menontonnya bersamaan. Ini tidak bisa dibatalkan.",
  "share_h": "Tautan undangan",
  "share_more": "Bagikan…",
- "share_text": "🎈 Gender reveal %s · 📅 %s\n",
+ "share_text": "Gender reveal %s · %s\n",
  "show_sound": "🔊 Nyalakan suara dan gabung",
  "show_ready": "Pengungkapan dimulai!",
  "show_ready_sub": "Siap-siap, sebentar lagi kita tiup balonnya bersama…",
@@ -127,7 +127,7 @@
  "f_need_seal": "masukkan hasil dulu",
  "f_keeper_starts": "%s yang akan memulai pengungkapan. Kamu akan tahu bersama semua orang 🎉",
  "share_p_guest": "Ada yang ketinggalan? Undang juga.",
- "share_text_np": "🎈 Gender reveal kami · 📅 %s\n",
+ "share_text_np": "Gender reveal kami · %s\n",
  "show_need": "%d / %d ketukan",
  "show_people_tapping": "%d orang mengetuk · %d dtk",
  "show_round": "Ronde %d! Ketuk lebih cepat!",
@@ -206,5 +206,12 @@
  "w_title": "Pesan",
  "w_del": "Hapus",
  "w_del_confirm": "Hapus pesan ini?",
- "w_nm_label": "Usulan nama"
+ "w_nm_label": "Usulan nama",
+ "cd_days": "Hari",
+ "cd_hours": "Jam",
+ "cd_mins": "Menit",
+ "cd_secs": "Detik",
+ "cd_opens": "Room pesta dibuka 30 menit sebelum momen reveal 🎈",
+ "cd_hint": "Saat itu, buka lagi link ini, tulis namamu, lalu beri suara.",
+ "cd_cal": "Tambah ke kalender"
 }

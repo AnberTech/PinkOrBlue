@@ -2,7 +2,7 @@
 import * as fb from "./fb.js";
 import { playShow, roundStart, showEnd } from "./show.js";
 import { playGame } from "./game.js";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady } from "./sfx.js";
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg } from "./sfx.js";
 window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -118,7 +118,7 @@ soundBtn.onclick = () => {
 // iOS Safari sesi yalnız "dokunma bitti / tıklama" anında açar (pointerdown sayılmaz)
 ["pointerdown", "touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, (e) => {
   if (e.target?.closest?.("#sound")) return;            // ses düğmesi kendi işini yapsın (yoksa ilk dokunuş sesi kapatır)
-  if (isOn() && !running()) { unlock(); setTimeout(paintSound, 150); }
+  if (isOn() && !running()) { unlock(); setTimeout(paintSound, 150); setTimeout(refreshBg, 250); }
 }, { passive: true, capture: true }));
 paintSound();
 
@@ -194,6 +194,7 @@ function bindDates(root) {
 // ---------------------------------------------------------------- oluştur
 function viewCreate() {
   document.body.dataset.view = "create";
+  setBg("bg-party");
   closeCal();
   const def = new Date(Date.now() + 86400000);
   const today = ymd(new Date()), maxD = ymd(new Date(Date.now() + 400 * 86400000));
@@ -365,9 +366,13 @@ function render() {
   paintDates(app);
   if (Math.abs(scrollY - y) > 2) scrollTo(0, y);
 }
+const GATE_MS = 30 * 60 * 1000;   // salon açılışa 30 dk kala açılır
+const gated = () => room.meta.status === "open" && !isHost() && !isRevealer() && fb.serverNow() < room.meta.partyAt - GATE_MS;
 function renderInner() {
   closeCal();
   const m = room.meta;
+  if (gated()) { setBg("bg-wait"); return renderCountdown(); }
+  if (!(m.status === "reveal" && room.shown)) setBg(m.status === "reveal" ? null : "bg-party");
   if (m.status === "reveal" && room.shown) return renderResult();
   if (m.status === "reveal") {
     app.innerHTML = `<div class="card center"><div class="big-emoji">🎈</div><h2>${S.show_ready}</h2><p class="muted">${S.show_ready_sub}</p></div>`;
@@ -375,6 +380,46 @@ function renderInner() {
   }
   if (!me()) return renderJoin();
   renderLobby();
+}
+
+// Açılışa 30 dakikadan fazla varsa misafir yalnız şık bir geri sayım görür
+function renderCountdown() {
+  const R = room, m = R.meta;
+  document.body.dataset.view = "countdown";
+  const box = (k) => `<div class="cdb"><b data-k="${k}">00</b><span>${S["cd_" + k]}</span></div>`;
+  app.innerHTML = `<section class="cdwrap">
+    <img class="cd-stork" src="${ASSET}img/stork.png" alt="" width="560" height="560">
+    <p class="eyebrow">${S.j_eyebrow}</p>
+    ${m.parents ? `<h1 class="cd-parents">${esc(m.parents)}</h1>` : ""}
+    <p class="cd-baby">${esc(fmt(S.lobby_title, babyOf(m)))}</p>
+    <p class="cd-date">${esc(fmtDate(m.partyAt))}</p>
+    <div class="cd-boxes" role="timer" aria-live="off">${box("days")}${box("hours")}${box("mins")}${box("secs")}</div>
+    <p class="cd-open">${S.cd_opens}</p>
+    <p class="muted small">${S.cd_hint}</p>
+    <button class="btn btn-gold" data-act="ics">📅 ${S.cd_cal}</button>
+    <p class="cd-brand"><img src="${ASSET}img/balloon-icon-180.png" alt="" width="22" height="22"><span><b>Pink</b>Or<i>Blue</i></span> · by <img class="am-d" src="${ASSET}img/anbertech.png" alt="" width="18" height="16"><img class="am-l" src="${ASSET}img/anbertech-ink.png" alt="" width="18" height="16"><span>Anber<em>Tech</em></span></p>
+  </section>`;
+  const tick = () => {
+    if (room !== R || !document.querySelector(".cdwrap")) return clearInterval(R.cdTimer);
+    const left = m.partyAt - GATE_MS - fb.serverNow();
+    if (left <= 0) { clearInterval(R.cdTimer); render(); return; }
+    const toOpen = m.partyAt - fb.serverNow(), s = Math.max(0, Math.floor(toOpen / 1000));
+    const v = { days: Math.floor(s / 86400), hours: Math.floor(s % 86400 / 3600), mins: Math.floor(s % 3600 / 60), secs: s % 60 };
+    for (const k in v) { const el = app.querySelector(`[data-k="${k}"]`); if (el) { const t = String(v[k]).padStart(2, "0"); if (el.textContent !== t) { el.textContent = t; el.classList.remove("tk"); void el.offsetWidth; el.classList.add("tk"); } } }
+  };
+  clearInterval(R.cdTimer); tick(); R.cdTimer = setInterval(tick, 1000);
+  app.querySelector('[data-act="ics"]').onclick = () => downloadIcs(m);
+}
+// Telefonun takvimine hatırlatıcı (.ics): açılış saatinden 30 dk önce uyarır
+function downloadIcs(m) {
+  const z = (d) => new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const title = (m.parents ? m.parents + " · " : "") + fmt(S.lobby_title, babyOf(m)), url = roomUrl(room.id);
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AnberTech//PinkOrBlue//TR", "BEGIN:VEVENT", "UID:" + room.id + "@pinkorblue",
+    "DTSTAMP:" + z(Date.now()), "DTSTART:" + z(m.partyAt), "DTEND:" + z(m.partyAt + 3600000), "SUMMARY:" + title.replace(/[,;]/g, " "),
+    "DESCRIPTION:" + url, "URL:" + url, "BEGIN:VALARM", "TRIGGER:-PT30M", "ACTION:DISPLAY", "DESCRIPTION:" + title.replace(/[,;]/g, " "), "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" })); a.download = "pinkorblue.ics";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  try { window.goatcounter?.count?.({ path: "pob/" + LANG.toLowerCase() + "/takvim", title: "takvim", event: true }); } catch (e) {}
 }
 
 function headHtml(m, eyebrow) {
@@ -660,6 +705,7 @@ function fetchResult(R, done) {
 function runShow(local) {
   const R = room, m = R.meta;
   R.showing = true;
+  setBg(null);
   R.lastTaps = { ...(R.taps || {}) };
   const base = fb.serverNow() - performance.now();               // saati bir kez sabitle (sıçramasın)
   const t0 = performance.now();
@@ -724,7 +770,7 @@ function runShow(local) {
       unsent++;
       if (!sendT) sendT = setTimeout(flush, 350);
     },
-    onEnd: () => { flush(); R.showing = false; R.shown = true; R.showCtl = null; clearInterval(R.resWatch); if (room === R) render(); },
+    onEnd: () => { flush(); R.showing = false; R.shown = true; R.showCtl = null; clearInterval(R.resWatch); if (room === R) { render(); setBg(null); setTimeout(() => { if (room === R && !R.showing) setBg("bg-party"); }, 9000); } },
   });
 }
 

@@ -75,7 +75,7 @@
  "k_confirm": "Enthüllung starten? Alle, die die Seite offen haben, sehen sie im selben Moment. Das lässt sich nicht rückgängig machen.",
  "share_h": "Einladungslink",
  "share_more": "Teilen…",
- "share_text": "🎈 Gender Reveal bei %s · 📅 %s\n",
+ "share_text": "Gender Reveal bei %s · %s\n",
  "show_sound": "🔊 Ton an und mitmachen",
  "show_ready": "Die Enthüllung beginnt!",
  "show_ready_sub": "Mach dich bereit, gleich pusten wir ihn gemeinsam auf…",
@@ -127,7 +127,7 @@
  "f_need_seal": "zuerst das Ergebnis eingeben",
  "f_keeper_starts": "%s startet die Enthüllung. Du erfährst es zusammen mit allen anderen 🎉",
  "share_p_guest": "Fehlt noch jemand? Schick den Link einfach weiter.",
- "share_text_np": "🎈 Unsere Gender Reveal Party · 📅 %s\n",
+ "share_text_np": "Unsere Gender Reveal Party · %s\n",
  "show_need": "%d / %d Mal getippt",
  "show_people_tapping": "%d tippen · %d s",
  "show_round": "Runde %d! Schneller tippen!",
@@ -206,5 +206,12 @@
  "w_title": "Nachrichten",
  "w_del": "Löschen",
  "w_del_confirm": "Diese Nachricht löschen?",
- "w_nm_label": "Namensvorschlag"
+ "w_nm_label": "Namensvorschlag",
+ "cd_days": "Tage",
+ "cd_hours": "Stunden",
+ "cd_mins": "Minuten",
+ "cd_secs": "Sekunden",
+ "cd_opens": "Der Partyraum öffnet 30 Minuten vor dem Reveal 🎈",
+ "cd_hint": "Tipp dann einfach wieder auf diesen Link, trag deinen Namen ein und stimm ab.",
+ "cd_cal": "Zum Kalender hinzufügen"
 }

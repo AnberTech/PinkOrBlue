@@ -75,7 +75,7 @@
  "k_confirm": "Rozpocząć odsłonięcie? Wszyscy z otwartą stroną obejrzą je w tej samej chwili. Tego nie da się cofnąć.",
  "share_h": "Link z zaproszeniem",
  "share_more": "Udostępnij…",
- "share_text": "🎈 Gender reveal: %s · 📅 %s\n",
+ "share_text": "Gender reveal: %s · %s\n",
  "show_sound": "🔊 Włącz dźwięk i dołącz",
  "show_ready": "Odsłonięcie się zaczyna!",
  "show_ready_sub": "Przygotuj się, zaraz razem nadmuchamy balon…",
@@ -127,7 +127,7 @@
  "f_need_seal": "najpierw wpisz wynik",
  "f_keeper_starts": "Odsłonięcie rozpocznie %s. Dowiesz się razem ze wszystkimi 🎉",
  "share_p_guest": "Kogoś brakuje? Zaproś też tę osobę.",
- "share_text_np": "🎈 Nasz gender reveal · 📅 %s\n",
+ "share_text_np": "Nasz gender reveal · %s\n",
  "show_need": "%d / %d dotknięć",
  "show_people_tapping": "Klika: %d · %d s",
  "show_round": "Runda %d! Szybciej!",
@@ -206,5 +206,12 @@
  "w_title": "Wiadomości",
  "w_del": "Usuń",
  "w_del_confirm": "Usunąć tę wiadomość?",
- "w_nm_label": "Propozycja imienia"
+ "w_nm_label": "Propozycja imienia",
+ "cd_days": "Dni",
+ "cd_hours": "Godz.",
+ "cd_mins": "Min.",
+ "cd_secs": "Sek.",
+ "cd_opens": "Pokój otworzy się 30 minut przed odsłonięciem 🎈",
+ "cd_hint": "Wtedy wejdź ponownie w ten link, wpisz imię i zagłosuj.",
+ "cd_cal": "Dodaj do kalendarza"
 }

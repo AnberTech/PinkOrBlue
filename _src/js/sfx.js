@@ -41,6 +41,7 @@ export function setOn(v) {
   enabled = v;
   try { localStorage.setItem("pob_sound", v ? "1" : "0"); } catch (e) {}
   if (v) unlock();
+  setTimeout(refreshBg, 120);
 }
 const ok = () => enabled && ctx && ctx.state === "running";
 
@@ -141,6 +142,34 @@ function revealSynth(girl) {
   // alkış ve neşe
   for (let i = 0; i < 40; i++) noise(0.03 + Math.random() * 0.03, 0.05 + Math.random() * 0.07, 0.4 + Math.random() * 3.2, "bandpass", 1800 + Math.random() * 2500, null, 0.9);
 }
+// ---- Fon müziği: assets/audio/bg-wait.mp3 (geri sayım) ve bg-party.mp3 (salon ve sonrası); yoksa sessiz
+const bgBuf = {}; let bgNow = null, bgSrc = null, bgGain = null, bgWant = null;
+async function loadBg(name) {
+  if (bgBuf[name] !== undefined) return bgBuf[name];
+  bgBuf[name] = null;
+  if (!(window.POB_AUDIO || []).includes(name) || !ctx) return null;
+  try { const r = await fetch(AUDIO_BASE + name + ".mp3", { cache: "force-cache" }); const d = await r.arrayBuffer(); bgBuf[name] = await new Promise((a, b) => ctx.decodeAudioData(d, a, b)); }
+  catch (e) { bgBuf[name] = null; }
+  return bgBuf[name];
+}
+function fadeOut(src, g) { if (!src) return; try { const t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0.0001, t + 1.2); src.stop(t + 1.3); } catch (e) {} }
+// İstenen fon parçası (null = sus). Ses kapalıysa ya da bağlam açılmadıysa bekler, açılınca başlar.
+export async function setBg(name) {
+  bgWant = name;
+  if (!enabled || !ctx || ctx.state !== "running") { if (bgSrc) { fadeOut(bgSrc, bgGain); bgSrc = null; bgNow = null; } return; }
+  if (bgNow === name) return;
+  if (bgSrc) { fadeOut(bgSrc, bgGain); bgSrc = null; }
+  bgNow = name;
+  if (!name) return;
+  const buf = await loadBg(name);
+  if (!buf || bgWant !== name || bgNow !== name) return;
+  const src = ctx.createBufferSource(), g = ctx.createGain();
+  src.buffer = buf; src.loop = true; g.gain.value = 0.0001; src.connect(g); g.connect(master); src.start();
+  g.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 1.5);
+  bgSrc = src; bgGain = g;
+}
+export const refreshBg = () => { const w = bgWant; bgNow = null; return setBg(w); };
+
 export const revealReady = () => Object.values(revealBuf).some(Boolean);
 export function playReveal(girl) {
   if (!ok()) return;

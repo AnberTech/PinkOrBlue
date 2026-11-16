@@ -75,7 +75,7 @@
  "k_confirm": "Açılış başlasın mı? Şu an sayfası açık olan herkes aynı anda izleyecek. Bu işlem geri alınamaz.",
  "share_h": "Davet linki",
  "share_more": "Paylaş…",
- "share_text": "🎈 %s seni bekliyor · 📅 %s\n",
+ "share_text": "%s seni bekliyor · %s\n",
  "show_sound": "🔊 Sesi aç ve katıl",
  "show_ready": "Açılış başlıyor!",
  "show_ready_sub": "Hazır ol, birazdan hep birlikte şişireceğiz…",
@@ -127,7 +127,7 @@
  "f_need_seal": "önce sonucu gir",
  "f_keeper_starts": "Açılışı %s başlatacak. Sen de herkesle birlikte sürprizle öğreneceksin 🎉",
  "share_p_guest": "Unutulan biri varsa sen de davet et.",
- "share_text_np": "🎈 Cinsiyet partimiz · 📅 %s\n",
+ "share_text_np": "Cinsiyet partimiz · %s\n",
  "show_need": "%d / %d dokunuş",
  "show_people_tapping": "%d kişi dokunuyor · %d sn",
  "show_round": "%d. tur! Daha hızlı dokun!",
@@ -206,5 +206,12 @@
  "w_title": "Mesajlar",
  "w_del": "Sil",
  "w_del_confirm": "Bu mesaj silinsin mi?",
- "w_nm_label": "İsim önerisi"
+ "w_nm_label": "İsim önerisi",
+ "cd_days": "Gün",
+ "cd_hours": "Saat",
+ "cd_mins": "Dakika",
+ "cd_secs": "Saniye",
+ "cd_opens": "Salon açılışa 30 dakika kala açılacak 🎈",
+ "cd_hint": "O zaman bu linke tekrar dokunman yeterli; adını yazıp oyunu verirsin.",
+ "cd_cal": "Takvime ekle"
 }

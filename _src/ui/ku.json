@@ -75,7 +75,7 @@
  "k_confirm": "Bila eşkerekirin dest pê bike? Her kesê ku rûpel vekirî ye, dê di heman kêliyê de temaşe bike. Ev nayê vegerandin.",
  "share_h": "Lînka vexwendinê",
  "share_more": "Parve bike…",
- "share_text": "🎈 Şahiya zayendê ya %s · 📅 %s\n",
+ "share_text": "Şahiya zayendê ya %s · %s\n",
  "show_sound": "🔊 Deng veke û tevlî bibe",
  "show_ready": "Eşkerekirin dest pê dike!",
  "show_ready_sub": "Amade be, em ê niha hemû bi hev re balonê werimînin…",
@@ -127,7 +127,7 @@
  "f_need_seal": "pêşî encamê binivîse",
  "f_keeper_starts": "Eşkerekirinê %s dê bide destpêkirin. Tu jî bi herkesî re bi surprîzê hîn bibî 🎉",
  "share_p_guest": "Kesek maye? Tu jî wî/wê vexwîne.",
- "share_text_np": "🎈 Şahiya me ya zayendê · 📅 %s\n",
+ "share_text_np": "Şahiya me ya zayendê · %s\n",
  "show_need": "%d / %d tikandin",
  "show_people_tapping": "%d kes ditikînin · %d çrk",
  "show_round": "Gera %d! Zûtir bitikîne!",
@@ -206,5 +206,12 @@
  "w_title": "Peyam",
  "w_del": "Jê bibe",
  "w_del_confirm": "Ev peyam bila were jêbirin?",
- "w_nm_label": "Pêşniyara navî"
+ "w_nm_label": "Pêşniyara navî",
+ "cd_days": "Roj",
+ "cd_hours": "Saet",
+ "cd_mins": "Deqe",
+ "cd_secs": "Sanî",
+ "cd_opens": "Odeya şahiyê 30 deqe beriya eşkerekirinê vedibe 🎈",
+ "cd_hint": "Wê demê dîsa li vê girêdanê bitikîne, navê xwe binivîse û deng bide.",
+ "cd_cal": "Li salnameyê zêde bike"
 }

@@ -75,7 +75,7 @@
  "k_confirm": "Lancer la révélation ? Tous ceux qui ont la page ouverte la verront au même moment. Impossible d'annuler.",
  "share_h": "Lien d'invitation",
  "share_more": "Partager…",
- "share_text": "🎈 Gender reveal chez %s · 📅 %s\n",
+ "share_text": "Gender reveal chez %s · %s\n",
  "show_sound": "🔊 Active le son et participe",
  "show_ready": "La révélation commence !",
  "show_ready_sub": "Prépare-toi, on va le gonfler tous ensemble…",
@@ -127,7 +127,7 @@
  "f_need_seal": "saisis d'abord le résultat",
  "f_keeper_starts": "C'est %s qui lancera la révélation. Tu le découvriras avec tout le monde 🎉",
  "share_p_guest": "Il manque quelqu'un ? Envoie-lui aussi le lien.",
- "share_text_np": "🎈 Notre gender reveal · 📅 %s\n",
+ "share_text_np": "Notre gender reveal · %s\n",
  "show_need": "%d / %d tapes",
  "show_people_tapping": "%d tapent · %d s",
  "show_round": "Manche %d ! Tape plus vite !",
@@ -206,5 +206,12 @@
  "w_title": "Messages",
  "w_del": "Supprimer",
  "w_del_confirm": "Supprimer ce message ?",
- "w_nm_label": "Prénom proposé"
+ "w_nm_label": "Prénom proposé",
+ "cd_days": "Jours",
+ "cd_hours": "Heures",
+ "cd_mins": "Minutes",
+ "cd_secs": "Secondes",
+ "cd_opens": "La salle ouvre 30 minutes avant la révélation 🎈",
+ "cd_hint": "Touche à nouveau ce lien à ce moment-là pour entrer ton prénom et voter.",
+ "cd_cal": "Ajouter au calendrier"
 }

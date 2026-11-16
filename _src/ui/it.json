@@ -75,7 +75,7 @@
  "k_confirm": "Avviare la rivelazione? Tutti quelli con la pagina aperta la vedranno nello stesso momento. Non si può annullare.",
  "share_h": "Link d'invito",
  "share_more": "Condividi…",
- "share_text": "🎈 Gender reveal · %s · 📅 %s\n",
+ "share_text": "Gender reveal · %s · %s\n",
  "show_sound": "🔊 Attiva l'audio e partecipa",
  "show_ready": "La rivelazione sta per iniziare!",
  "show_ready_sub": "Preparati, tra poco lo gonfiamo tutti insieme…",
@@ -127,7 +127,7 @@
  "f_need_seal": "prima inserisci il risultato",
  "f_keeper_starts": "Sarà %s ad avviare la rivelazione. Lo scoprirai insieme a tutti gli altri 🎉",
  "share_p_guest": "Manca qualcuno? Invitalo anche tu.",
- "share_text_np": "🎈 Il nostro gender reveal · 📅 %s\n",
+ "share_text_np": "Il nostro gender reveal · %s\n",
  "show_need": "%d / %d tocchi",
  "show_people_tapping": "%d stanno toccando · %d s",
  "show_round": "Round %d! Tocca più veloce!",
@@ -206,5 +206,12 @@
  "w_title": "Messaggi",
  "w_del": "Elimina",
  "w_del_confirm": "Eliminare questo messaggio?",
- "w_nm_label": "Nome proposto"
+ "w_nm_label": "Nome proposto",
+ "cd_days": "Giorni",
+ "cd_hours": "Ore",
+ "cd_mins": "Minuti",
+ "cd_secs": "Secondi",
+ "cd_opens": "La stanza apre 30 minuti prima del reveal 🎈",
+ "cd_hint": "A quel punto tocca di nuovo questo link, scrivi il tuo nome e vota.",
+ "cd_cal": "Aggiungi al calendario"
 }

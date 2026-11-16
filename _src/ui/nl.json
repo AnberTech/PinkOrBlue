@@ -75,7 +75,7 @@
  "k_confirm": "Onthulling starten? Iedereen die de pagina open heeft, kijkt op hetzelfde moment mee. Dit kan niet ongedaan worden gemaakt.",
  "share_h": "Uitnodigingslink",
  "share_more": "Delen…",
- "share_text": "🎈 Gender reveal van %s · 📅 %s\n",
+ "share_text": "Gender reveal van %s · %s\n",
  "show_sound": "🔊 Zet het geluid aan en doe mee",
  "show_ready": "De onthulling begint!",
  "show_ready_sub": "Maak je klaar, zo blazen we hem samen op…",
@@ -127,7 +127,7 @@
  "f_need_seal": "vul eerst de uitslag in",
  "f_keeper_starts": "%s start de onthulling. Jij ontdekt het samen met de rest 🎉",
  "share_p_guest": "Mist er iemand? Nodig die ook uit.",
- "share_text_np": "🎈 Onze gender reveal · 📅 %s\n",
+ "share_text_np": "Onze gender reveal · %s\n",
  "show_need": "%d / %d tikken",
  "show_people_tapping": "%d tikken · %d s",
  "show_round": "Ronde %d! Tik sneller!",
@@ -206,5 +206,12 @@
  "w_title": "Berichten",
  "w_del": "Verwijderen",
  "w_del_confirm": "Dit bericht verwijderen?",
- "w_nm_label": "Naamsuggestie"
+ "w_nm_label": "Naamsuggestie",
+ "cd_days": "Dagen",
+ "cd_hours": "Uur",
+ "cd_mins": "Minuten",
+ "cd_secs": "Seconden",
+ "cd_opens": "De feestkamer gaat 30 minuten voor de onthulling open 🎈",
+ "cd_hint": "Tik dan opnieuw op deze link, vul je naam in en stem.",
+ "cd_cal": "Aan agenda toevoegen"
 }

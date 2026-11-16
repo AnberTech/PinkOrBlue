@@ -75,7 +75,7 @@
  "k_confirm": "Start the reveal? Everyone with the page open will watch at the same moment. This can't be undone.",
  "share_h": "Invite link",
  "share_more": "Share…",
- "share_text": "🎈 %s's gender reveal · 📅 %s\n",
+ "share_text": "%s's gender reveal · %s\n",
  "show_sound": "🔊 Turn on sound and join",
  "show_ready": "The reveal is starting!",
  "show_ready_sub": "Get ready, we're about to blow it up together…",
@@ -127,7 +127,7 @@
  "f_need_seal": "enter the result first",
  "f_keeper_starts": "%s will start the reveal. You'll find out with everyone else 🎉",
  "share_p_guest": "Know someone who's missing? Invite them too.",
- "share_text_np": "🎈 Our gender reveal · 📅 %s\n",
+ "share_text_np": "Our gender reveal · %s\n",
  "show_need": "%d / %d taps",
  "show_people_tapping": "%d tapping · %d s",
  "show_round": "Round %d! Tap faster!",
@@ -206,5 +206,12 @@
  "w_title": "Messages",
  "w_del": "Delete",
  "w_del_confirm": "Delete this message?",
- "w_nm_label": "Name suggestion"
+ "w_nm_label": "Name suggestion",
+ "cd_days": "Days",
+ "cd_hours": "Hours",
+ "cd_mins": "Minutes",
+ "cd_secs": "Seconds",
+ "cd_opens": "The party room opens 30 minutes before the reveal 🎈",
+ "cd_hint": "Just tap this link again then to add your name and vote.",
+ "cd_cal": "Add to calendar"
 }
