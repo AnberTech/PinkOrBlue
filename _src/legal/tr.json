@@ -1,0 +1,48 @@
+{
+ "pv_title": "Gizlilik Politikası",
+ "pv_desc": "PinkOrBlue gizlilik politikası: yalnızca parti için gereken ad, oy ve tahminler saklanır; reklam ve takip yoktur, veriler 7 gün sonra silinir.",
+ "pv_updated": "Son Güncelleme Tarihi:",
+ "pv_date": "16 Kasım 2026",
+ "pv_sections": [
+  [
+   "1. Genel Bilgi",
+   "<p>PinkOrBlue, ailelerin bebeklerinin cinsiyetini sevdikleriyle birlikte online olarak açıklayabildiği ücretsiz bir web sitesidir. Aile bir parti odası açar, bağlantıyı misafirleriyle paylaşır; misafirler oy ve tahmin verir, açılış herkesin ekranında aynı anda gösterilir. Bu sayfada hangi verilerin neden saklandığı ve ne zaman silindiği açıklanmaktadır. PinkOrBlue, AnberTech tarafından geliştirilmiştir.</p>"
+  ],
+  [
+   "2. Saklanan Veriler",
+   "<p><b>PinkOrBlue yalnızca partinin çalışması için gereken bilgileri saklar.</b></p><ul><li>Oda bilgisi: parti adı, parti tarihi, kurucunun girdiği sonuç ve odanın ayarları.</li><li>Misafirin girdiği ad: odadaki diğer kişilere kimin oy verdiğini göstermek için kullanılır. Gerçek adınızı yazmak zorunda değilsiniz; bir takma ad da yeterlidir.</li><li>Oylar ve tahminler: Kız/Erkek oyu ile misafirin verdiği tahminler.</li><li>Mini oyun skoru: odadaki skor tablosunu göstermek için kullanılır.</li></ul><p>E-posta adresi, telefon numarası, şifre, konum, fotoğraf ya da rehber bilgisi istenmez ve toplanmaz.</p>"
+  ],
+  [
+   "3. Kimlik ve Hesap",
+   "<p>Üyelik ya da hesap açma yoktur. Siteyi açtığınızda Firebase Anonymous Authentication sizin için rastgele, anonim bir kimlik oluşturur. Bu kimlik yalnızca oyunuzu size ait göstermek ve aynı tarayıcıdan odaya geri döndüğünüzde kaldığınız yerden devam etmenizi sağlamak için kullanılır. Kimliğin içinde adınız, e-postanız ya da sizi tanımlayan başka bir bilgi bulunmaz. Bu anonim oturum tarayıcınızın yerel depolama alanında tutulur; takip amacıyla kullanılmaz.</p>"
+  ],
+  [
+   "4. Verilerin Saklandığı Yer",
+   "<p>Oda bilgileri, adlar, oylar, tahminler ve skorlar Google'ın sunduğu Firebase Realtime Database hizmetinde saklanır. Bu veriler yalnızca ilgili odanın bağlantısına sahip kişilere gösterilir; satılmaz, kiralanmaz ve reklam amacıyla kimseyle paylaşılmaz. Firebase, verileri Google'ın kendi gizlilik ve güvenlik koşullarına uygun olarak işler.</p><p>Siteye bağlanırken barındırma hizmeti (GitHub Pages) ve Firebase sunucuları, bağlantının kurulabilmesi için IP adresi gibi teknik bilgileri işleyebilir. Bu bilgiler tarafımızdan toplanmaz ve saklanmaz.</p>"
+  ],
+  [
+   "5. Verilerin Silinmesi",
+   "<p><b>Bir odaya ait tüm veriler, parti tarihinden 7 gün sonra otomatik olarak silinir.</b></p><ul><li>Odayı kuran kişi, odayı istediği an silebilir; bu durumda odaya ait tüm adlar, oylar, tahminler ve skorlar hemen silinir.</li><li>Misafir olarak adınızın ya da oyunuzun daha erken silinmesini isterseniz odayı kuran kişiden isteyebilir ya da aşağıdaki adresten bize yazabilirsiniz.</li></ul><p>Silinen veriler geri getirilemez.</p>"
+  ],
+  [
+   "6. Reklam, Analitik ve Çerezler",
+   "<p>PinkOrBlue reklam göstermez. Analiz, istatistik, reklam ya da takip amaçlı hiçbir üçüncü taraf servisi kullanmaz ve takip çerezi kullanmaz.</p>"
+  ],
+  [
+   "7. Çocukların Gizliliği",
+   "<p>PinkOrBlue, bebek bekleyen ailelerin ve yetişkin yakınlarının kullanımı için tasarlanmıştır; 13 yaşın altındaki çocuklara yönelik değildir. 13 yaşın altındaki bir çocuğun bilgi girdiğini fark ederseniz bize yazın; ilgili veriyi sileriz.</p>"
+  ],
+  [
+   "8. Değişiklikler",
+   "<p>Bu politika güncellendiğinde yeni metin bu sayfada yayımlanır ve sayfanın başındaki tarih değiştirilir.</p>"
+  ],
+  [
+   "9. İletişim",
+   "<p>Sorularınız ve silme talepleriniz için bizimle iletişime geçebilirsiniz:</p>"
+  ]
+ ],
+ "sp_title": "Destek",
+ "sp_desc": "PinkOrBlue destek: soru, görüş, silme talebi ve teknik destek için bize e-posta ile ulaşın.",
+ "sp_text": "PinkOrBlue ile ilgili her türlü soru, görüş, veri silme ve teknik destek talebiniz için aşağıdaki e-posta adresi üzerinden bizimle iletişime geçebilirsiniz. Yazarken odanızın bağlantısını eklerseniz size daha hızlı yardımcı olabiliriz:",
+ "sp_faq": "Sıkça sorulan sorular"
+}

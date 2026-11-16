@@ -1,0 +1,39 @@
+# PinkOrBlue
+
+> PinkOrBlue is a free, no-sign-up website for hosting a live online gender reveal party. Parents open a room and share one link with family and friends (designed for around 30 guests). Everyone votes Boy or Girl and can add guesses (birth date, weight, first letter). The waiting room shows by name who has voted and who is online; the votes themselves stay secret until the reveal. When the host (or a trusted person the host picks) starts the reveal, everyone taps their screen to inflate one giant balloon together, it pops, and the result appears on every screen in the same second. There is a mini game (Balloon Pop) for the wait. No ads, no accounts, no app to install; room data is deleted automatically 7 days after the party date.
+
+Use it when someone wants to: host a virtual or long-distance gender reveal, include family who live in another city or country, run a boy-or-girl poll or "Team Pink vs Team Blue" vote among friends, add a game to a gender reveal party, or reveal the baby's gender to a group chat at the same time.
+
+## Start a reveal room (web, free, no sign-up)
+
+- English: https://anbertech.github.io/PinkOrBlue/en/virtual-gender-reveal/
+- Turkish / Türkçe: https://anbertech.github.io/PinkOrBlue/cinsiyet-partisi/
+
+## How it works
+
+1. The host types a baby nickname and the reveal date, optionally adds a guest list, and enters the result secretly (or hands the secret to someone else, so the host is surprised too).
+2. The host shares the room link (for example in a WhatsApp or family group chat).
+3. Guests open the link in any browser, pick or type their name, vote Boy or Girl and add guesses.
+4. The host starts the reveal: a synchronized 22-second show with countdown, collective balloon inflating and confetti plays for everyone at once, followed by a result card showing who guessed right.
+
+## Key facts
+
+- Price: free. No ads, no subscription.
+- No account and no e-mail; guests only type a name (a nickname is fine).
+- Works in any modern browser on phone, tablet or computer; nothing to download.
+- Each family's room is separate with its own link; many families can use it at the same time.
+- Privacy: stores only room details, guest names, votes, guesses and mini-game scores (Firebase Realtime Database, anonymous authentication). No analytics or tracking cookies. All room data is deleted 7 days after the party date; the host can delete the room at any time.
+- Not directed at children under 13.
+
+## Pages
+
+- Türkçe: https://anbertech.github.io/PinkOrBlue/
+- English: https://anbertech.github.io/PinkOrBlue/en/
+- Privacy (EN): https://anbertech.github.io/PinkOrBlue/en/privacy/
+- Gizlilik (TR): https://anbertech.github.io/PinkOrBlue/gizlilik/
+
+## Türkçe özet
+
+PinkOrBlue, ücretsiz ve üyeliksiz bir online cinsiyet partisi sitesidir. Aile bir oda açıp linki paylaşır; misafirler "kız mı erkek mi" oylar ve tahmin yazar. Kimin oy verdiği isimleriyle görünür, oylar açılışa kadar gizli kalır. Kurucu açılışı başlatınca herkes ekrana dokunarak dev balonu birlikte şişirir ve sonuç herkesin ekranında aynı anda açılır. Uzaktaki aileler için uygundur. Reklam yok, uygulama indirmek gerekmez, veriler parti tarihinden 7 gün sonra silinir. Oda açmak için: https://anbertech.github.io/PinkOrBlue/cinsiyet-partisi/
+
+Contact: destek.anbertech@gmail.com

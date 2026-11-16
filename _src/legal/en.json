@@ -1,0 +1,48 @@
+{
+ "pv_title": "Privacy Policy",
+ "pv_desc": "PinkOrBlue privacy policy: we keep only the names, votes and guesses a party needs. No ads, no tracking, and all data is deleted 7 days after the party.",
+ "pv_updated": "Last updated:",
+ "pv_date": "November 16, 2026",
+ "pv_sections": [
+  [
+   "1. Overview",
+   "<p>PinkOrBlue is a free website that lets families reveal their baby's gender online, together with the people they love. A parent opens a party room and shares the link; guests vote and guess, and the reveal plays on everyone's screen at the same moment. This page explains what we store, why we store it and when it is deleted. PinkOrBlue is made by AnberTech.</p>"
+  ],
+  [
+   "2. Data We Store",
+   "<p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the party name, the party date, the result entered by the host and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p>"
+  ],
+  [
+   "3. Identity and Accounts",
+   "<p>There is no sign-up and no account. When you open the site, Firebase Anonymous Authentication creates a random, anonymous ID for you. It is used only to link your vote to you and to let you pick up where you left off if you come back to the room in the same browser. The ID does not contain your name, e-mail or anything else that identifies you. This anonymous session is kept in your browser's local storage and is never used for tracking.</p>"
+  ],
+  [
+   "4. Where Data Is Stored",
+   "<p>Room details, names, votes, guesses and scores are stored in Firebase Realtime Database, a service provided by Google. This data is shown only to people who have the link to that room. It is never sold, rented or shared with anyone for advertising. Firebase processes the data under Google's own privacy and security terms.</p><p>When you connect to the site, the hosting service (GitHub Pages) and Firebase servers may process technical information such as your IP address in order to deliver the page. We do not collect or keep this information.</p>"
+  ],
+  [
+   "5. Deletion",
+   "<p><b>All data belonging to a room is deleted automatically 7 days after the party date.</b></p><ul><li>The host can delete the room at any time; all names, votes, guesses and scores in it are then removed immediately.</li><li>If you are a guest and would like your name or vote removed sooner, ask the host or e-mail us at the address below.</li></ul><p>Deleted data cannot be recovered.</p>"
+  ],
+  [
+   "6. Ads, Analytics and Cookies",
+   "<p>PinkOrBlue shows no ads. It uses no third-party analytics, statistics, advertising or tracking services, and no tracking cookies.</p>"
+  ],
+  [
+   "7. Children's Privacy",
+   "<p>PinkOrBlue is made for expecting families and their adult friends and relatives. It is not directed at children under 13. If you notice that a child under 13 has entered information, please let us know and we will delete it.</p>"
+  ],
+  [
+   "8. Changes",
+   "<p>If this policy changes, the new version will be posted on this page and the date at the top will be updated.</p>"
+  ],
+  [
+   "9. Contact",
+   "<p>For questions or deletion requests, you can contact us at:</p>"
+  ]
+ ],
+ "sp_title": "Support",
+ "sp_desc": "PinkOrBlue support: send your questions, feedback, deletion requests and technical support requests by e-mail.",
+ "sp_text": "For any questions, feedback, data deletion or technical support requests about PinkOrBlue, you can reach us at the e-mail address below. Including your room link helps us help you faster:",
+ "sp_faq": "Frequently asked questions"
+}
