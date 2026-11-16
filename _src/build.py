@@ -242,7 +242,7 @@ def page_app(c, T, U, L, fbcfg, invite=False):
     cfg = {k: cfg[k] for k in ('apiKey', 'authDomain', 'databaseURL', 'projectId', 'appId', 'messagingSenderId')}
     paths = {'POB_INVITE': '../' + INVITE_SLUG[c] + '/', 'POB_CREATE': '../' + t['fx_slug'] + '/', 'POB_IS_INVITE': invite}
     adir = os.path.join(ROOT, 'assets', 'audio')
-    paths['POB_AUDIO'] = sorted(f[:-4] for f in os.listdir(adir) if f.endswith('.mp3')) if os.path.isdir(adir) else []
+    paths['POB_AUDIO'] = sorted(f.rsplit('.', 1)[0] for f in os.listdir(adir) if f.endswith(('.mp3', '.m4a'))) if os.path.isdir(adir) else []
     intro = '' if invite else f'''<div class="app-intro">
     <img src="{base}assets/img/stork.png" alt="" width="560" height="560" />
     <h1>{t['fx_h1_html']}</h1>

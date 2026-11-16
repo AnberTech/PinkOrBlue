@@ -142,33 +142,57 @@ function revealSynth(girl) {
   // alkış ve neşe
   for (let i = 0; i < 40; i++) noise(0.03 + Math.random() * 0.03, 0.05 + Math.random() * 0.07, 0.4 + Math.random() * 3.2, "bandpass", 1800 + Math.random() * 2500, null, 0.9);
 }
-// ---- Fon müziği: assets/audio/bg-wait.mp3 (geri sayım) ve bg-party.mp3 (salon ve sonrası); yoksa sessiz
-const bgBuf = {}; let bgNow = null, bgSrc = null, bgGain = null, bgWant = null;
-async function loadBg(name) {
-  if (bgBuf[name] !== undefined) return bgBuf[name];
-  bgBuf[name] = null;
-  if (!(window.POB_AUDIO || []).includes(name) || !ctx) return null;
-  try { const r = await fetch(AUDIO_BASE + name + ".mp3", { cache: "force-cache" }); const d = await r.arrayBuffer(); bgBuf[name] = await new Promise((a, b) => ctx.decodeAudioData(d, a, b)); }
-  catch (e) { bgBuf[name] = null; }
-  return bgBuf[name];
+// ---- Fon müziği: assets/audio/bg-wait.m4a (geri sayım), bg-party.m4a (salon ve sonrası). Akışla çalar (bellek dostu).
+// setBg(name)            → döngüde çalar
+// setBg(name, { at })    → "son şarkı": sunucu saatine göre herkeste aynı saniyeden, döngüsüz
+let bgEl = null, bgNode = null, bgGain = null, bgNow = "", bgWant = { name: null };
+const bgUrl = (n) => AUDIO_BASE + n + ".m4a";
+const hasBg = (n) => (window.POB_AUDIO || []).includes(n);
+function bgSetup() {
+  if (bgEl || !ctx) return;
+  bgEl = new Audio(); bgEl.preload = "auto"; bgEl.setAttribute("playsinline", "");
+  try { bgNode = ctx.createMediaElementSource(bgEl); bgGain = ctx.createGain(); bgGain.gain.value = 0.0001; bgNode.connect(bgGain); bgGain.connect(master); }
+  catch (e) { bgNode = null; bgEl.volume = 0.25; }
 }
-function fadeOut(src, g) { if (!src) return; try { const t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0.0001, t + 1.2); src.stop(t + 1.3); } catch (e) {} }
-// İstenen fon parçası (null = sus). Ses kapalıysa ya da bağlam açılmadıysa bekler, açılınca başlar.
-export async function setBg(name) {
-  bgWant = name;
-  if (!enabled || !ctx || ctx.state !== "running") { if (bgSrc) { fadeOut(bgSrc, bgGain); bgSrc = null; bgNow = null; } return; }
-  if (bgNow === name) return;
-  if (bgSrc) { fadeOut(bgSrc, bgGain); bgSrc = null; }
-  bgNow = name;
-  if (!name) return;
-  const buf = await loadBg(name);
-  if (!buf || bgWant !== name || bgNow !== name) return;
-  const src = ctx.createBufferSource(), g = ctx.createGain();
-  src.buffer = buf; src.loop = true; g.gain.value = 0.0001; src.connect(g); g.connect(master); src.start();
-  g.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 1.5);
-  bgSrc = src; bgGain = g;
+function bgVol(v, sec) {
+  if (bgGain) { const t = ctx.currentTime; bgGain.gain.cancelScheduledValues(t); bgGain.gain.setValueAtTime(Math.max(0.0001, bgGain.gain.value), t); bgGain.gain.linearRampToValueAtTime(Math.max(0.0001, v), t + sec); }
+  else if (bgEl) bgEl.volume = Math.min(1, v * 1.2);
 }
-export const refreshBg = () => { const w = bgWant; bgNow = null; return setBg(w); };
+export function setBg(name, opt = {}) {
+  bgWant = { name, at: opt.at || 0, now: opt.now };
+  const key = name ? name + "|" + (opt.at || 0) : "";
+  if (!enabled || !ctx || ctx.state !== "running" || !name || !hasBg(name)) {
+    if (bgEl && !bgEl.paused) { bgVol(0, .8); setTimeout(() => { if (!bgWant.name || !enabled) bgEl.pause(); }, 900); }
+    bgNow = ""; return;
+  }
+  bgSetup();
+  if (bgNow === key && !bgEl.paused) return;
+  bgNow = key;
+  const start = () => {
+    if (opt.at && opt.now) {                         // senkron: sunucu saatine göre konum
+      const off = (opt.now() - opt.at) / 1000;
+      if (off >= (bgEl.duration || 1e9)) { bgEl.pause(); return; }
+      try { bgEl.currentTime = Math.max(0, off); } catch (e) {}
+    }
+    bgEl.play().then(() => bgVol(opt.at ? 0.32 : 0.22, 1.5)).catch(() => { bgNow = ""; });
+  };
+  bgVol(0, .4);
+  setTimeout(() => {
+    if (bgNow !== key) return;
+    const url = bgUrl(name);
+    bgEl.loop = !opt.at;
+    if (!bgEl.src.endsWith(url.split("/").pop()) || opt.at) {
+      if (!bgEl.src.endsWith(url.split("/").pop())) bgEl.src = url;
+      if (bgEl.readyState >= 1) start(); else bgEl.addEventListener("loadedmetadata", start, { once: true });
+    } else start();
+  }, bgEl.paused ? 0 : 450);
+}
+export const bgState = () => bgEl ? { src: (bgEl.src || "").split("/").pop(), paused: bgEl.paused, t: +bgEl.currentTime.toFixed(2), loop: bgEl.loop } : null;
+export const refreshBg = () => { const w = bgWant; bgNow = ""; return setBg(w.name, { at: w.at, now: w.now }); };
+// Parça süresi (sn) — kurucunun "son şarkı" sayacı için
+export function bgDuration(name) {
+  return new Promise((res) => { if (!hasBg(name)) return res(0); const a = new Audio(); a.preload = "metadata"; a.onloadedmetadata = () => res(a.duration || 0); a.onerror = () => res(0); a.src = bgUrl(name); });
+}
 
 export const revealReady = () => Object.values(revealBuf).some(Boolean);
 export function playReveal(girl) {

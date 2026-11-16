@@ -2,8 +2,8 @@
 import * as fb from "./fb.js";
 import { playShow, roundStart, showEnd } from "./show.js";
 import { playGame } from "./game.js";
-import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg } from "./sfx.js";
-window.__pob = { level, audioState, revealReady };   // teşhis/test için (ses gerçekten üretiliyor mu)
+import { unlock, setOn, isOn, running, sfx, level, audioState, revealReady, setBg, refreshBg, bgDuration, bgState } from "./sfx.js";
+window.__pob = { level, audioState, revealReady, bgState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
 const LANG = document.documentElement.lang;
@@ -372,7 +372,7 @@ function renderInner() {
   closeCal();
   const m = room.meta;
   if (gated()) { setBg("bg-wait"); return renderCountdown(); }
-  if (!(m.status === "reveal" && room.shown)) setBg(m.status === "reveal" ? null : "bg-party");
+  if (!(m.status === "reveal" && room.shown)) setBg(m.status === "reveal" ? null : "bg-party", m.musicAt ? { at: m.musicAt, now: fb.serverNow } : {});
   if (m.status === "reveal" && room.shown) return renderResult();
   if (m.status === "reveal") {
     app.innerHTML = `<div class="card center"><div class="big-emoji">🎈</div><h2>${S.show_ready}</h2><p class="muted">${S.show_ready_sub}</p></div>`;
@@ -479,6 +479,7 @@ function renderLobby() {
   ${headHtml(m, S.lobby_eyebrow)}
   <section class="sky" data-n="${ps.length > 30 ? "l" : ps.length > 16 ? "m" : "s"}" data-sig="${esc(sig)}" aria-label="${S.lobby_sky}">${ps.map(balloonHtml).join("")}</section>
   <p class="sky-stat"><b>${fmt(S.lobby_voted, votedN, expected)}</b> · ${fmt(S.lobby_online, onN)}</p>
+  ${m.musicAt && !isHost() && !isRevealer() ? `<p class="song-banner">🎵 ${S.fs_banner}</p>` : ""}
   ${isHost() ? hostFlow(votedN, expected, onN) : isRevealer() ? keeperCard(votedN, expected, onN) : ""}
   ${voteCard(isRevealer())}
   ${gameCard()}
@@ -530,9 +531,15 @@ function voteCard(guessOnly) {
   </section>`;
 }
 
+function finalSongStep() {
+  const m = room.meta;
+  if (!(window.POB_AUDIO || []).includes("bg-party")) return "";
+  if (!m.musicAt) return `<div class="final-song"><button class="btn" data-act="song">🎵 ${S.fs_start}</button><p class="muted small">${S.fs_hint}</p></div>`;
+  return `<div class="final-song on"><p>🎵 ${S.fs_playing} <b class="fs-left">…</b></p></div>`;
+}
 function stepStart(votedN, expected, onN) {
   const s = room.sealed;
-  return `<li class="${s ? "" : "locked"}"><b>${S.f_step3}</b>
+  return `<li class="${s ? "" : "locked"}"><b>${S.f_step3}</b>${finalSongStep()}
     <button class="btn btn-gold btn-big start" data-act="start" ${s ? "" : "disabled"}>🎉 ${S.k_start}</button>
     <p class="muted small center">${fmt(S.k_status, votedN, expected, onN)}${s ? "" : " · " + S.f_need_seal}</p></li>`;
 }
@@ -644,6 +651,24 @@ function bindLobby() {
     if (!confirm(S.h_delete_confirm)) return;
     try { await fb.deleteRoom(R.id); cleanupRoom(); location.href = CREATE; } catch (e) { console.error(e); toast(S.err_generic); }
   });
+  act("song", async (ev) => {
+    unlock(); ev.currentTarget.disabled = true;
+    try { await fb.startFinalSong(R.id); track("son-sarki"); } catch (e) { console.error(e); toast(S.err_generic); ev.currentTarget.disabled = false; }
+  });
+  clearInterval(R.songTimer);
+  if (R.meta.musicAt && app.querySelector(".fs-left")) {
+    const durP = R.songDur ? Promise.resolve(R.songDur) : bgDuration("bg-party").then(d => (R.songDur = d));
+    durP.then((dur) => {
+      const tick = () => {
+        const el = app.querySelector(".fs-left"); if (!el || room !== R) return clearInterval(R.songTimer);
+        const left = Math.max(0, Math.ceil(dur - (fb.serverNow() - R.meta.musicAt) / 1000));
+        el.textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+        const st = app.querySelector('[data-act="start"]');
+        if (st) { st.classList.toggle("now", left <= 10); st.innerHTML = "🎉 " + (left <= 10 ? S.fs_now : S.k_start); }
+      };
+      tick(); R.songTimer = setInterval(tick, 500);
+    });
+  }
   act("copy", () => copy(roomUrl(R.id)));
   act("copykey", () => copy(hostLink(R.id, ls.get("pob_hk_" + R.id))));
   act("share", () => { track("davet-paylas"); share(shareText(R.meta)); });

@@ -213,5 +213,10 @@
  "cd_secs": "Secondes",
  "cd_opens": "La salle ouvre 30 minutes avant la révélation 🎈",
  "cd_hint": "Touche à nouveau ce lien à ce moment-là pour entrer ton prénom et voter.",
- "cd_cal": "Ajouter au calendrier"
+ "cd_cal": "Ajouter au calendrier",
+ "fs_start": "Lancer la dernière chanson",
+ "fs_hint": "Elle joue pour tout le monde en même temps ; lance la révélation 10 secondes avant la fin.",
+ "fs_playing": "Dernière chanson, il reste :",
+ "fs_now": "Lance maintenant !",
+ "fs_banner": "La dernière chanson passe, la révélation approche !"
 }

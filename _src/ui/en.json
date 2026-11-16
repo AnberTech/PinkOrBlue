@@ -213,5 +213,10 @@
  "cd_secs": "Seconds",
  "cd_opens": "The party room opens 30 minutes before the reveal 🎈",
  "cd_hint": "Just tap this link again then to add your name and vote.",
- "cd_cal": "Add to calendar"
+ "cd_cal": "Add to calendar",
+ "fs_start": "Start the final song",
+ "fs_hint": "It plays for everyone at the same moment; start the reveal 10 seconds before it ends.",
+ "fs_playing": "Final song playing, time left:",
+ "fs_now": "Start now!",
+ "fs_banner": "The final song is playing, the reveal is very close!"
 }

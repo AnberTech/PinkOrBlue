@@ -213,5 +213,10 @@
  "cd_secs": "Saniye",
  "cd_opens": "Salon açılışa 30 dakika kala açılacak 🎈",
  "cd_hint": "O zaman bu linke tekrar dokunman yeterli; adını yazıp oyunu verirsin.",
- "cd_cal": "Takvime ekle"
+ "cd_cal": "Takvime ekle",
+ "fs_start": "Son şarkıyı başlat",
+ "fs_hint": "Şarkı herkeste aynı anda çalar; bitimine 10 saniye kala açılışı başlat.",
+ "fs_playing": "Son şarkı çalıyor, bitmesine:",
+ "fs_now": "Şimdi başlat!",
+ "fs_banner": "Son şarkı çalıyor, açılış çok yakında!"
 }

@@ -213,5 +213,10 @@
  "cd_secs": "Sek.",
  "cd_opens": "Pokój otworzy się 30 minut przed odsłonięciem 🎈",
  "cd_hint": "Wtedy wejdź ponownie w ten link, wpisz imię i zagłosuj.",
- "cd_cal": "Dodaj do kalendarza"
+ "cd_cal": "Dodaj do kalendarza",
+ "fs_start": "Puść ostatnią piosenkę",
+ "fs_hint": "Gra u wszystkich jednocześnie; zacznij odsłonięcie 10 sekund przed końcem.",
+ "fs_playing": "Gra ostatnia piosenka, zostało:",
+ "fs_now": "Startuj teraz!",
+ "fs_banner": "Gra ostatnia piosenka, odsłonięcie już za chwilę!"
 }

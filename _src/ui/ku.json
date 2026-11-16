@@ -213,5 +213,10 @@
  "cd_secs": "Sanî",
  "cd_opens": "Odeya şahiyê 30 deqe beriya eşkerekirinê vedibe 🎈",
  "cd_hint": "Wê demê dîsa li vê girêdanê bitikîne, navê xwe binivîse û deng bide.",
- "cd_cal": "Li salnameyê zêde bike"
+ "cd_cal": "Li salnameyê zêde bike",
+ "fs_start": "Strana dawî dest pê bike",
+ "fs_hint": "Ji bo hemûyan di heman demê de lê dide; 10 saniye beriya dawiyê eşkerekirinê dest pê bike.",
+ "fs_playing": "Strana dawî lê dide, maye:",
+ "fs_now": "Niha dest pê bike!",
+ "fs_banner": "Strana dawî lê dide, eşkerekirin pir nêzîk e!"
 }

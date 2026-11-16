@@ -138,6 +138,8 @@ export async function setInvitees(id, names) {
   await set(r(id, "invitees"), inv);
 }
 
+// Kurucu "son şarkıyı" başlatır: herkeste aynı saniyeden çalar
+export const startFinalSong = (id) => set(r(id, "meta/musicAt"), serverTimestamp());
 export const delegate = (id, uid) => set(r(id, "meta/revealerUid"), uid);
 
 export async function seal(id, pick) {

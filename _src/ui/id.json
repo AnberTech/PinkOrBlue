@@ -213,5 +213,10 @@
  "cd_secs": "Detik",
  "cd_opens": "Room pesta dibuka 30 menit sebelum momen reveal 🎈",
  "cd_hint": "Saat itu, buka lagi link ini, tulis namamu, lalu beri suara.",
- "cd_cal": "Tambah ke kalender"
+ "cd_cal": "Tambah ke kalender",
+ "fs_start": "Putar lagu terakhir",
+ "fs_hint": "Lagu diputar bersamaan untuk semua; mulai reveal 10 detik sebelum lagu selesai.",
+ "fs_playing": "Lagu terakhir diputar, sisa:",
+ "fs_now": "Mulai sekarang!",
+ "fs_banner": "Lagu terakhir sedang diputar, momen reveal sebentar lagi!"
 }

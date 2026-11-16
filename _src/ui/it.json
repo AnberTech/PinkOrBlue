@@ -213,5 +213,10 @@
  "cd_secs": "Secondi",
  "cd_opens": "La stanza apre 30 minuti prima del reveal 🎈",
  "cd_hint": "A quel punto tocca di nuovo questo link, scrivi il tuo nome e vota.",
- "cd_cal": "Aggiungi al calendario"
+ "cd_cal": "Aggiungi al calendario",
+ "fs_start": "Avvia l'ultima canzone",
+ "fs_hint": "Suona per tutti nello stesso momento; avvia il reveal 10 secondi prima della fine.",
+ "fs_playing": "Ultima canzone, mancano:",
+ "fs_now": "Avvia ora!",
+ "fs_banner": "Suona l'ultima canzone, il reveal è vicinissimo!"
 }

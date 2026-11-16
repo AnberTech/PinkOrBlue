@@ -213,5 +213,10 @@
  "cd_secs": "Seconden",
  "cd_opens": "De feestkamer gaat 30 minuten voor de onthulling open 🎈",
  "cd_hint": "Tik dan opnieuw op deze link, vul je naam in en stem.",
- "cd_cal": "Aan agenda toevoegen"
+ "cd_cal": "Aan agenda toevoegen",
+ "fs_start": "Start het laatste nummer",
+ "fs_hint": "Het speelt bij iedereen tegelijk; start de onthulling 10 seconden voor het einde.",
+ "fs_playing": "Laatste nummer speelt, nog:",
+ "fs_now": "Nu starten!",
+ "fs_banner": "Het laatste nummer speelt, de onthulling komt eraan!"
 }

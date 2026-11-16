@@ -213,5 +213,10 @@
  "cd_secs": "Sekunden",
  "cd_opens": "Der Partyraum öffnet 30 Minuten vor dem Reveal 🎈",
  "cd_hint": "Tipp dann einfach wieder auf diesen Link, trag deinen Namen ein und stimm ab.",
- "cd_cal": "Zum Kalender hinzufügen"
+ "cd_cal": "Zum Kalender hinzufügen",
+ "fs_start": "Letzten Song starten",
+ "fs_hint": "Er läuft bei allen gleichzeitig; starte das Reveal 10 Sekunden vor dem Ende.",
+ "fs_playing": "Letzter Song läuft, noch:",
+ "fs_now": "Jetzt starten!",
+ "fs_banner": "Der letzte Song läuft – gleich ist es so weit!"
 }
