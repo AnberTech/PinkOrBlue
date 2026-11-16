@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611161921";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611161921";
-import { playGame } from "./game.js?v=202611161921";
-import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161921";
+import * as fb from "./fb.js?v=202611161934";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611161934";
+import { playGame } from "./game.js?v=202611161934";
+import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161934";
 window.__pob = { level, audioState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -74,6 +74,8 @@ function roomId() {
   return m[1].toLowerCase();
 }
 const babyOf = (m) => m.babyName || S.default_baby;
+const ls = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+const hostLink = (id, key) => location.origin + INVITE + "#r=" + id + "&k=" + key;
 function shareText(m) {
   const when = DF_DAY ? DF_DAY.format(new Date(m.partyAt)) : fmtDate(m.partyAt);
   return (m.parents ? fmt(S.share_text, m.parents, when) : fmt(S.share_text_np, when)) + roomUrl(room.id);
@@ -187,6 +189,8 @@ function viewCreate() {
       <div class="dt">${dateField("date", ymd(def), { min: today, max: maxD })}
         <span class="tm"><select name="hh" aria-label="${S.c_hour}">${hours}</select><b>:</b><select name="mm" aria-label="${S.c_minute}">${mins}</select></span></div>
       <small>${S.c_date_hint}</small></div>
+    <details class="inv-box pw-box"><summary>🔒 ${S.c_pw} <em>${S.optional}</em></summary>
+      <input name="pw" maxlength="40" autocomplete="off" placeholder="${S.c_pw_ph}"><small>${S.c_pw_hint}</small></details>
     <details class="inv-box"><summary>${S.c_invitees} <em>${S.optional}</em></summary>
       <textarea name="inv" rows="5" placeholder="${S.c_invitees_ph}"></textarea><small>${S.c_invitees_hint}</small></details>
     <button class="btn btn-gold btn-big" type="submit">${S.c_submit}</button>
@@ -203,6 +207,8 @@ function viewCreate() {
     const host = parents.slice(0, 40);            // kurucu odada anne-baba adıyla görünür
     const err = !mom && !dad ? S.c_err_parent : null;
     if (err) return toast(err);
+    const pw = f.pw.value.trim();
+    if (pw && pw.length < 4) return toast(S.c_err_pw);
     const d = parseYmd(f.date.value);
     if (!d) return toast(S.c_err_date);
     const partyAt = new Date(d.getFullYear(), d.getMonth(), d.getDate(), +f.hh.value, +f.mm.value).getTime();
@@ -212,7 +218,8 @@ function viewCreate() {
       const seen = new Set([lower(host)]), invitees = [];
       String(f.inv.value || "").split(/[\n,]/).map(s => titleCase(s).slice(0, 40)).filter(Boolean)
         .forEach(n => { if (!seen.has(lower(n))) { seen.add(lower(n)); invitees.push(n); } });
-      const id = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: invitees.slice(0, 80), hostName: host });
+      const { id, hostKey } = await fb.createRoom({ babyName: titleCase(f.baby.value) || S.default_baby, parents, partyAt, lang: LANG, invitees: invitees.slice(0, 80), hostName: host, password: pw || null });
+      ls.set("pob_hk_" + id, hostKey); if (pw) ls.set("pob_pw_" + id, pw);
       history.replaceState(null, "", INVITE + "#r=" + id);
       route(true);
     } catch (e) {
@@ -239,6 +246,20 @@ async function viewRoom(id, justCreated) {
   const uid = await fb.ready;
   if (gen !== routeGen) return;            // bu sırada başka sayfaya geçildi
   cleanupRoom();
+  // Kurucu linki (#r=..&k=..): bu cihazı kurucu yap, anahtarı sakla, adresten sil
+  const km = (location.hash + "&" + location.search).match(/[#?&]k=([a-z0-9]{16,40})/);
+  if (km) {
+    history.replaceState(null, "", INVITE + "#r=" + id);
+    try { await fb.claimHost(id, km[1], S.default_host); ls.set("pob_hk_" + id, km[1]); toast(S.h_claimed); }
+    catch (e) { console.error(e); toast(S.h_claim_fail); }
+    if (gen !== routeGen) return;
+  }
+  // Şifreli oda: üye değilse şifre iste
+  if (await fb.isLocked(id) && !(await fb.isMember(id))) {
+    if (gen !== routeGen) return;
+    return renderPassword(id, justCreated);
+  }
+  if (gen !== routeGen) return;
   const R = room = { id, uid, meta: null, guests: {}, invitees: {}, presence: {}, taps: {}, scores: {}, show: {}, votes: null, mine: null, sealed: null, result: null, unsubs: [], showing: false, shown: false, justCreated, drafts: {}, decided: {}, presenceOn: false };
   const key = (p) => ({ ["votes/" + uid]: "mine", ["sealed/" + uid]: "sealed" }[p] || p);
   const first = (path) => new Promise(res => {
@@ -260,6 +281,20 @@ async function viewRoom(id, justCreated) {
     render();
   }));
   R.timer = setInterval(() => { const el = $("#cd"); if (el && R.meta) el.textContent = countdown(R.meta.partyAt); }, 20000);
+}
+
+function renderPassword(id, justCreated) {
+  document.body.dataset.view = "room";
+  app.innerHTML = `<div class="card center join"><div class="big-emoji">🔒</div><h2>${S.pw_h}</h2><p class="muted">${S.pw_p}</p>
+    <form id="pwf" novalidate><input name="pw" maxlength="40" autocomplete="off" placeholder="${S.c_pw_ph}"><button class="btn btn-gold btn-big" type="submit">${S.pw_go}</button></form></div>`;
+  const f = $("#pwf");
+  f.onsubmit = async (ev) => {
+    ev.preventDefault(); unlock();
+    const pw = f.pw.value.trim(); if (!pw) return;
+    const btn = f.querySelector("button"); btn.disabled = true;
+    if (await fb.enterPassword(id, pw) && await fb.isMember(id)) { ls.set("pob_pw_" + id, pw); viewRoom(id, justCreated); }
+    else { btn.disabled = false; toast(S.pw_wrong); f.pw.select(); }
+  };
 }
 
 function renderMissing() {
@@ -336,7 +371,12 @@ function renderJoin() {
     ev.preventDefault(); unlock(); paintSound();
     const R = room, n = titleCase(inp.value).slice(0, 40);
     if (!n) { toast(S.j_err_empty); inp.focus(); return; }
-    if (Object.entries(R.guests).some(([u, g]) => u !== R.uid && lower(g.name) === lower(n))) { toast(S.j_err_taken); inp.focus(); return; }
+    const same = Object.entries(R.guests).filter(([u, g]) => u !== R.uid && lower(g.name) === lower(n));
+    if (same.length) {
+      const online = new Set(onlineUids());
+      if (same.some(([u]) => online.has(u))) { toast(S.j_err_taken); inp.focus(); return; }
+      if (!confirm(fmt(S.j_rejoin, n))) return;
+    }
     try { await fb.join(R.id, n); if (room !== R) return; delete R.drafts.n; sfx.plop(); document.activeElement?.blur(); render(); }
     catch (e) { console.error(e); toast(S.err_generic); }
   };
@@ -344,8 +384,12 @@ function renderJoin() {
 
 function people() {
   const on = new Set(onlineUids()), m = room.meta;
-  return Object.entries(room.guests).map(([uid, g]) => ({ uid, name: g.name, voted: !!g.voted, keeper: uid === m.revealerUid, online: on.has(uid), me: uid === room.uid, host: uid === m.hostUid }))
-    .sort((a, b) => (b.voted - a.voted) || a.name.localeCompare(b.name, LANG));
+  const all = Object.entries(room.guests).map(([uid, g]) => ({ uid, name: g.name, voted: !!g.voted, keeper: uid === m.revealerUid, online: on.has(uid), me: uid === room.uid, host: uid === m.hostUid }));
+  // Aynı kişi (cihaz değiştirip / geçmişi silip yeniden katılan) tek balon olsun: ben > kurucu/sır tutucu > çevrimiçi > oy vermiş
+  const score = (p) => p.me * 8 + (p.host || p.keeper) * 4 + p.online * 2 + p.voted;
+  const best = new Map();
+  for (const p of all) { const k = lower(p.name), cur = best.get(k); if (!cur || score(p) > score(cur)) best.set(k, { ...p, voted: p.voted || (cur && cur.voted) }); else if (p.voted) cur.voted = true; }
+  return [...best.values()].sort((a, b) => (b.voted - a.voted) || a.name.localeCompare(b.name, LANG));
 }
 
 function renderLobby() {
@@ -364,7 +408,7 @@ function renderLobby() {
   <section class="sky" data-n="${ps.length > 30 ? "l" : ps.length > 16 ? "m" : "s"}" data-sig="${esc(sig)}" aria-label="${S.lobby_sky}">${ps.map(balloonHtml).join("")}</section>
   <p class="sky-stat"><b>${fmt(S.lobby_voted, votedN, expected)}</b> · ${fmt(S.lobby_online, onN)}</p>
   ${isHost() ? hostFlow(votedN, expected, onN) : isRevealer() ? keeperCard(votedN, expected, onN) : ""}
-  ${!isRevealer() ? voteCard() : ""}
+  ${voteCard(isRevealer())}
   ${gameCard()}
   ${!isHost() ? `<section class="card share-mini"><div class="row"><div><b>${S.share_h}</b><p class="muted small">${S.share_p_guest}</p></div>
     <div class="row gap"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(shareText(m))}">WhatsApp</a><button class="btn" data-act="share">${S.share_more}</button></div></div></section>` : ""}
@@ -391,13 +435,21 @@ function pickBtns(cls, sel, attr) {
     <button class="vb boy ${sel === "boy" ? "on" : ""}" data-${attr}="boy" aria-pressed="${sel === "boy"}"><span class="vi" aria-hidden="true">🎩</span>${S.boy}</button></div>`;
 }
 
-function voteCard() {
+function voteCard(guessOnly) {
   const v = room.mine;
   const maxB = ymd(new Date(Date.now() + 320 * 86400000));
   const extras = v && (v.birth || v.weight || v.letter);
-  return `<section class="card vote ${v ? "has" : ""}">
-    <h2>${v ? fmt(S.v_yours_is, v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : S.v_h}</h2>
-    ${v ? `<p class="muted small">${S.v_change}</p>` : `<p class="muted small">${S.v_private}</p>`}
+  if (guessOnly) return `<section class="card vote has parents-guess">
+    <h2>👑 ${S.pg_h}</h2><p class="muted small">${S.pg_p}</p>
+    <details class="guesses" ${extras ? "" : "open"}><summary>${extras ? S.v_more_saved : S.pg_open}</summary>
+      <label class="lbl">${S.v_birth}${dateField("birth", v?.birth, { min: ymd(new Date()), max: maxB, ph: S.v_birth_ph })}</label>
+      <label class="lbl">${S.v_weight}<input type="number" name="weight" min="500" max="7000" step="10" inputmode="numeric" placeholder="3250" value="${esc(v?.weight || "")}"></label>
+      <label class="lbl">${S.v_letter}<input name="letter" maxlength="1" value="${esc(v?.letter || "")}" autocapitalize="characters"></label>
+      <button class="btn" data-act="saveg">${S.v_save}</button>
+    </details></section>`;
+  return `<section class="card vote ${v?.pick ? "has" : ""}">
+    <h2>${v?.pick ? fmt(S.v_yours_is, v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : S.v_h}</h2>
+    ${v?.pick ? `<p class="muted small">${S.v_change}</p>` : `<p class="muted small">${S.v_private}</p>`}
     ${pickBtns("cast", v?.pick, "p")}
     <details class="guesses"><summary>${extras ? S.v_more_saved : S.v_more}</summary>
       <label class="lbl">${S.v_birth}${dateField("birth", v?.birth, { min: ymd(new Date()), max: maxB, ph: S.v_birth_ph })}</label>
@@ -434,6 +486,7 @@ function hostFlow(votedN, expected, onN) {
         <p class="muted small link-text">${esc(url)}</p></li>
       ${delegated ? `<li><b>${S.f_step3}</b><p class="muted">${fmt(S.f_keeper_starts, esc(who || "?"))}</p></li>` : stepStart(votedN, expected, onN)}
     </ol>
+    ${hostKeyBox()}
     <details class="settings"><summary>⚙️ ${S.h_more}</summary>
       <label class="lbl">${S.h_keeper}<small class="muted">${S.h_keeper_lbl}</small>
         <select name="keeper" data-init="${m.revealerUid}"><option value="${room.uid}">${S.h_keeper_me}</option>
@@ -444,6 +497,16 @@ function hostFlow(votedN, expected, onN) {
       <button class="btn btn-danger" data-act="del">${S.h_delete}</button>
     </details>
   </section>`;
+}
+function hostKeyBox() {
+  const key = ls.get("pob_hk_" + room.id), pw = ls.get("pob_pw_" + room.id);
+  if (!key && !pw) return "";
+  const link = key ? hostLink(room.id, key) : "";
+  return `<div class="keybox">
+    ${key ? `<p><b>🔑 ${S.hk_h}</b></p><p class="muted small">${S.hk_p}</p>
+    <div class="row gap"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(S.hk_msg + "\n" + link)}">${S.hk_wa}</a><button class="btn" data-act="copykey">${S.copy}</button></div>` : ""}
+    ${pw ? `<p class="small pw-show">🔒 ${fmt(S.pw_is, `<b>${esc(pw)}</b>`)}</p>` : ""}
+  </div>`;
 }
 function keeperCard(votedN, expected, onN) {
   return `<section class="card flow keeper"><p class="eyebrow">🤫 ${S.k_eyebrow}</p><h2>${S.k_h_guest}</h2>
@@ -472,14 +535,16 @@ function bindLobby() {
   act("saveg", async () => {
     const box = app.querySelector(".guesses");
     const next = Object.assign({}, R.mine || {});
-    if (!next.pick) return toast(S.v_pick_first);
+    if (!next.pick && !isRevealer()) return toast(S.v_pick_first);
     const bv = box.querySelector("[name=birth]").value, wRaw = box.querySelector("[name=weight]").value.trim(), l = box.querySelector("[name=letter]").value.trim();
     const w = parseInt(wRaw, 10);
     if (wRaw && !(w >= 500 && w <= 7000)) return toast(S.v_err_weight);
     if (bv && !parseYmd(bv)) return toast(S.v_err_birth);
+    if (isRevealer()) delete next.pick;
     if (bv) next.birth = bv; else delete next.birth;
     if (wRaw) next.weight = w; else delete next.weight;
     if (l) next.letter = l.toLocaleUpperCase(LANG); else delete next.letter;
+    if (!next.pick && !next.birth && !next.weight && !next.letter) return toast(S.pg_empty);
     try { await fb.vote(R.id, clean(next)); if (room !== R) return; R.mine = next; ["birth", "weight", "letter"].forEach(k => delete R.drafts[k]); document.activeElement?.blur(); toast(S.v_saved); render(); }
     catch (e) { console.error(e); toast(S.err_generic); }
   });
@@ -515,6 +580,7 @@ function bindLobby() {
     try { await fb.deleteRoom(R.id); cleanupRoom(); location.href = CREATE; } catch (e) { console.error(e); toast(S.err_generic); }
   });
   act("copy", () => copy(roomUrl(R.id)));
+  act("copykey", () => copy(hostLink(R.id, ls.get("pob_hk_" + R.id))));
   act("share", () => share(shareText(R.meta)));
   act("play", () => {
     const names = [...new Set([...Object.values(R.guests).map(g => g.name), ...Object.values(R.invitees)].map(n => n.trim().split(/\s+/)[0]).filter(Boolean))];
@@ -639,7 +705,9 @@ function renderResult() {
   const taps = Object.entries(R.taps).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
   const tapTotal = taps.reduce((s, [, n]) => s + n, 0);
   const rounds = Object.keys(R.show?.r || {}).length || 1;
-  const guesses = list.filter(v => v.birth || v.weight || v.letter);
+  const pv = R.votes?.[m.revealerUid];   // sır tutucunun (anne-baba) ek tahmini
+  const parentsRow = pv && (pv.birth || pv.weight || pv.letter) ? [{ uid: m.revealerUid, name: m.parents || R.guests[m.revealerUid]?.name || S.default_host, parent: true, ...pv }] : [];
+  const guesses = [...parentsRow, ...list.filter(v => v.birth || v.weight || v.letter).map(v => ({ ...v, parent: v.uid === m.hostUid }))];
   const mine = m.revealerUid === R.uid ? null : R.mine?.pick;
   const conf = Array.from({ length: 26 }, (_, i) => `<i style="--x:${(i * 37) % 100}%;--d:${(i * 0.37) % 6}s;--t:${5 + (i % 5)}s;--c:${["#fff", "#F2B93B", girl ? "#D6336C" : "#1C6FB8", "#FFE08A"][i % 4]};--r:${(i * 47) % 360}deg"></i>`).join("");
   const av = (n) => { const h = hash(n); return `<span class="av" style="background:${PALETTE[h % PALETTE.length]}">${esc(initials(n))}</span>`; };
@@ -656,7 +724,7 @@ function renderResult() {
     </section>
     <section class="res-stats">
       <div><b>${fmt(S.r_pct, pct)}</b><span>${fmt(S.r_right_short, right.length, tot)}</span></div>
-      <div><b>${tapTotal}</b><span>${fmt(rounds > 1 ? S.r_taps_rounds : S.r_taps_one, rounds)}</span></div>
+      <div><b>${new Set(Object.values(R.guests).map(g => lower(g.name))).size}</b><span>${S.r_joined}</span></div>
       <div><b>${scores[0] ? scores[0].score : "–"}</b><span>${scores[0] ? "🏆 " + esc(scores[0].name.split(" ")[0]) : S.game_name}</span></div>
     </section>
     <section class="res-card">
@@ -667,10 +735,10 @@ function renderResult() {
     <section class="res-card">
       <h2>${fmt(S.r_right, right.length)}</h2>
       ${right.length ? `<div class="res-people">${right.map(v => `<span class="rp">${av(v.name)}<b>${esc(v.name)}</b></span>`).join("")}</div>` : `<p class="muted">${S.r_nobody}</p>`}
-      ${taps[0] ? `<p class="res-note">👆 ${fmt(S.r_fastest, esc(R.guests[taps[0][0]]?.name || "?"), taps[0][1])}</p>` : ""}
     </section>
     ${guesses.length ? `<section class="res-card"><h2>${S.r_guesses}</h2><div class="res-guess">
-      ${guesses.map(v => `<div class="rg">${av(v.name)}<div><b>${esc(v.name)}</b><span>${[v.birth ? "📅 " + esc(shortDate(v.birth)) : "", v.weight ? "⚖️ " + v.weight + " g" : "", v.letter ? "🔤 " + esc(v.letter) : ""].filter(Boolean).join(" · ")}</span></div><i class="${v.pick}">${v.pick === "girl" ? "🎀" : "🎩"}</i></div>`).join("")}</div></section>` : ""}
+      ${guesses.map(v => `<div class="rg ${v.parent ? "parent" : ""}">${v.parent ? `<span class="av crown">👑</span>` : av(v.name)}<div><b>${esc(v.name)}${v.parent ? ` <em>${S.r_parents_tag}</em>` : ""}</b><span>${[v.birth ? "📅 " + esc(shortDate(v.birth)) : "", v.weight ? "⚖️ " + v.weight + " g" : "", v.letter ? "🔤 " + esc(v.letter) : ""].filter(Boolean).join(" · ")}</span></div>${v.pick ? `<i class="${v.pick}">${v.pick === "girl" ? "🎀" : "🎩"}</i>` : ""}</div>`).join("")}</div>
+      <button class="btn pdf-btn" data-act="pdf">📄 ${S.r_pdf}</button></section>` : ""}
   </article>
   <div class="r-actions">
     <button class="btn btn-gold" data-act="replay">▶ ${S.r_replay}</button>
@@ -678,8 +746,34 @@ function renderResult() {
     <a class="btn" href="${CREATE}">${S.r_new}</a>
   </div>
   <p class="muted small center">${S.r_expire}</p>`;
+  const pdfBtn = app.querySelector('[data-act="pdf"]');
+  if (pdfBtn) pdfBtn.onclick = () => printGuesses(R, guesses, girl);
   app.querySelector('[data-act="replay"]').onclick = () => { unlock(); runShow(true); };
   app.querySelector('[data-act="rshare"]').onclick = () => share(fmt(girl ? S.r_share_text_girl : S.r_share_text_boy, babyOf(m)) + "\n" + roomUrl(R.id));
+}
+
+// Tahmin listesini yazdırılabilir sayfa olarak aç → "PDF olarak kaydet"
+function printGuesses(R, guesses, girl) {
+  const m = R.meta;
+  const all = [...guesses];
+  Object.entries(R.votes || {}).forEach(([u, v]) => { if (u !== m.revealerUid && !all.some(x => x.uid === u)) all.push({ uid: u, name: R.guests[u]?.name || "?", ...v }); });
+  const rows = all.map(v => `<tr class="${v.parent ? "p" : ""}"><td>${v.parent ? "👑 " : ""}${esc(v.name)}</td><td>${v.pick ? (v.pick === "girl" ? "🎀 " + S.girl : "🎩 " + S.boy) : "–"}</td><td>${v.birth ? esc(shortDate(v.birth)) : "–"}</td><td>${v.weight ? v.weight + " g" : "–"}</td><td>${esc(v.letter || "–")}</td></tr>`).join("");
+  const title = (m.parents ? m.parents + " · " : "") + fmt(S.lobby_title, babyOf(m));
+  const html = `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><title>${esc(title)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@600;800&display=swap&subset=latin-ext" rel="stylesheet">
+  <style>body{font-family:Nunito,system-ui,sans-serif;color:#2B2140;margin:32px}h1{font:800 30px/1.1 "Baloo 2",system-ui;margin:0}
+  .r{display:inline-block;margin:10px 0 18px;padding:6px 14px;border-radius:999px;background:${girl ? "#FFE3EE" : "#E2F2FF"};color:${girl ? "#C2185B" : "#1565C0"};font-weight:800}
+  table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;font-size:12px;text-transform:uppercase;color:#6E6380;border-bottom:2px solid #EADFD0;padding:8px 6px}
+  td{padding:9px 6px;border-bottom:1px solid #F1E8DA}tr.p td{background:#FFF7DD;font-weight:800}.f{margin-top:22px;font-size:12px;color:#6E6380}
+  @media print{body{margin:14mm}button{display:none}}</style></head><body>
+  <h1>${esc(title)}</h1><div class="r">${girl ? S.girl_big : S.boy_big} · ${esc(fmtDate(m.partyAt))}</div>
+  <table><thead><tr><th>${S.pdf_name}</th><th>${S.pdf_pick}</th><th>${S.v_birth}</th><th>${S.v_weight}</th><th>${S.v_letter}</th></tr></thead><tbody>${rows}</tbody></table>
+  <p class="f">PinkOrBlue · anbertech.github.io/PinkOrBlue</p>
+  <button onclick="print()" style="margin-top:16px;padding:12px 18px;border-radius:12px;border:0;background:#F2B93B;font-weight:800">📄 ${S.r_pdf}</button>
+  <script>window.onload=function(){setTimeout(function(){print()},400)}<\/script></body></html>`;
+  const w = window.open("", "_blank");
+  if (!w) { toast(S.pdf_blocked); return; }
+  w.document.open(); w.document.write(html); w.document.close();
 }
 
 // ---------------------------------------------------------------- yönlendirme

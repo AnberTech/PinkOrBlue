@@ -32,26 +32,62 @@ function newId(n = 10) {
   return Array.from(a, b => ID_ABC[b % ID_ABC.length]).join("");
 }
 
-export async function createRoom({ babyName, parents, partyAt, lang, invitees, hostName }) {
+export async function createRoom({ babyName, parents, partyAt, lang, invitees, hostName, password }) {
   const uid = await ready;
   const id = newId();
+  const hostKey = newId(20);            // kurucu linki için gizli anahtar (veritabanında okunamaz)
   const expiresAt = partyAt + WEEK;
+  const R = "rooms/" + id + "/";
   const up = {};
   up["expiry/" + id] = expiresAt;
-  up["rooms/" + id + "/meta"] = {
+  up[R + "meta"] = {
     babyName, partyAt, expiresAt, lang, hostUid: uid, revealerUid: uid, ...(parents ? { parents } : {}),
     status: "open", createdAt: serverTimestamp()
   };
+  up[R + "hostkeys/" + hostKey] = true;
+  if (password) { up[R + "lock/pw"] = password; up[R + "locked"] = true; }
   await update(ref(db), up);
+  if (password) await set(ref(db, R + "members/" + uid), password);
   const rest = {};
   if (invitees && invitees.length) {
     const inv = {};
     invitees.forEach((n, i) => { inv["i" + i] = n; });
-    rest["rooms/" + id + "/invitees"] = inv;
+    rest[R + "invitees"] = inv;
   }
-  rest["rooms/" + id + "/guests/" + uid] = { name: hostName, joinedAt: serverTimestamp() };
+  rest[R + "guests/" + uid] = { name: hostName, joinedAt: serverTimestamp() };
   await update(ref(db), rest);
-  return id;
+  return { id, hostKey };
+}
+
+// Şifreli mi? (meta okunamazsa bu bayrak yine okunur)
+export async function isLocked(id) {
+  try { return (await get(ref(db, "rooms/" + id + "/locked"))).val() === true; } catch (e) { return false; }
+}
+export async function isMember(id) {
+  const uid = await ready;
+  try { await get(ref(db, "rooms/" + id + "/meta/status")); return true; } catch (e) { return false; }
+}
+export async function enterPassword(id, pw) {
+  const uid = await ready;
+  try { await set(ref(db, "rooms/" + id + "/members/" + uid), pw); return true; } catch (e) { return false; }
+}
+// Kurucu linkiyle (anahtar) odayı bu cihaza al: geçmiş silinse, telefon değişse de çalışır
+export async function claimHost(id, key, name) {
+  const uid = await ready;
+  const R = "rooms/" + id + "/";
+  await set(ref(db, R + "claims/" + uid), key);
+  try { await set(ref(db, R + "members/" + uid), key); } catch (e) { /* şifresiz odada üyelik gerekmez / zaten üye */ }
+  const meta = (await get(ref(db, R + "meta"))).val();
+  if (!meta) throw new Error("no-room");
+  if (meta.hostUid === uid) return meta;
+  if (meta.status === "open") {
+    const g = (await get(ref(db, R + "guests/" + uid))).val();
+    if (!g) await set(ref(db, R + "guests/" + uid), { name, joinedAt: serverTimestamp() });
+  }
+  const wasRevealer = meta.revealerUid === meta.hostUid;
+  await set(ref(db, R + "meta/hostUid"), uid);
+  if (wasRevealer && meta.status === "open") await set(ref(db, R + "meta/revealerUid"), uid);
+  return meta;
 }
 
 export const r = (id, path = "") => ref(db, "rooms/" + id + (path ? "/" + path : ""));
@@ -67,7 +103,9 @@ export async function join(id, name) {
 
 export async function vote(id, data) {
   const uid = await ready;
-  await update(r(id), { ["votes/" + uid]: data, ["guests/" + uid + "/voted"]: true });
+  const up = { ["votes/" + uid]: data };
+  if (data.pick) up["guests/" + uid + "/voted"] = true;
+  await update(r(id), up);
 }
 
 let connected = false;
