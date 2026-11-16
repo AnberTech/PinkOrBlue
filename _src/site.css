@@ -294,3 +294,27 @@ footer.mini nav{gap:14px}
 footer.mini nav a{color:var(--ink-muted)}
 body[data-view=room] .seo{display:none}
 @media(max-width:360px){.two{grid-template-columns:1fr}.seg span{font-size:.9rem}}
+
+/* ---- v2.1: uyumluluk ve dokunma hedefleri (Gemini denetimi) */
+.toast{top:max(16px,env(safe-area-inset-top));bottom:auto;transform:translate(-50%,-30px)}
+.toast.in{transform:translate(-50%,0)}
+.top{padding-top:env(safe-area-inset-top)}
+.wrap,.app-page main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+footer.mini{padding-bottom:max(28px,env(safe-area-inset-bottom))}
+.show-ui{bottom:max(12%,env(safe-area-inset-bottom))}
+.icon-btn,.g-close,.cal-h button{width:44px;height:44px}
+.lang a{padding:12px 12px;min-height:44px;display:inline-flex;align-items:center}
+button.chip,.seg span{min-height:44px}
+.dt .dp-wrap{flex:1 1 145px}
+.tm select{min-width:62px;padding:12px 22px 12px 10px}
+select{-webkit-appearance:none;appearance:none;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236E6380' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.cal{width:min(300px,calc(100vw - 72px));padding:10px 6px}
+.cal-g{gap:1px}
+.cal-g button{aspect-ratio:auto;height:40px;min-height:40px}
+.seg input:focus+span{outline:3px solid var(--gold)}
+.seg input:focus:not(:focus-visible)+span{outline:none}
+.balloon:not(.on){opacity:1}
+.balloon:not(.on) .bb{opacity:.6}
+.r-pie svg{flex-shrink:0}
+@media(max-width:360px){.game-card .row{flex-wrap:wrap}}
+.seg label{position:relative}.seg input{left:0;top:0;width:1px;height:1px;margin:0}

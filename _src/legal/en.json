@@ -10,7 +10,7 @@
   ],
   [
    "2. Data We Store",
-   "<p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the parents' names (if entered), the baby's nickname, the reveal date, the result the host enters secretly, the guest list and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p>"
+   "<p><b>PinkOrBlue stores only what the party needs to work.</b></p><ul><li>Room details: the parents' names (if entered), the baby's nickname, the reveal date, the result the host enters secretly, the guest list and the room settings.</li><li>The name a guest types in: shown to others in the room so everyone can see who voted. You don't have to use your real name; a nickname is fine.</li><li>Votes and guesses: each guest's boy or girl vote and their predictions, plus the number of taps during the reveal show and whether someone is currently in the room.</li><li>Mini-game scores: used to show the room's leaderboard.</li></ul><p>We never ask for or collect e-mail addresses, phone numbers, passwords, location, photos or contacts.</p>"
   ],
   [
    "3. Identity and Accounts",
@@ -18,7 +18,7 @@
   ],
   [
    "4. Where Data Is Stored",
-   "<p>Room details, names, votes, guesses and scores are stored in Firebase Realtime Database, a service provided by Google. This data is shown only to people who have the link to that room. It is never sold, rented or shared with anyone for advertising. Firebase processes the data under Google's own privacy and security terms.</p><p>When you connect to the site, the hosting service (GitHub Pages) and Firebase servers may process technical information such as your IP address in order to deliver the page. We do not collect or keep this information.</p>"
+   "<p>Room details, names, votes, guesses and scores are stored in Firebase Realtime Database, a service provided by Google. This data is shown only to people who have the link to that room. It is never sold, rented or shared with anyone for advertising. Firebase processes the data under Google's own privacy and security terms. The page fonts are loaded from Google Fonts, so your browser connects to Google's servers for them.</p><p>When you connect to the site, the hosting service (GitHub Pages) and Firebase servers may process technical information such as your IP address in order to deliver the page. We do not collect or keep this information.</p>"
   ],
   [
    "5. Deletion",

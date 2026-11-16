@@ -1,8 +1,8 @@
 // PinkOrBlue uygulama ekranları: oda oluştur, katıl, bekleme salonu, kurucu akışı, şov, sonuç.
-import * as fb from "./fb.js?v=202611161755";
-import { playShow, roundStart, showEnd } from "./show.js?v=202611161755";
-import { playGame } from "./game.js?v=202611161755";
-import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161755";
+import * as fb from "./fb.js?v=202611161805";
+import { playShow, roundStart, showEnd } from "./show.js?v=202611161805";
+import { playGame } from "./game.js?v=202611161805";
+import { unlock, setOn, isOn, running, sfx, level, audioState } from "./sfx.js?v=202611161805";
 window.__pob = { level, audioState };   // teşhis/test için (ses gerçekten üretiliyor mu)
 
 const S = window.POB_S;
@@ -27,12 +27,20 @@ function initials(n) {
 }
 function toast(msg) {
   const el = document.createElement("div"); el.className = "toast"; el.textContent = msg;
+  el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
   document.body.appendChild(el); setTimeout(() => el.classList.add("in"), 10);
   setTimeout(() => { el.classList.remove("in"); setTimeout(() => el.remove(), 400); }, 2600);
 }
 async function copy(text) {
-  try { await navigator.clipboard.writeText(text); toast(S.copied); }
-  catch (e) { prompt(S.copy_manual, text); }
+  try { await navigator.clipboard.writeText(text); toast(S.copied); return; } catch (e) {}
+  try {   // Instagram/Facebook içi tarayıcılar ve eski WebView'lar
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;left:-9999px;top:0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy"); ta.remove();
+    if (ok) { toast(S.copied); return; }
+  } catch (e) {}
+  prompt(S.copy_manual, (text.match(/https?:\/\/\S+/) || [text])[0]);
 }
 async function share(text) {
   if (navigator.share) { try { await navigator.share({ text }); return; } catch (e) { if (e.name === "AbortError") return; } }
@@ -59,7 +67,7 @@ function parseYmd(s) {
 function shortDate(s) { const d = parseYmd(s); return d ? (DF_SHORT ? DF_SHORT.format(d) : s) : "–"; }
 const roomUrl = (id) => location.origin + INVITE + "#r=" + id;
 function roomId() {
-  const m = location.hash.match(/r=([A-Za-z0-9]+)/);
+  const m = (location.hash + "&" + location.search).match(/[#?&]r=([A-Za-z0-9]+)/);
   if (!m) return null;
   return m[1].toLowerCase();
 }
@@ -83,7 +91,10 @@ soundBtn.onclick = () => {
   setTimeout(paintSound, 120);
 };
 // iOS Safari sesi yalnız "dokunma bitti / tıklama" anında açar (pointerdown sayılmaz)
-["pointerdown", "touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, () => { if (isOn() && !running()) { unlock(); setTimeout(paintSound, 150); } }, { passive: true, capture: true }));
+["pointerdown", "touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, (e) => {
+  if (e.target?.closest?.("#sound")) return;            // ses düğmesi kendi işini yapsın (yoksa ilk dokunuş sesi kapatır)
+  if (isOn() && !running()) { unlock(); setTimeout(paintSound, 150); }
+}, { passive: true, capture: true }));
 paintSound();
 
 // Fare basılıyken ekranı yeniden çizme (yoksa basılan düğme değişir ve tıklama kaybolur)
@@ -96,7 +107,7 @@ document.addEventListener("pointercancel", release, true);
 // ---------------------------------------------------------------- tarih seçici (kendi takvimimiz)
 function dateField(name, value, { min, max, ph }) {
   return `<span class="dp-wrap"><input type="hidden" name="${name}" value="${esc(value || "")}">
-    <button type="button" class="dp-btn" data-for="${name}" data-min="${min || ""}" data-max="${max || ""}" data-ph="${esc(ph || "")}" aria-haspopup="dialog"></button></span>`;
+    <button type="button" class="dp-btn" data-for="${name}" data-min="${min || ""}" data-max="${max || ""}" data-ph="${esc(ph || "")}" aria-haspopup="dialog" aria-expanded="false"></button></span>`;
 }
 function paintDates(root) {
   root.querySelectorAll(".dp-btn").forEach(b => {
@@ -106,9 +117,15 @@ function paintDates(root) {
   });
 }
 let openCal = null;
-function closeCal() { if (openCal) { openCal.remove(); openCal = null; document.removeEventListener("pointerdown", outsideCal, true); document.removeEventListener("keydown", escCal, true); } }
+function closeCal(refocus) {
+  if (!openCal) return;
+  const btn = openCal.parentElement?.querySelector(".dp-btn");
+  openCal.remove(); openCal = null;
+  document.removeEventListener("pointerdown", outsideCal, true); document.removeEventListener("keydown", escCal, true);
+  if (btn) { btn.setAttribute("aria-expanded", "false"); if (refocus) btn.focus(); }
+}
 function outsideCal(e) { if (openCal && !openCal.contains(e.target) && !e.target.closest(".dp-btn")) closeCal(); }
-function escCal(e) { if (e.key === "Escape") closeCal(); }
+function escCal(e) { if (e.key === "Escape") { e.preventDefault(); closeCal(true); } }
 function bindDates(root) {
   paintDates(root);
   root.querySelectorAll(".dp-btn").forEach(b => b.onclick = () => {
@@ -120,7 +137,9 @@ function bindDates(root) {
     view = new Date(view.getFullYear(), view.getMonth(), 1, 12);
     const cal = document.createElement("div");
     cal.className = "cal"; cal.dataset.for = b.dataset.for; cal.setAttribute("role", "dialog");
-    const paint = () => {
+    cal.setAttribute("aria-label", b.dataset.ph || S.pick_date);
+    const DF_FULL = dtf({ weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    const paint = (focusSel) => {
       const y = view.getFullYear(), mo = view.getMonth();
       const first = (new Date(y, mo, 1).getDay() + 6) % 7;   // Pazartesi başlangıç
       const days = new Date(y, mo + 1, 0).getDate();
@@ -131,15 +150,18 @@ function bindDates(root) {
       for (let d = 1; d <= days; d++) {
         const dt = new Date(y, mo, d, 12), v = ymd(dt);
         const off = (min && dt < new Date(min.getFullYear(), min.getMonth(), min.getDate())) || (max && dt > max);
-        cells += `<button type="button" data-v="${v}" class="${v === sel ? "on" : ""} ${v === today ? "today" : ""}" ${off ? "disabled" : ""}>${d}</button>`;
+        cells += `<button type="button" data-v="${v}" class="${v === sel ? "on" : ""} ${v === today ? "today" : ""}" ${off ? "disabled" : ""} aria-label="${esc(DF_FULL ? DF_FULL.format(dt) : v)}" aria-pressed="${v === sel}">${d}</button>`;
       }
       cal.innerHTML = `<div class="cal-h"><button type="button" class="prev" aria-label="‹">‹</button><b>${DF_MONTH ? DF_MONTH.format(view) : y + "-" + (mo + 1)}</b><button type="button" class="next" aria-label="›">›</button></div><div class="cal-g">${cells}</div>`;
-      cal.querySelector(".prev").onclick = () => { view = new Date(y, mo - 1, 1, 12); paint(); };
-      cal.querySelector(".next").onclick = () => { view = new Date(y, mo + 1, 1, 12); paint(); };
-      cal.querySelectorAll(".cal-g button").forEach(x => x.onclick = () => { inp.value = x.dataset.v; inp.dataset.dirty = "1"; paintDates(root); closeCal(); inp.dispatchEvent(new Event("change", { bubbles: true })); });
+      cal.querySelector(".prev").setAttribute("aria-label", S.cal_prev); cal.querySelector(".next").setAttribute("aria-label", S.cal_next);
+      cal.querySelector(".prev").onclick = () => { view = new Date(y, mo - 1, 1, 12); paint(".prev"); };
+      cal.querySelector(".next").onclick = () => { view = new Date(y, mo + 1, 1, 12); paint(".next"); };
+      cal.querySelectorAll(".cal-g button").forEach(x => x.onclick = () => { inp.value = x.dataset.v; inp.dataset.dirty = "1"; paintDates(root); closeCal(true); inp.dispatchEvent(new Event("change", { bubbles: true })); });
+      if (focusSel) cal.querySelector(focusSel)?.focus();
     };
     paint();
-    b.parentElement.appendChild(cal); openCal = cal;
+    b.parentElement.appendChild(cal); openCal = cal; b.setAttribute("aria-expanded", "true");
+    (cal.querySelector(".cal-g button.on") || cal.querySelector(".cal-g button.today:not(:disabled)") || cal.querySelector(".cal-g button:not(:disabled)"))?.focus();
     setTimeout(() => { document.addEventListener("pointerdown", outsideCal, true); document.addEventListener("keydown", escCal, true); }, 0);
   });
 }
@@ -369,15 +391,15 @@ function balloonHtml(p) {
   const col = PALETTE[h % PALETTE.length];
   const delay = -(h % 5000) / 1000, dur = 3 + (h % 3000) / 1000;
   const tip = `${p.name} · ${p.keeper ? S.tip_keeper : p.voted ? S.tip_voted : S.tip_not_voted}${p.online ? " · " + S.tip_here : ""}`;
-  return `<button type="button" class="balloon ${p.voted || p.keeper ? "voted" : ""} ${p.online ? "on" : ""} ${p.me ? "me" : ""}" style="--d:${delay}s;--dur:${dur}s" data-tip="${esc(tip)}">
-    <span class="bb"><span class="av" style="background:${col}">${esc(initials(p.name))}</span></span><span class="str"></span>
-    <span class="nm">${p.keeper ? "🤫 " : ""}${p.me ? S.you : esc(p.name.split(" ")[0])}</span></button>`;
+  return `<button type="button" class="balloon ${p.voted || p.keeper ? "voted" : ""} ${p.online ? "on" : ""} ${p.me ? "me" : ""}" style="--d:${delay}s;--dur:${dur}s" data-tip="${esc(tip)}" aria-label="${esc(tip)}">
+    <span class="bb" aria-hidden="true"><span class="av" style="background:${col}">${esc(initials(p.name))}</span></span><span class="str" aria-hidden="true"></span>
+    <span class="nm" aria-hidden="true">${p.keeper ? "🤫 " : ""}${p.me ? S.you : esc(p.name.split(" ")[0])}</span></button>`;
 }
 
 function pickBtns(cls, sel, attr) {
   return `<div class="vote-btns ${cls}">
-    <button class="vb girl ${sel === "girl" ? "on" : ""}" data-${attr}="girl"><span class="vi">🎀</span>${S.girl}</button>
-    <button class="vb boy ${sel === "boy" ? "on" : ""}" data-${attr}="boy"><span class="vi">🎩</span>${S.boy}</button></div>`;
+    <button class="vb girl ${sel === "girl" ? "on" : ""}" data-${attr}="girl" aria-pressed="${sel === "girl"}"><span class="vi" aria-hidden="true">🎀</span>${S.girl}</button>
+    <button class="vb boy ${sel === "boy" ? "on" : ""}" data-${attr}="boy" aria-pressed="${sel === "boy"}"><span class="vi" aria-hidden="true">🎩</span>${S.boy}</button></div>`;
 }
 
 function voteCard() {
@@ -616,7 +638,7 @@ function renderResult() {
     ${mine ? `<p class="r-me ${mine === R.result ? "yes" : ""}">${mine === R.result ? S.show_you_right : S.show_you_wrong}</p>` : ""}
     <section class="r-pie">
       <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><circle cx="60" cy="60" r="${Rr}" fill="none" stroke="var(--blue)" stroke-width="18"/>
-      <circle cx="60" cy="60" r="${Rr}" fill="none" stroke="var(--pink)" stroke-width="18" stroke-dasharray="${gLen} ${Cc}" transform="rotate(-90 60 60)" class="pie-g"/></svg>
+      <circle cx="60" cy="60" r="${Rr}" fill="none" stroke="var(--pink-deep)" stroke-width="18" stroke-dasharray="${gLen} ${Cc}" transform="rotate(-90 60 60)" class="pie-g"/></svg>
       <div><p class="r-pct">${fmt(S.r_pct, pct)}</p><p>🎀 ${S.girl} <b>${nG}</b> · 🎩 ${S.boy} <b>${nB}</b></p></div>
     </section>
     <section><h2>${fmt(S.r_right, right.length)}</h2>
@@ -644,7 +666,7 @@ function renderResult() {
 function route(justCreated) {
   routeGen++;
   keepHashInLangLinks();
-  const hasR = /[#&]r=/.test(location.hash);
+  const hasR = /[#?&]r=/.test(location.hash + "&" + location.search);
   const id = roomId();
   if (id && /^[a-z0-9]{6,20}$/.test(id)) viewRoom(id, justCreated === true);
   else if (hasR) { cleanupRoom(); document.body.dataset.view = "room"; renderMissing(); }

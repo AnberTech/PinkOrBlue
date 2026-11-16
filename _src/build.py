@@ -238,7 +238,7 @@ def page_app(c, T, U, L, fbcfg, invite=False):
 {topbar(c, base, T, alts, sound=True)}
 <main>
   {intro}
-  <div id="app" aria-live="polite"><noscript><div class="card">JavaScript gerekli / JavaScript required.</div></noscript></div>
+  <div id="app"><noscript><div class="card">JavaScript gerekli / JavaScript required.</div></noscript></div>
 </main>
 {seo}
 {footer(c, base, T, L, compact=True)}

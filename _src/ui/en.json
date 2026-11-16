@@ -61,7 +61,7 @@
  "game_name": "Balloon Pop",
  "game_teaser": "Waiting for the reveal? How many balloons can you pop in 30 seconds?",
  "game_play": "Play",
- "game_combo": "Combo x%d!",
+ "game_combo": "Combo ×%d!",
  "game_result": "Your score: %d",
  "game_start": "Go!",
  "game_rules_html": "Tap balloons: <b>+1</b>. Gold balloon: <b>+5</b>. Stork: <b>×2</b> for 3 seconds. Don't touch the hedgehog: <b>−3</b>!",
@@ -87,7 +87,7 @@
  "k_confirm": "Start the reveal? Everyone with the page open will watch at the same moment. This can't be undone.",
  "share_h": "Invite link",
  "share_more": "Share…",
- "share_text": "🎈 %s invite you to their gender reveal!\nBoy or girl? Make your guess and watch the reveal live with us.\n📅 %s\n👉 ",
+ "share_text": "🎈 You're invited to %s's gender reveal!\nBoy or girl? Make your guess and watch the reveal live with us.\n📅 %s\n👉 ",
  "show_sound": "🔊 Turn on sound and join",
  "show_ready": "The reveal is starting!",
  "show_ready_sub": "Get ready, we're about to blow it up together…",
@@ -137,7 +137,7 @@
  "default_baby": "Baby",
  "j_type": "Type your name to join.",
  "j_err_empty": "Type your name first.",
- "j_err_taken": "Someone already joined with this name. Add an initial (e.g. Ali K.).",
+ "j_err_taken": "Someone already joined with this name. Add an initial (e.g. Alex K.).",
  "lobby_waiting_n": "Who are we waiting for? (%d)",
  "tip_keeper": "keeps the secret",
  "v_yours_is": "Your guess: %s",
@@ -164,5 +164,7 @@
  "game_names_hint": "The balloons carry the names of everyone here. The gold one with the baby's name is +5!",
  "r_total_taps_rounds": "Together we inflated it with %d taps in %d rounds",
  "sound_test": "🔊 Sound is on. No sound? Turn off your phone's silent mode.",
- "show_secs": "%d s left"
+ "show_secs": "%d s left",
+ "cal_prev": "Previous month",
+ "cal_next": "Next month"
 }

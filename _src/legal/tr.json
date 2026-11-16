@@ -10,7 +10,7 @@
   ],
   [
    "2. Saklanan Veriler",
-   "<p><b>PinkOrBlue yalnızca partinin çalışması için gereken bilgileri saklar.</b></p><ul><li>Oda bilgisi: anne ve baba adı (girildiyse), bebeğin takma adı, açılış tarihi, kurucunun gizlice girdiği sonuç, davetli listesi ve odanın ayarları.</li><li>Misafirin girdiği ad: odadaki diğer kişilere kimin oy verdiğini göstermek için kullanılır. Gerçek adınızı yazmak zorunda değilsiniz; bir takma ad da yeterlidir.</li><li>Oylar ve tahminler: Kız/Erkek oyu ile misafirin verdiği tahminler.</li><li>Mini oyun skoru: odadaki skor tablosunu göstermek için kullanılır.</li></ul><p>E-posta adresi, telefon numarası, şifre, konum, fotoğraf ya da rehber bilgisi istenmez ve toplanmaz.</p>"
+   "<p><b>PinkOrBlue yalnızca partinin çalışması için gereken bilgileri saklar.</b></p><ul><li>Oda bilgisi: anne ve baba adı (girildiyse), bebeğin takma adı, açılış tarihi, kurucunun gizlice girdiği sonuç, davetli listesi ve odanın ayarları.</li><li>Misafirin girdiği ad: odadaki diğer kişilere kimin oy verdiğini göstermek için kullanılır. Gerçek adınızı yazmak zorunda değilsiniz; bir takma ad da yeterlidir.</li><li>Oylar ve tahminler: Kız/Erkek oyu ile misafirin verdiği tahminler; ayrıca açılış şovundaki dokunuş sayısı ve kişinin o an odada olup olmadığı bilgisi.</li><li>Mini oyun skoru: odadaki skor tablosunu göstermek için kullanılır.</li></ul><p>E-posta adresi, telefon numarası, şifre, konum, fotoğraf ya da rehber bilgisi istenmez ve toplanmaz.</p>"
   ],
   [
    "3. Kimlik ve Hesap",
@@ -18,7 +18,7 @@
   ],
   [
    "4. Verilerin Saklandığı Yer",
-   "<p>Oda bilgileri, adlar, oylar, tahminler ve skorlar Google'ın sunduğu Firebase Realtime Database hizmetinde saklanır. Bu veriler yalnızca ilgili odanın bağlantısına sahip kişilere gösterilir; satılmaz, kiralanmaz ve reklam amacıyla kimseyle paylaşılmaz. Firebase, verileri Google'ın kendi gizlilik ve güvenlik koşullarına uygun olarak işler.</p><p>Siteye bağlanırken barındırma hizmeti (GitHub Pages) ve Firebase sunucuları, bağlantının kurulabilmesi için IP adresi gibi teknik bilgileri işleyebilir. Bu bilgiler tarafımızdan toplanmaz ve saklanmaz.</p>"
+   "<p>Oda bilgileri, adlar, oylar, tahminler ve skorlar Google'ın sunduğu Firebase Realtime Database hizmetinde saklanır. Bu veriler yalnızca ilgili odanın bağlantısına sahip kişilere gösterilir; satılmaz, kiralanmaz ve reklam amacıyla kimseyle paylaşılmaz. Firebase, verileri Google'ın kendi gizlilik ve güvenlik koşullarına uygun olarak işler. Sayfadaki yazı tipleri Google Fonts üzerinden yüklenir; bu sırada tarayıcınız Google sunucularına bağlanır.</p><p>Siteye bağlanırken barındırma hizmeti (GitHub Pages) ve Firebase sunucuları, bağlantının kurulabilmesi için IP adresi gibi teknik bilgileri işleyebilir. Bu bilgiler tarafımızdan toplanmaz ve saklanmaz.</p>"
   ],
   [
    "5. Verilerin Silinmesi",

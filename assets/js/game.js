@@ -1,5 +1,5 @@
 // Mini oyun: Balon Patlat (30 sn, tek parmak).
-import { sfx, vib, unlock } from "./sfx.js?v=202611161755";
+import { sfx, vib, unlock } from "./sfx.js?v=202611161805";
 
 const DUR = 30;
 export function playGame({ root, S, onEnd, names = [], baby = "" }) {
@@ -79,7 +79,7 @@ export function playGame({ root, S, onEnd, names = [], baby = "" }) {
         if (o.k === "b") { pts = 1 * m; sfx.pop(); }
         else if (o.k === "gold") { pts = 5 * m; sfx.gold(); col = "#A8740A"; }
         else if (o.k === "stork") { mult = performance.now() + 3000; sfx.ding(); label = "×2!"; col = "#A8740A"; }
-        else { pts = -3; sfx.bonk(); vib(60); shake = 1; col = "#E5484D"; }
+        else { pts = -3; sfx.bonk(); vib(60); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) shake = 1; col = "#E5484D"; }
         if (pts > 0) {
           const n = performance.now(); combo = combo.filter(c => n - c < 1000); combo.push(n);
           if (combo.length >= 3) { pts += 1; label = S.game_combo.replace("%d", combo.length); combo = []; }
