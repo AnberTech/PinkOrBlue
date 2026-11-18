@@ -6,9 +6,13 @@
 - Gizlilik/destek:    _src/legal/<dil>.json
 - Stil: _src/site.css (sayfalara gömülür), JS: _src/js/*.js -> assets/js/
 - Firebase: _src/firebase-config.json + DB_URL
+- Rehberler: _src/guides/<dil>.json (party, vote, far; dosyası olan dillerde üretilir) + _src/guide_page.py
 Üretilen HTML dosyalarını elle düzenleme. Jekyll "_" ile başlayan klasörleri yayınlamaz.
 """
 import datetime, html, json, os, re, shutil, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import guide_page  # noqa: E402  (rehber şablonu; WeddingInvite/NobetFormal ile ortak dosya)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, '_src')
@@ -71,6 +75,36 @@ def html_attrs(c):
 def url_home(c): return SITE + ldir(c)
 def url_app(c, T): return SITE + ldir(c) + T[c]['fx_slug'] + '/'
 def url_doc(c, i): return SITE + ldir(c) + DOC_SLUGS[c][i] + '/'
+
+
+GUIDE_TOPICS = ('party', 'vote', 'far')
+GUIDE_THEME = (":root{--bg:#FFF8EE;--card:#FFFFFF;--soft:#FFE3EE;--line:#EADFD0;--ink:#2B2140;--muted:#6E6380;--acc:#D6336C;"
+               "--f-head:'Baloo 2','Nunito',system-ui,sans-serif;--f-text:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;"
+               "--f-ui:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif}"
+               "html[dir=rtl]{--f-head:'Baloo Bhaijaan 2','Nunito',system-ui,sans-serif}"
+               "html[lang=ja],html[lang=ko]{--f-head:system-ui,sans-serif;--f-text:system-ui,sans-serif}"
+               ".btn{background:linear-gradient(135deg,var(--acc),#1C6FB8)}")
+GC = '<script data-goatcounter="https://anbertech.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>\n'
+
+
+def url_guide(c, G, x): return SITE + ldir(c) + G[c][f'{x}_slug'] + '/'
+
+
+def build_guides(G, T):
+    built = [c for c, *_ in LANGS if c in G]
+    org = {'@type': 'Organization', '@id': 'https://anbertech.github.io/#org', 'name': 'AnberTech', 'url': 'https://anbertech.github.io/', 'email': EMAIL}
+    names = {c: LANG_INFO[c][1] for c in built}
+    out = []
+    for c in built:
+        head = FONTS + ('\n' + FONTS_AR if LANG_INFO[c][3] == 'rtl' else '') + '\n'
+        for x in GUIDE_TOPICS:
+            page = guide_page.render(code=c, dirn=LANG_INFO[c][3], og_locale=LANG_INFO[c][2], lang_names=names, built=built, x=x, t=G[c],
+                                     topics=GUIDE_TOPICS, url_of=lambda k, y: url_guide(k, G, y), home_url=url_home, cta_url=url_app(c, T),
+                                     brand='Pink<span style="color:#1C6FB8">Or</span>Blue', site_name='PinkOrBlue', org=org, email=EMAIL,
+                                     theme_css=GUIDE_THEME, analytics=GC, extra_head=head, icon=SITE + 'assets/img/favicon.png?v=3')
+            write(ldir(c) + G[c][f'{x}_slug'] + '/index.html', page)
+            out.append(url_guide(c, G, x))
+    return out
 
 
 def check(T, U, L):
@@ -297,7 +331,12 @@ def page_doc(c, i, T, L):
 '''
 
 
-def llms(T):
+def llms(T, G=None):
+    G = G or {}
+    guides = ''
+    if 'en' in G:
+        guides = '\n## Guides\n\n' + ''.join(f"- [{G['en'][f'{x}_name']}]({url_guide('en', G, x)}): {G['en'][f'{x}_card']}\n" for x in GUIDE_TOPICS) + \
+                 f'\nGuides are available in {len(G)} languages (each language folder has its own slugs).\n'
     return f'''# PinkOrBlue
 
 > PinkOrBlue is a free, no-sign-up website for hosting a live online gender reveal party. Parents open a room and share one link with family and friends (designed for around 30 guests). Everyone votes Boy or Girl and can add guesses (birth date, weight, first letter). The waiting room shows by name who has voted and who is online; the votes themselves stay secret until the reveal. When the host (or a trusted person the host picks) starts the reveal, everyone taps their screen to inflate one giant balloon together, it pops, and the result appears on every screen in the same second. There is a mini game (Balloon Pop) for the wait. No ads, no accounts, no app to install; room data is deleted automatically 7 days after the party date.
@@ -310,7 +349,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 
 ## How it works
 
-1. The host types a baby nickname and the reveal date, optionally adds a guest list, and enters the result secretly (or hands the secret to someone else, so the host is surprised too).
+1. The host types the parents' names and the reveal date, optionally adds a guest list, and enters the result secretly (or hands the secret to someone else, so the host is surprised too).
 2. The host shares the room link (for example in a WhatsApp or family group chat).
 3. Guests open the link in any browser, pick or type their name, vote Boy or Girl and add guesses.
 4. The host starts the reveal: a synchronized 22-second show with countdown, collective balloon inflating and confetti plays for everyone at once, followed by a result card showing who guessed right.
@@ -329,7 +368,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 {chr(10).join(f"- {LANG_INFO[c][1]}: {url_home(c)}" for c, *_ in LANGS)}
 - Privacy (EN): {url_doc('en', 0)}
 - Gizlilik (TR): {url_doc('tr', 0)}
-
+{guides}
 ## Türkçe özet
 
 PinkOrBlue, ücretsiz ve üyeliksiz bir online cinsiyet partisi sitesidir. Aile bir oda açıp linki paylaşır; misafirler "kız mı erkek mi" oylar ve tahmin yazar. Kimin oy verdiği isimleriyle görünür, oylar açılışa kadar gizli kalır. Kurucu açılışı başlatınca herkes ekrana dokunarak dev balonu birlikte şişirir ve sonuç herkesin ekranında aynı anda açılır. Uzaktaki aileler için uygundur. Reklam yok, uygulama indirmek gerekmez, veriler parti tarihinden 7 gün sonra silinir. Oda açmak için: {url_app('tr', T)}
@@ -343,6 +382,16 @@ def main():
     U = {c: load('ui', c) for c, *_ in LANGS}
     L = {c: load('legal', c) for c, *_ in LANGS}
     check(T, U, L)
+    G = {}
+    gdir = os.path.join(SRC, 'guides')
+    if os.path.isdir(gdir):
+        G = {c: load('guides', c) for c, *_ in LANGS if os.path.exists(os.path.join(gdir, c + '.json'))}
+        if G and 'tr' not in G:
+            sys.exit('HATA: guides/tr.json gerekli')
+        for c, g in G.items():
+            errs = guide_page.check(c, g, G.get('tr'), GUIDE_TOPICS)
+            if errs:
+                sys.exit(f'HATA: guides/{c}.json\n  ' + '\n  '.join(errs))
     fbcfg = json.loads(read(os.path.join(SRC, 'firebase-config.json')))
     if not {'tr', 'en'} <= {c for c, *_ in LANGS}:
         sys.exit('HATA: tr ve en dil dosyaları zorunlu')
@@ -351,7 +400,7 @@ def main():
         if c != 'tr' and c not in T and os.path.isdir(d) and os.path.exists(os.path.join(d, 'index.html')):
             shutil.rmtree(d); print('kaldırıldı:', ldir(c))
     for c, *_ in LANGS:
-        paths = [T[c]['fx_slug'], INVITE_SLUG[c], *DOC_SLUGS[c]]
+        paths = [T[c]['fx_slug'], INVITE_SLUG[c], *DOC_SLUGS[c]] + ([G[c][f'{x}_slug'] for x in GUIDE_TOPICS] if c in G else [])
         if len(set(paths)) != len(paths):
             sys.exit(f'HATA: {c} adresleri çakışıyor: {paths}')
     urls = []
@@ -361,6 +410,7 @@ def main():
         write(ldir(c) + INVITE_SLUG[c] + '/index.html', page_app(c, T, U, L, fbcfg, invite=True))
         for i in (0, 1):
             write(ldir(c) + DOC_SLUGS[c][i] + '/index.html', page_doc(c, i, T, L)); urls.append(url_doc(c, i))
+    urls += build_guides(G, T)
     js = os.path.join(ROOT, 'assets', 'js'); os.makedirs(js, exist_ok=True)
     for f in os.listdir(os.path.join(SRC, 'js')):
         if f.endswith('.js'):
@@ -370,7 +420,7 @@ def main():
     today = datetime.date.today().isoformat()
     sm = ''.join(f'<url><loc>{u}</loc><lastmod>{today}</lastmod></url>\n' for u in urls)
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{sm}</urlset>\n')
-    write('llms.txt', llms(T))
+    write('llms.txt', llms(T, G))
     write('robots.txt', f'User-agent: *\nAllow: /\n\nSitemap: {SITE}sitemap.xml\n')
     write('manifest.webmanifest', json.dumps({'name': 'PinkOrBlue', 'short_name': 'PinkOrBlue', 'start_url': './' + T['tr']['fx_slug'] + '/', 'display': 'standalone',
                                               'background_color': '#FFF8EE', 'theme_color': '#FFF8EE',

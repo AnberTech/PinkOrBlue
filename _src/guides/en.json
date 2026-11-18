@@ -1,0 +1,218 @@
+{
+ "g_steps_h2": "Step by step",
+ "g_faq_h2": "Frequently asked questions",
+ "g_cta_h2": "Open your reveal room",
+ "g_cta_p": "Create your party room and send the invite link to the people you love, so everyone shares the big moment together on their own screen. Free, no sign-up, no ads.",
+ "g_cta_btn": "Start a free reveal room",
+ "g_contact": "Questions and suggestions:",
+ "g_other_h2": "More guides",
+ "g_lang": "Language",
+ "g_home": "Home",
+ "party_slug": "how-to-host-a-virtual-gender-reveal",
+ "party_name": "Virtual gender reveal party",
+ "party_title": "How to Host a Virtual Gender Reveal Party | PinkOrBlue",
+ "party_desc": "A step-by-step guide to a virtual gender reveal: planning, invites, who keeps the secret, the live reveal moment and tips to keep guests excited.",
+ "party_h1": "How to host a virtual gender reveal party",
+ "party_lead": "Your loved ones don't need to be in the same room to share the big moment. Here's how to plan an online gender reveal, from the first invite to the final pop.",
+ "party_card": "Planning, invites, the secret keeper and how the live reveal flows.",
+ "party_body": [
+  [
+   "What is a virtual gender reveal?",
+   "At a virtual gender reveal, family and friends find out whether the baby is a boy or a girl together, but each from their own screen. There's no venue, decorations or food to plan; guests join from home, from work or from another city. You can also pair it with a small party at home and bring everyone who lives far away into the same moment. With PinkOrBlue you open a party room and share the link; guests vote <b>Boy or Girl</b>, and when you start the reveal, the result opens on everyone's screen together. It's free, with no app to download and no sign-up."
+  ],
+  [
+   "Planning: date, time and guest list",
+   "Your first decision is the date and time of the reveal. Pick a time when most of your guests are at home and relaxed; weekends and evenings usually work well. Ask your doctor when and how you can learn the result, and schedule the party after that. Then make your guest list: close family, friends, maybe a few coworkers. PinkOrBlue was built with family-and-friends gatherings of <b>around 30 people</b> in mind; that's not a cap on guests. When you set up the room, you choose the date and time of the reveal, and guests see the time left as a countdown."
+  ],
+  [
+   "Who keeps the secret?",
+   "The biggest question of the party is who knows the result. Some parents find out first and save the surprise for their guests. Others want to be surprised too, so they hand the result to someone they trust. In PinkOrBlue, the person who sets up the room enters the result secretly by default. If you'd rather not know, open \"More settings\" and pass the right to enter the result and start the reveal to someone who has joined the room. That person becomes the <b>secret keeper</b>, and you find out together with everyone else. The result stays sealed, never shows on guests' screens, and can be changed until the reveal."
+  ],
+  [
+   "How the reveal moment flows",
+   "Until 30 minutes before the reveal, guests who tap the link see a countdown screen. Then the party room opens: you can see who has voted, who hasn't yet, and who is on the page right now, by name. While they wait, guests can compete in a mini game called Balloon Pop. If the host taps \"Start the final song,\" it plays together for everyone with sound on; the tip is to start the reveal 10 seconds before it ends. Once the reveal begins, everyone taps their screen to <b>blow up a giant balloon together</b>. When it pops, pink or blue appears on every open screen together, though connections can add a slight delay."
+  ],
+  [
+   "Tips for a great guest experience",
+   "Put the reveal date and time clearly in your invite message; on the countdown screen, guests can tap \"Add to calendar\" to download a calendar file and add it to their calendar, with a reminder 30 minutes before the reveal. Remind everyone to turn their sound on. Start the reveal when everyone has arrived; the screen of the person starting it shows how many people have voted and how many are on the page right now. Afterward, the results screen shows <b>who called it</b>, Team Pink and Team Blue, the guesses, plus messages and name ideas. You can share the result with a card, and anyone who missed it can watch the reveal again."
+  ]
+ ],
+ "party_steps": [
+  [
+   "Open a party room",
+   "Enter who is setting up the room, Mom's or Dad's name, and the reveal date and time. You can also add a room password."
+  ],
+  [
+   "Seal the result and share the link",
+   "Enter the result secretly or leave it to a secret keeper. Share the invite link by WhatsApp, text or copy and paste."
+  ],
+  [
+   "Guests vote and guess",
+   "Guests tap the link, type their name and pick Boy or Girl; they can also guess the birth date, weight and first letter of the name."
+  ],
+  [
+   "Start the reveal together",
+   "Start the reveal while everyone is in the room. Guests tap to blow up the balloon, and when it pops, the result opens on everyone's screen together."
+  ]
+ ],
+ "party_faq": [
+  [
+   "Do guests need an app for a virtual gender reveal?",
+   "No. PinkOrBlue runs in the browser on a phone, tablet or computer. Guests tap the link and type their name; if the room has a password, they enter the one the host shared first. There's no sign-up, and no email address or phone number is asked for."
+  ],
+  [
+   "Can we host a gender reveal if we don't know the result either?",
+   "Yes. The person who sets up the room can pass the right to enter the result and start the reveal to someone trusted who has joined the room. That secret keeper enters the result and starts the reveal, and the parents find out with everyone else."
+  ],
+  [
+   "What if a guest isn't on the page during the reveal?",
+   "The reveal plays together for everyone who has the page open. Once the reveal has finished, a guest who taps the link later still sees the result, who called it and the guesses, and can tap \"Watch the reveal again.\" If a reveal was cut short, the result may not appear right away."
+  ],
+  [
+   "How many people can join a virtual gender reveal?",
+   "PinkOrBlue was built with family-and-friends gatherings of around 30 people in mind. That number isn't a limit on guests, just the group size the design is aimed at. Guests can also send the link to anyone who was left out."
+  ],
+  [
+   "How long is the party data kept?",
+   "The room closes 7 days after the reveal date chosen at setup, and its names, votes, guesses and scores are deleted shortly after. Before the reveal starts, the host can delete the room and all its data from \"More settings.\" There are no ads and no tracking cookies."
+  ]
+ ],
+ "vote_slug": "boy-or-girl-vote",
+ "vote_name": "Boy or girl vote",
+ "vote_title": "Boy or Girl Vote: Gender Reveal Voting Games | PinkOrBlue",
+ "vote_desc": "How to run a boy or girl vote at your gender reveal: Team Pink vs. Team Blue, birth date and weight guesses, and votes kept secret until the reveal.",
+ "vote_h1": "Boy or girl vote: how to run gender reveal voting",
+ "vote_lead": "Everyone has a hunch. Here's how to make the boy or girl vote and guessing games part of your party, and how to keep every vote a secret until the reveal.",
+ "vote_card": "Team Pink vs. Team Blue, guessing games and secret votes.",
+ "vote_body": [
+  [
+   "Why a boy or girl vote is so much fun",
+   "Before the big reveal, almost everyone has a gut feeling. Some trust a dream, some just \"know,\" and older relatives often bring old wives' tales that get the whole family talking. These are only for fun; for reliable information about the baby's sex, ask your doctor. A vote turns all those hunches into part of the party. Everyone <b>picks a side</b>, the wait turns into a friendly contest, and the reveal becomes the moment you learn not only the result but also who got it right. Even guests who rarely speak up in the family group chat suddenly have an opinion."
+  ],
+  [
+   "Team Pink or Team Blue?",
+   "The favorite way to vote is to split guests into two teams. In PinkOrBlue, a guest taps the link, types their name and picks Boy or Girl, which puts them on <b>Team Pink</b> or Team Blue. Anyone who changes their mind can switch their vote any time before the reveal. In the party room, every guest appears as a balloon, and you can tell who has voted from who hasn't, so you know who you're still waiting for. After the reveal, the results screen shows both teams side by side and how many people called it. Sometimes the teams even split the family right down the middle."
+  ],
+  [
+   "Guessing games: birth date, weight and first letter",
+   "Adding a few guessing games to the boy or girl question keeps the fun going. PinkOrBlue offers guests three optional extra guesses: the <b>birth date</b>, the birth weight in grams, and the first letter of the baby's name. The person who knows the result, whether a parent or the secret keeper, doesn't vote Boy or Girl but can still make these three guesses, which appear next to everyone else's on the results screen. You can save all the guesses as a PDF. Opening that list after the baby arrives to see who came closest to the date and weight turns into a second round of fun months later."
+  ],
+  [
+   "Keeping the votes secret until the reveal",
+   "Half the thrill of a vote is not knowing who picked what until the very end. When votes are public, guests start following the crowd, and the first few votes sway the rest. In PinkOrBlue, <b>who voted what stays secret until the reveal</b>: until it starts, each guest sees only their own vote. The party room shows only who has voted and who hasn't yet, by name, never the vote itself. The result is protected the same way and doesn't show on guests' screens until the reveal starts. That way, everyone votes on their own hunch, and the surprise holds until the big moment."
+  ],
+  [
+   "Who called it at the reveal?",
+   "When the balloon pops, the result appears, followed by the names of everyone who guessed right. A guest who got it right sees \"You called it!\" on their own screen, and if nobody did, the screen says so too. On the results screen, guests can leave a message for the family and, now that they know, <b>suggest a name</b>. If you like, promise a small, symbolic prize to the winners, like dessert at the next family get-together. Presenting the vote as a shared game rather than a contest lets the guests who guessed wrong enjoy the surprise just as much."
+  ]
+ ],
+ "vote_steps": [
+  [
+   "Open a voting room",
+   "Open a party room with Mom's or Dad's name and the reveal date and time; enter the result secretly or leave it to a secret keeper."
+  ],
+  [
+   "Share the link",
+   "Send the invite link to your family and friends. Guests can also use the same link to invite anyone who was left out."
+  ],
+  [
+   "Collect votes and guesses",
+   "Guests pick Boy or Girl and can also guess the baby's birth date, birth weight and first initial. Votes stay secret until the reveal."
+  ],
+  [
+   "See who called it",
+   "Start the reveal. When the balloon pops, the result, the winners, both teams and all the guesses show on every screen."
+  ]
+ ],
+ "vote_faq": [
+  [
+   "Can I change my vote after I've voted?",
+   "Yes. Until the reveal starts, you can change your Boy or Girl pick and your extra guesses. Once it begins, votes are final; the results screen shows the names of those who called it, each team's vote count and the guesses of anyone who added extra predictions."
+  ],
+  [
+   "Can I see what other guests voted?",
+   "No. Until the reveal starts, each guest sees only their own vote. The party room shows who has voted and who hasn't yet; at the reveal, the names of those who called it and each team's vote count come out."
+  ],
+  [
+   "Can the parents vote too?",
+   "The person who knows the result, meaning the host or the secret keeper, doesn't vote Boy or Girl but can guess the birth date, weight and first letter of the name. Parents who leave the result to a secret keeper can vote like everyone else."
+  ],
+  [
+   "Is there a reliable way to predict boy or girl?",
+   "The old wives' tales passed around in families are just for fun and don't decide anything. Talk to your doctor about how and when you can learn the baby's sex, and use the vote to enjoy everyone's guesses."
+  ],
+  [
+   "How can I see how many people have voted?",
+   "The party room shows how many people have voted and how many are on the page right now. Every guest appears as a balloon; tap a balloon to see whether that person has voted yet."
+  ]
+ ],
+ "far_slug": "long-distance-gender-reveal",
+ "far_name": "Long distance gender reveal",
+ "far_title": "Long Distance Gender Reveal for Family Far Away | PinkOrBlue",
+ "far_desc": "Plan a long distance gender reveal with family in another city or country: picking a time across time zones, a live reveal and easy joining for elders.",
+ "far_h1": "How to do a long distance gender reveal",
+ "far_lead": "Grandma may live in another city and your cousin in another country. Here's how to plan a reveal so everyone far away shares the big moment with you, all at once.",
+ "far_card": "Time zones, a live reveal at the same moment and easy joining for elders.",
+ "far_body": [
+  [
+   "Bringing faraway family into the big moment",
+   "In many families, the people we love are spread across different cities and even different countries. That often means the baby's sex is shared in a phone call or a photo dropped into the group chat; the excitement is there, but the moment is gone. A virtual gender reveal closes that distance: everyone joins the same room from their own screen, watches the same countdown and learns the result <b>together</b>. That's exactly what PinkOrBlue is for. Anyone in another city or country joins the same room by tapping the link, with no travel, tickets or shared venue needed."
+  ],
+  [
+   "Time zones and choosing the date",
+   "When your family lives in different time zones, one reveal time won't suit everyone perfectly. Start by noting where the people who matter most live and work out their local time. Look for a window that doesn't land at midnight for one person or in the middle of a workday for another; weekends usually give you more room. In PinkOrBlue, the reveal time is shown on each guest's screen <b>in their own device's time</b>, and the countdown runs to the same moment for everyone. Still, mentioning the time difference in your invite message makes sure nobody gets ready at the wrong hour."
+  ],
+  [
+   "A live reveal, all at once",
+   "In a long distance party, the most valuable thing is a shared moment. When you start the reveal in PinkOrBlue, everyone with the page open sees the same thing: guests tap their screens to <b>blow up a giant balloon together</b>, and when it pops, the result opens on everyone's screen together, though connections can add a slight delay. If the host plays the final song first, it plays together for everyone with sound on, and guests can tell the reveal is close. Once the reveal has finished, a guest who taps the link later can still see the result and watch the reveal again."
+  ],
+  [
+   "Making it easy for grandparents",
+   "Grandparents are often the most excited guests, but installing a new app can be hard for them. PinkOrBlue has <b>no app and no sign-up</b>; it doesn't ask for an email or phone number. Tapping the link and typing a name is all it takes, plus the room password if the host set one. Sending the link a few days early and opening it together once is a good rehearsal: they see the countdown screen and can tap \"Add to calendar\" to download a calendar file and add it to their calendar. On reveal day, if someone is with them, have that person check that the sound is on and the phone isn't on silent."
+  ],
+  [
+   "Using it alongside a video call",
+   "PinkOrBlue doesn't have its own video calling, but it works well alongside a video call app. One way is to keep the call running on a laptop or tablet and open PinkOrBlue on a phone, so everyone watches the reveal and sees each other's reactions. Running both on one device makes the screen small, and the sounds can mix. If the music echoes on the call, one side can mute their microphone. After the reveal, you can use the <b>share to your story</b> card to send the result to loved ones who couldn't make the call. That way, even those who missed it live can still feel part of the day."
+  ]
+ ],
+ "far_steps": [
+  [
+   "Pick a time that works for all",
+   "Check your guests' time zones and find a time that suits everyone; enter that date and time when you open the room."
+  ],
+  [
+   "Share the link early",
+   "Send the invite link a few days ahead. Guests see the countdown and can tap \"Add to calendar\" to download a calendar file for their calendar app."
+  ],
+  [
+   "Guests vote from afar",
+   "The party room opens 30 minutes before the reveal. Guests type their name, pick Boy or Girl and leave their guesses."
+  ],
+  [
+   "Share the reveal at once",
+   "Start the reveal while everyone is in the room; the result opens on everyone's screen together. Keep a video call running if you like."
+  ]
+ ],
+ "far_faq": [
+  [
+   "How do guests in another country see the reveal time?",
+   "The reveal date and time are shown on each guest's screen in their own device's time. The countdown runs to the same moment for everyone, so guests in different time zones watch the reveal at the same time as you."
+  ],
+  [
+   "Do relatives overseas need to install anything?",
+   "No. A phone, tablet or computer with an internet connection and a browser is enough. Guests tap the link, type their name and join the room; if it has a password, they enter it first. There's no app to download and no sign-up."
+  ],
+  [
+   "Can grandparents who aren't tech-savvy join?",
+   "Yes. Joining happens in the browser: once the party room opens, guests type their name, and password-protected rooms ask for the password first. Opening the link together once ahead of time, and having someone nearby on reveal day, makes it even easier."
+  ],
+  [
+   "How do I use PinkOrBlue with a video call?",
+   "The easiest way is to run the video call on one device and PinkOrBlue on another. That way you watch the reveal and see each other's reactions at the same time. If the sounds mix, one side can mute their microphone."
+  ],
+  [
+   "What happens if my internet drops during the reveal?",
+   "Tap the link again once you're back online; on the same browser, your name and vote are kept. If the reveal is still running, you join it at the current point, not where you left off. If it has finished, you'll see the result and the guesses, and can tap \"Watch the reveal again.\""
+  ]
+ ]
+}

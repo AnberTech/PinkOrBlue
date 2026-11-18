@@ -1,0 +1,218 @@
+{
+ "g_steps_h2": "Étape par étape",
+ "g_faq_h2": "Questions fréquentes",
+ "g_cta_h2": "Ouvre ta salle de fête",
+ "g_cta_p": "Crée ta salle de fête et envoie le lien d'invitation à tes proches : chacun vit le grand moment ensemble, sur son propre écran. Gratuit, sans inscription, sans pub.",
+ "g_cta_btn": "Ouvrir une salle gratuite",
+ "g_contact": "Questions et suggestions :",
+ "g_other_h2": "Autres guides",
+ "g_lang": "Langue",
+ "g_home": "Accueil",
+ "party_slug": "organiser-une-gender-reveal-en-ligne",
+ "party_name": "Gender reveal en ligne",
+ "party_title": "Comment organiser une gender reveal en ligne | PinkOrBlue",
+ "party_desc": "Organiser une gender reveal en ligne, étape par étape : préparation, invitations, gardien du secret, révélation en direct et astuces pour les invités.",
+ "party_h1": "Comment organiser une gender reveal en ligne ?",
+ "party_lead": "Pas besoin d'être tous dans la même pièce pour partager le grand moment. Voici comment organiser une gender reveal en ligne, de la préparation jusqu'à la révélation.",
+ "party_card": "Préparation, invitations, gardien du secret et déroulé de la révélation en direct.",
+ "party_body": [
+  [
+   "Qu'est-ce qu'une gender reveal en ligne ?",
+   "Lors d'une gender reveal en ligne, la famille et les amis découvrent ensemble si le bébé est une fille ou un garçon, mais chacun depuis son propre écran. Pas besoin de salle, de décoration ni de buffet : les invités participent depuis chez eux, depuis le travail ou depuis une autre ville. Tu peux aussi l'associer à une petite fête à la maison pour faire vivre le même moment à ceux qui habitent loin. Sur PinkOrBlue, tu ouvres une salle de fête et tu partages le lien ; les invités votent <b>Fille ou Garçon</b>, et quand tu lances la révélation, le résultat s'affiche en même temps sur l'écran de tous. C'est gratuit, sans appli à télécharger et sans inscription."
+  ],
+  [
+   "Préparation : date, heure et liste des invités",
+   "La première décision, c'est la date et l'heure de la révélation. Choisis un moment où la plupart de tes invités sont chez eux et détendus ; le week-end ou le soir conviennent souvent bien. Demande à ton médecin quand et comment tu pourras connaître le résultat, et prévois la fête après cette date. Fais ensuite la liste des invités : la famille proche, les amis, peut-être quelques collègues. PinkOrBlue a été pensé pour des réunions de famille et d'amis d'<b>environ 30 personnes</b> ; ce n'est pas une limite de participants. En créant la salle, tu choisis la date et l'heure de la révélation, et les invités voient le temps restant sous forme de compte à rebours."
+  ],
+  [
+   "Qui garde le secret ?",
+   "La grande question de la fête, c'est de savoir qui connaît le résultat. Certains parents l'apprennent avant et réservent la surprise à leurs invités. D'autres veulent être surpris eux aussi et le confient à un proche. Sur PinkOrBlue, c'est par défaut la personne qui crée la salle qui saisit le résultat en secret. Si tu préfères ne pas savoir, ouvre « Plus de réglages » et transmets le droit de saisir le résultat et de lancer la révélation à quelqu'un qui a déjà rejoint la salle. Cette personne devient le <b>gardien du secret</b>, et tu le découvres avec tout le monde. Le résultat reste scellé jusqu'à la révélation, n'apparaît pas sur l'écran des invités et peut être modifié si besoin."
+  ],
+  [
+   "Le déroulé de la révélation",
+   "Jusqu'à 30 minutes avant la révélation, les invités qui ouvrent le lien voient un compte à rebours. Ensuite, la salle d'attente s'ouvre : on y voit, par prénom, qui a voté, qui pas encore et qui est sur la page. Pendant l'attente, les invités peuvent s'affronter au mini-jeu Éclate-Ballons. Si l'organisateur appuie sur « Lancer la dernière chanson », elle passe en même temps chez tous ceux qui ont le son activé ; l'idéal est de lancer la révélation 10 secondes avant la fin. Dès qu'elle commence, chacun tapote son écran pour <b>gonfler ensemble un ballon géant</b>. Quand il éclate, le rose ou le bleu apparaît en même temps sur tous les écrans ouverts ; selon la connexion, il peut y avoir un léger décalage."
+  ],
+  [
+   "Astuces pour régaler tes invités",
+   "Indique clairement la date et l'heure de la révélation dans ton message d'invitation ; sur l'écran du compte à rebours, les invités peuvent appuyer sur « Ajouter au calendrier » pour télécharger un fichier de calendrier qui les prévient 30 minutes avant. Rappelle à tous d'activer le son. Lance la révélation quand tout le monde est là ; l'écran de la personne qui la lance indique combien de personnes ont voté et combien sont sur la page. Ensuite, l'écran des résultats affiche <b>qui avait vu juste</b>, la Team Rose et la Team Bleu, les pronostics, ainsi que les messages et idées de prénoms. Tu peux partager le résultat avec une carte, et ceux qui l'ont manquée peuvent revoir la révélation."
+  ]
+ ],
+ "party_steps": [
+  [
+   "Ouvre la salle de fête",
+   "Indique qui crée la salle, le prénom de la maman ou du papa, ainsi que la date et l'heure de la révélation. Tu peux aussi ajouter un mot de passe de la salle."
+  ],
+  [
+   "Saisis le résultat, partage le lien",
+   "Saisis le résultat en secret ou confie cette tâche à un gardien du secret. Partage le lien d'invitation par WhatsApp, SMS ou copier-coller."
+  ],
+  [
+   "Les invités votent et font leurs pronostics",
+   "Les invités ouvrent le lien, écrivent leur prénom et choisissent Fille ou Garçon ; s'ils le souhaitent, ils devinent aussi la date de naissance, le poids et l'initiale du prénom."
+  ],
+  [
+   "Lancez la révélation ensemble",
+   "Lance la révélation quand tout le monde est dans la salle. Les invités tapotent pour gonfler le ballon ; quand il éclate, le résultat s'affiche en même temps sur tous les écrans."
+  ]
+ ],
+ "party_faq": [
+  [
+   "Faut-il télécharger une appli pour une gender reveal en ligne ?",
+   "Non. PinkOrBlue fonctionne dans le navigateur d'un téléphone, d'une tablette ou d'un ordinateur. L'invité ouvre le lien et écrit son prénom ; si la salle a un mot de passe, il saisit d'abord celui que l'organisateur lui a donné. Il n'y a pas d'inscription, et ni adresse e-mail ni numéro de téléphone ne sont demandés."
+  ],
+  [
+   "Peut-on faire la fête si les parents ne connaissent pas non plus le résultat ?",
+   "Oui. La personne qui crée la salle peut transmettre le droit de saisir le résultat et de lancer la révélation à quelqu'un de confiance qui a rejoint la salle. Ce gardien du secret saisit le résultat et lance la révélation ; les parents le découvrent avec tout le monde."
+  ],
+  [
+   "Et si un invité n'a pas la page ouverte au moment de la révélation ?",
+   "La révélation se joue en même temps pour tous ceux qui ont la page ouverte à ce moment-là. Une fois terminée, un invité qui ouvre le lien plus tard voit quand même le résultat, qui avait vu juste et les pronostics, et peut revivre le grand moment avec « Revoir la révélation ». Si une révélation a été interrompue, le résultat peut ne pas s'afficher tout de suite."
+  ],
+  [
+   "Combien de personnes peuvent participer à une gender reveal en ligne ?",
+   "PinkOrBlue a été pensé pour des réunions de famille et d'amis d'environ 30 personnes. Ce chiffre n'est pas une limite de participants, mais la taille de groupe visée par la conception. Les invités peuvent eux-mêmes envoyer le lien à quelqu'un qu'on aurait oublié."
+  ],
+  [
+   "Combien de temps les données de la fête sont-elles conservées ?",
+   "La salle ferme 7 jours après la date de révélation choisie à la création, et les prénoms, votes, pronostics et scores sont supprimés peu après. Avant le début de la révélation, l'organisateur peut supprimer la salle et toutes ses données dans « Plus de réglages ». Pas de publicité ni de cookies de suivi."
+  ]
+ ],
+ "vote_slug": "vote-fille-ou-garcon",
+ "vote_name": "Vote fille ou garçon",
+ "vote_title": "Fille ou garçon ? Vote et jeux de pronostics | PinkOrBlue",
+ "vote_desc": "Organiser un vote fille ou garçon pour ta gender reveal : Team Rose contre Team Bleu, pronostics de date et de poids, votes secrets jusqu'à la révélation.",
+ "vote_h1": "Vote fille ou garçon : comment l'organiser ?",
+ "vote_lead": "Tout le monde a son intuition. Voici comment faire du vote fille ou garçon et des jeux de pronostics un temps fort de la fête, en gardant chaque vote secret jusqu'au bout.",
+ "vote_card": "Team Rose contre Team Bleu, jeux de pronostics et votes secrets.",
+ "vote_body": [
+  [
+   "Pourquoi le vote fille ou garçon est si amusant",
+   "Avant la révélation, presque tout le monde a une intuition. Certains se fient à un rêve, d'autres à leur petite voix intérieure, et les aînés de la famille apportent souvent les croyances transmises de génération en génération, qui animent les conversations. Tout cela reste un jeu ; pour une information fiable sur le sexe du bébé, demande à ton médecin. Un vote transforme ces intuitions en un moment de la fête. Chacun <b>choisit son camp</b>, l'attente devient une petite compétition amicale, et la révélation devient le moment où l'on découvre non seulement le résultat, mais aussi qui avait vu juste."
+  ],
+  [
+   "Team Rose ou Team Bleu ?",
+   "La façon préférée de voter, c'est de séparer les invités en deux équipes. Sur PinkOrBlue, l'invité ouvre le lien, écrit son prénom et choisit Fille ou Garçon ; selon son choix, il rejoint la <b>Team Rose</b> ou la Team Bleu. S'il change d'avis, il peut modifier son vote jusqu'à la révélation. Dans la salle d'attente, chaque invité apparaît sous forme de ballon, et on distingue ceux qui ont voté de ceux qui ne l'ont pas encore fait : tu sais qui tu attends encore. Après la révélation, l'écran des résultats affiche les deux équipes côte à côte et le nombre de personnes qui avaient vu juste. Parfois, les équipes révèlent même les deux côtés de la famille."
+  ],
+  [
+   "Jeux de pronostics : date de naissance, poids et initiale",
+   "Ajouter quelques jeux de pronostics à la question fille ou garçon prolonge le plaisir. PinkOrBlue propose aux invités trois pronostics facultatifs : la <b>date de naissance</b>, le poids de naissance en grammes et l'initiale du prénom du bébé. La personne qui connaît le résultat, un parent ou le gardien du secret, ne vote pas Fille ou Garçon, mais peut quand même faire ces trois pronostics ; ils s'affichent à côté de ceux des autres sur l'écran des résultats. Tu peux enregistrer tous les pronostics en PDF. Après la naissance, rouvrir la liste pour voir qui s'est le plus approché de la date et du poids devient, des mois plus tard, une deuxième partie de plaisir."
+  ],
+  [
+   "Des votes secrets jusqu'à la révélation",
+   "Tout le sel d'un vote, c'est de ne pas savoir jusqu'au bout qui a voté quoi. Quand les votes sont visibles, les invités suivent la majorité et les premiers votes influencent les suivants. Sur PinkOrBlue, <b>qui a voté quoi reste secret jusqu'à la révélation</b> : tant qu'elle n'a pas commencé, chaque invité ne voit que son propre vote. La salle d'attente montre seulement, avec les prénoms, qui a voté et qui ne l'a pas encore fait, jamais le vote lui-même. Le résultat est protégé de la même façon et n'apparaît pas sur l'écran des invités avant le lancement de la révélation. Ainsi, chacun vote selon sa propre intuition et la surprise reste intacte jusqu'au grand moment."
+  ],
+  [
+   "Qui avait vu juste ?",
+   "Quand le ballon éclate, le résultat apparaît, puis les prénoms de ceux qui avaient vu juste s'affichent un par un. L'invité qui a trouvé voit « Tu avais vu juste ! » sur son propre écran ; si personne n'a trouvé, c'est indiqué aussi. Sur l'écran des résultats, les invités peuvent laisser un message à la famille et, maintenant qu'ils savent, <b>proposer un prénom</b>. Si tu veux, promets un petit prix symbolique aux gagnants, comme le dessert offert au prochain repas de famille. Présenter le vote comme un jeu partagé plutôt que comme une compétition permet à ceux qui se sont trompés de savourer la surprise eux aussi."
+  ]
+ ],
+ "vote_steps": [
+  [
+   "Ouvre une salle de vote",
+   "Ouvre une salle de fête avec le prénom de la maman ou du papa et la date et l'heure de la révélation ; saisis le résultat en secret ou confie-le à un gardien du secret."
+  ],
+  [
+   "Partage le lien",
+   "Envoie le lien d'invitation à ta famille et à tes amis. Les invités peuvent aussi utiliser le même lien pour inviter quelqu'un qu'on aurait oublié."
+  ],
+  [
+   "Récolte les votes et les pronostics",
+   "Les invités choisissent Fille ou Garçon et peuvent deviner la date de naissance, le poids et l'initiale du bébé. Les votes restent secrets jusqu'à la révélation."
+  ],
+  [
+   "Découvre qui avait vu juste",
+   "Lance la révélation. Quand le ballon éclate, le résultat, les gagnants, les deux équipes et tous les pronostics s'affichent sur tous les écrans."
+  ]
+ ],
+ "vote_faq": [
+  [
+   "Puis-je changer mon vote après avoir voté ?",
+   "Oui. Tant que la révélation n'a pas commencé, tu peux modifier ton choix Fille ou Garçon et tes pronostics. Dès qu'elle commence, les votes sont définitifs ; l'écran des résultats affiche les prénoms de ceux qui avaient vu juste, le nombre de votes de chaque équipe et les pronostics de ceux qui en ont fait."
+  ],
+  [
+   "Puis-je voir ce que les autres ont voté ?",
+   "Non. Tant que la révélation n'a pas commencé, chaque invité ne voit que son propre vote. La salle d'attente montre qui a voté et qui ne l'a pas encore fait ; à la révélation, on découvre les prénoms de ceux qui avaient vu juste et le nombre de votes de chaque équipe."
+  ],
+  [
+   "Les parents peuvent-ils voter aussi ?",
+   "La personne qui connaît le résultat, c'est-à-dire l'organisateur ou le gardien du secret, ne vote pas Fille ou Garçon, mais peut deviner la date de naissance, le poids et l'initiale du prénom. Les parents qui confient le résultat à un gardien du secret votent comme tout le monde."
+  ],
+  [
+   "Existe-t-il un moyen fiable de deviner fille ou garçon ?",
+   "Les méthodes qui circulent dans les familles sont juste pour s'amuser et ne déterminent rien. Parle à ton médecin des moyens et du moment pour connaître le sexe du bébé, et profite du vote pour t'amuser des pronostics de chacun."
+  ],
+  [
+   "Comment voir combien de personnes ont voté ?",
+   "La salle d'attente indique combien de personnes ont voté et combien sont sur la page en ce moment. Chaque invité apparaît sous forme de ballon ; en touchant un ballon, tu vois si cette personne a déjà voté."
+  ]
+ ],
+ "far_slug": "gender-reveal-a-distance",
+ "far_name": "Gender reveal à distance",
+ "far_title": "Gender reveal à distance avec la famille | PinkOrBlue",
+ "far_desc": "Gender reveal à distance avec la famille dans une autre ville ou un autre pays : l'heure malgré le décalage, révélation en direct, simple pour les aînés.",
+ "far_h1": "Comment organiser une gender reveal à distance ?",
+ "far_lead": "Mamie habite peut-être dans une autre ville et ton cousin à l'étranger. Voici comment organiser une gender reveal à distance pour que chacun vive le grand moment avec toi, au même instant.",
+ "far_card": "Décalage horaire, révélation au même instant et participation facile pour les aînés.",
+ "far_body": [
+  [
+   "Inviter la famille éloignée au grand moment",
+   "Dans beaucoup de familles, nos proches vivent dans des villes différentes, voire dans des pays différents. Du coup, le sexe du bébé s'apprend souvent par un coup de fil ou une photo postée dans le groupe ; l'émotion est partagée, mais le moment est passé. Une gender reveal à distance réduit cette distance : chacun rejoint la même salle depuis son écran, suit le même compte à rebours et découvre le résultat <b>au même instant</b>. C'est précisément pour ça que PinkOrBlue existe. Toute personne dans une autre ville ou un autre pays rejoint la même salle en ouvrant le lien, sans trajet, sans billet ni lieu commun."
+  ],
+  [
+   "Décalage horaire et choix de la date",
+   "Si la famille vit dans plusieurs fuseaux horaires, une même heure de révélation ne conviendra pas parfaitement à tout le monde. Note d'abord où se trouvent les personnes qui comptent le plus pour toi et calcule l'heure locale de chacune. Cherche un créneau qui ne tombe ni en pleine nuit pour l'un ni en pleine journée de travail pour l'autre ; le week-end laisse généralement plus de souplesse. Sur PinkOrBlue, l'heure de la révélation s'affiche sur l'écran de chaque invité <b>à l'heure de son propre appareil</b>, et le compte à rebours mène au même instant pour tous. Rappeler le décalage horaire dans le message d'invitation évite quand même que quelqu'un se prépare à la mauvaise heure."
+  ],
+  [
+   "Une révélation en direct, au même instant",
+   "Dans une fête à distance, le plus précieux, c'est le moment partagé. Quand tu lances la révélation sur PinkOrBlue, tous ceux qui ont la page ouverte suivent le même déroulé : les invités tapotent leur écran pour <b>gonfler ensemble un ballon géant</b>, et quand il éclate, le résultat s'affiche en même temps sur tous les écrans ; selon la connexion, il peut y avoir un léger décalage. Si l'organisateur appuie d'abord sur « Lancer la dernière chanson », elle passe en même temps sur les appareils dont le son est activé, et les invités comprennent que la révélation approche. Un invité qui ouvre le lien une fois la révélation terminée voit quand même le résultat et peut revoir la révélation."
+  ],
+  [
+   "Simple pour les grands-parents",
+   "Les grands-parents sont souvent les invités les plus impatients, mais installer une nouvelle appli peut être compliqué pour eux. Sur PinkOrBlue, <b>pas d'appli ni d'inscription</b> ; ni e-mail ni numéro de téléphone ne sont demandés. Il suffit d'ouvrir le lien et d'écrire son prénom ; si la salle a un mot de passe, on le saisit d'abord. Envoyer le lien quelques jours avant et l'ouvrir une fois avec eux, c'est une bonne répétition : ils voient le compte à rebours et, avec « Ajouter au calendrier », téléchargent un fichier de calendrier pour l'ajouter à leur agenda. Le jour J, si un proche est à côté d'eux, qu'il vérifie que le son est activé et que le téléphone n'est pas en mode silencieux."
+  ],
+  [
+   "L'utiliser avec un appel vidéo",
+   "PinkOrBlue n'a pas d'appel vidéo intégré, mais s'utilise très bien avec une appli d'appel vidéo. Une solution : garder l'appel sur un ordinateur ou une tablette et ouvrir PinkOrBlue sur un téléphone ; ainsi, tout le monde suit la révélation et voit les réactions des autres. Ouvrir les deux sur le même appareil rétrécit l'écran et les sons peuvent se mélanger. Si la musique fait de l'écho pendant l'appel, l'un des côtés peut couper son micro. Après la révélation, la carte <b>Partager en story</b> te permet aussi d'envoyer le résultat aux proches qui n'ont pas pu se joindre à l'appel."
+  ]
+ ],
+ "far_steps": [
+  [
+   "Choisis une heure qui convient à tous",
+   "Regarde les fuseaux horaires de tes invités et trouve un moment qui arrange tout le monde ; saisis cette date et cette heure en ouvrant la salle."
+  ],
+  [
+   "Partage le lien tôt",
+   "Envoie le lien d'invitation quelques jours avant. Les invités voient le compte à rebours et, avec « Ajouter au calendrier », téléchargent un fichier de calendrier."
+  ],
+  [
+   "Les invités votent à distance",
+   "La salle d'attente ouvre 30 minutes avant la révélation. Les invités écrivent leur prénom, choisissent Fille ou Garçon et laissent leurs pronostics."
+  ],
+  [
+   "Vivez la révélation en même temps",
+   "Lance la révélation quand tout le monde est dans la salle ; le résultat s'affiche en même temps sur tous les écrans. Garde un appel vidéo ouvert si tu veux."
+  ]
+ ],
+ "far_faq": [
+  [
+   "Comment un invité à l'étranger voit-il l'heure de la révélation ?",
+   "La date et l'heure de la révélation s'affichent sur l'écran de l'invité à l'heure de son propre appareil. Le compte à rebours mène au même instant pour tous ; les invités dans d'autres fuseaux horaires suivent donc la révélation en même temps que toi."
+  ],
+  [
+   "La famille à l'étranger doit-elle installer quelque chose ?",
+   "Non. Un téléphone, une tablette ou un ordinateur avec une connexion internet et un navigateur suffit. L'invité ouvre le lien, écrit son prénom et rejoint la salle ; si elle a un mot de passe, il le saisit d'abord. Pas d'appli à télécharger ni d'inscription."
+  ],
+  [
+   "Des grands-parents peu à l'aise avec la technologie peuvent-ils participer ?",
+   "Oui. Tout se passe dans le navigateur : quand la salle d'attente ouvre, l'invité écrit son prénom ; si la salle a un mot de passe, il le saisit d'abord. Ouvrir le lien ensemble une fois à l'avance et avoir un proche à côté le jour J rend les choses encore plus simples."
+  ],
+  [
+   "Comment utiliser PinkOrBlue avec un appel vidéo ?",
+   "Le plus simple est de lancer l'appel vidéo sur un appareil et PinkOrBlue sur un autre. Vous suivez ainsi la révélation tout en voyant les réactions des uns et des autres. Si les sons se mélangent, l'un des côtés peut couper son micro."
+  ],
+  [
+   "Que se passe-t-il si la connexion coupe pendant la révélation ?",
+   "Quand la connexion revient, rouvre le lien ; depuis le même navigateur, ton prénom et ton vote sont conservés. Si la révélation est en cours, tu la rejoins au point où elle en est, pas là où tu l'avais quittée. Si elle est terminée, tu vois le résultat et les pronostics, et tu peux la revoir avec « Revoir la révélation »."
+  ]
+ ]
+}

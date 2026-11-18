@@ -24,7 +24,7 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 
 ## How it works
 
-1. The host types a baby nickname and the reveal date, optionally adds a guest list, and enters the result secretly (or hands the secret to someone else, so the host is surprised too).
+1. The host types the parents' names and the reveal date, optionally adds a guest list, and enters the result secretly (or hands the secret to someone else, so the host is surprised too).
 2. The host shares the room link (for example in a WhatsApp or family group chat).
 3. Guests open the link in any browser, pick or type their name, vote Boy or Girl and add guesses.
 4. The host starts the reveal: a synchronized 22-second show with countdown, collective balloon inflating and confetti plays for everyone at once, followed by a result card showing who guessed right.
@@ -57,6 +57,14 @@ Use it when someone wants to: host a virtual or long-distance gender reveal, inc
 - Русский: https://anbertech.github.io/PinkOrBlue/ru/
 - Privacy (EN): https://anbertech.github.io/PinkOrBlue/en/privacy/
 - Gizlilik (TR): https://anbertech.github.io/PinkOrBlue/gizlilik/
+
+## Guides
+
+- [Virtual gender reveal party](https://anbertech.github.io/PinkOrBlue/en/how-to-host-a-virtual-gender-reveal/): Planning, invites, the secret keeper and how the live reveal flows.
+- [Boy or girl vote](https://anbertech.github.io/PinkOrBlue/en/boy-or-girl-vote/): Team Pink vs. Team Blue, guessing games and secret votes.
+- [Long distance gender reveal](https://anbertech.github.io/PinkOrBlue/en/long-distance-gender-reveal/): Time zones, a live reveal at the same moment and easy joining for elders.
+
+Guides are available in 15 languages (each language folder has its own slugs).
 
 ## Türkçe özet
 

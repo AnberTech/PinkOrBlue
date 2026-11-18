@@ -1,0 +1,218 @@
+{
+ "g_steps_h2": "Adım adım",
+ "g_faq_h2": "Sık sorulan sorular",
+ "g_cta_h2": "Parti odanızı açın",
+ "g_cta_p": "Parti odanızı oluşturun, davet linkini sevdiklerinize gönderin; büyük anı herkes kendi ekranında birlikte yaşasın. Ücretsiz, üyeliksiz, reklamsız.",
+ "g_cta_btn": "Ücretsiz parti odası aç",
+ "g_contact": "Soru ve öneriler:",
+ "g_other_h2": "Diğer rehberler",
+ "g_lang": "Dil",
+ "g_home": "Ana sayfa",
+ "party_slug": "online-cinsiyet-partisi",
+ "party_name": "Online cinsiyet partisi",
+ "party_title": "Online Cinsiyet Partisi Nasıl Yapılır? | PinkOrBlue",
+ "party_desc": "Online cinsiyet partisi için adım adım rehber: hazırlık, davet, sonucu kimin saklayacağı, canlı açılış anı ve misafirler için ipuçları.",
+ "party_h1": "Online cinsiyet partisi nasıl yapılır?",
+ "party_lead": "Sevdikleriniz aynı salonda olmasa da büyük anı birlikte yaşayabilirsiniz. Hazırlıktan açılış anına kadar online bir cinsiyet partisini nasıl planlayacağınızı anlatıyoruz.",
+ "party_card": "Hazırlık, davet, sır tutucu ve canlı açılış anının akışı.",
+ "party_body": [
+  [
+   "Online cinsiyet partisi nedir?",
+   "Online cinsiyet partisinde bebeğin kız mı erkek mi olduğu, aile ve dostlarla birlikte ama herkesin kendi ekranından öğrenilir. Salon, süsleme ya da ikram hazırlamak gerekmez; misafirler evinden, işinden ya da başka bir şehirden katılır. İsterseniz evde küçük bir kutlamayla birleştirip uzaktakileri de aynı ana dahil edebilirsiniz. PinkOrBlue'da bir parti odası açar, linki paylaşırsınız; misafirler <b>Kız ya da Erkek</b> oyunu verir, siz başlattığınızda sonuç herkesin ekranında birlikte açılır. Ücretsizdir; uygulama indirmek ya da üye olmak gerekmez."
+  ],
+  [
+   "Hazırlık: tarih, saat ve misafir listesi",
+   "İlk karar açılışın tarihi ve saatidir. Misafirlerin çoğunun evde ve rahat olduğu bir zaman seçin; hafta sonu ya da akşam saatleri genellikle uygundur. Sonucu ne zaman ve hangi yolla öğreneceğinizi doktorunuza danışın ve partiyi bu tarihten sonraya koyun. Ardından davet edeceğiniz kişilerin listesini çıkarın: yakın aile, arkadaşlar, belki iş arkadaşları. PinkOrBlue <b>yaklaşık 30 kişilik</b> aile ve arkadaş buluşmaları düşünülerek hazırlandı; bu bir katılım sınırı değildir. Odayı kurarken açılış tarihini ve saatini seçersiniz; misafirler bu ana kalan süreyi geri sayım olarak görür."
+  ],
+  [
+   "Sonucu kim saklayacak? Sır tutucu",
+   "Partinin en önemli sorusu, sonucu kimin bileceğidir. Bazı anne-babalar sonucu önceden öğrenir ve sürprizi misafirlerine yaşatır. Bazıları ise kendileri de bilmek istemez; sonucu güvendikleri bir yakına bırakır. PinkOrBlue'da varsayılan olarak odayı kuran kişi sonucu gizlice girer. İsterseniz \"Diğer ayarlar\" bölümünden sonucu girme ve açılışı başlatma yetkisini odaya katılmış birine devredersiniz: bu kişi <b>sır tutucu</b> olur, siz de herkesle birlikte sürprizle öğrenirsiniz. Sonuç açılışa kadar mühürlü kalır, misafirlerin ekranında görünmez ve istenirse değiştirilebilir."
+  ],
+  [
+   "Açılış anının akışı",
+   "Açılışa 30 dakika kalana kadar misafirler linke dokunduğunda bir geri sayım ekranı görür. Sonra bekleme salonu açılır: kimin oy verdiği, kimin henüz vermediği ve kimin şu an sayfada olduğu isimleriyle görünür. Beklerken misafirler Balon Patlat adlı mini oyunda yarışabilir. Kurucu \"Son şarkı\"yı başlatırsa şarkı, sesi açık cihazlarda herkeste birlikte çalar; bitimine 10 saniye kala açılışı başlatmak önerilir. Açılış başlayınca herkes ekrana dokunarak dev balonu <b>birlikte şişirir</b>. Balon patladığında pembe mi mavi mi, sonuç sayfası açık olan ekranlarda birlikte ortaya çıkar; bağlantıya göre küçük gecikmeler olabilir."
+  ],
+  [
+   "Misafir deneyimi için ipuçları",
+   "Davet mesajında açılış tarihini ve saatini açıkça yazın; misafirler geri sayım ekranındaki \"Takvime ekle\" düğmesiyle bir takvim dosyası indirip takvimlerine ekleyebilir, dosya açılıştan 30 dakika önce hatırlatır. Misafirlere sesi açmalarını hatırlatın. Açılışı herkes geldiğinde başlatın; açılışı başlatacak kişinin ekranında kaç kişinin oy verdiği ve kaçının şu an sayfada olduğu yazar. Açılıştan sonra sonuç ekranında <b>doğru bilenler</b>, Takım Pembe ve Takım Mavi, tahminler ile mesaj ve isim önerileri görünür. Sonucu bir kartla paylaşabilir, kaçıranlar için açılışı tekrar izletebilirsiniz."
+  ]
+ ],
+ "party_steps": [
+  [
+   "Parti odasını açın",
+   "Odayı kimin kurduğunu, anne ya da baba adını, açılış tarihini ve saatini yazın. İsterseniz oda şifresi de koyabilirsiniz."
+  ],
+  [
+   "Sonucu girin, linki paylaşın",
+   "Sonucu gizlice girin ya da bu işi bir sır tutucuya bırakın. Davet linkini WhatsApp, mesaj ya da kopyala-yapıştır ile paylaşın."
+  ],
+  [
+   "Misafirler oy ve tahmin verir",
+   "Misafirler linke dokunur, adını yazar, Kız ya da Erkek seçer; isterse doğum tarihi, kilo ve ismin baş harfi için de tahmin yapar."
+  ],
+  [
+   "Açılışı birlikte başlatın",
+   "Herkes salondayken açılışı başlatın. Misafirler dokunarak balonu şişirir, balon patlayınca sonuç herkesin ekranında birlikte açılır."
+  ]
+ ],
+ "party_faq": [
+  [
+   "Online cinsiyet partisi için uygulama indirmek gerekir mi?",
+   "Hayır. PinkOrBlue telefon, tablet ya da bilgisayardaki tarayıcıda çalışır. Misafir linke dokunur ve adını yazar; oda şifreliyse önce kurucunun verdiği şifreyi girer. Üyelik yoktur, e-posta adresi ya da telefon numarası istenmez."
+  ],
+  [
+   "Anne ve baba da sonucu bilmeden parti yapabilir mi?",
+   "Evet. Odayı kuran kişi, sonucu girme ve açılışı başlatma yetkisini odaya katılmış güvendiği birine devredebilir. Bu sır tutucu sonucu girer ve açılışı başlatır; anne-baba da herkesle birlikte öğrenir."
+  ],
+  [
+   "Açılış anında sayfası açık olmayan misafir ne olur?",
+   "Açılış, o an sayfası açık olan herkes için birlikte oynar. Açılış tamamlandıysa, sonradan linke dokunan misafir de sonucu, doğru bilenleri ve tahminleri görür; \"Açılışı tekrar izle\" düğmesiyle büyük anı izleyebilir. Yarıda kalan bir açılışta sonuç hemen görünmeyebilir."
+  ],
+  [
+   "Online cinsiyet partisine kaç kişi katılabilir?",
+   "PinkOrBlue yaklaşık 30 kişilik aile ve arkadaş buluşmaları düşünülerek hazırlandı. Bu sayı bir katılım sınırı değil, tasarımın hedeflediği grup büyüklüğüdür. Misafirler linki unutulan birine kendileri de gönderebilir."
+  ],
+  [
+   "Parti verileri ne kadar süre saklanıyor?",
+   "Oda, kurulumda seçilen açılış tarihinden 7 gün sonra erişime kapanır ve adlar, oylar, tahminler, skorlar kısa süre içinde silinir. Kurucu, açılış başlamadan önce \"Diğer ayarlar\" bölümünden odayı ve tüm verilerini silebilir. Reklam ve takip çerezi kullanılmaz."
+  ]
+ ],
+ "vote_slug": "kiz-mi-erkek-mi-oylamasi",
+ "vote_name": "Kız mı erkek mi oylaması",
+ "vote_title": "Kız mı Erkek mi Oylaması ve Tahmin Oyunları | PinkOrBlue",
+ "vote_desc": "Cinsiyet partisinde kız mı erkek mi oylaması: Takım Pembe ve Takım Mavi, doğum tarihi ve kilo tahmini, oyların açılışa kadar gizli kalması.",
+ "vote_h1": "Kız mı erkek mi oylaması nasıl yapılır?",
+ "vote_lead": "Herkesin bir tahmini vardır. Oylamayı ve tahmin oyunlarını partinin parçası yapmanın, oyları açılışa kadar gizli tutmanın yollarını anlatıyoruz.",
+ "vote_card": "Takım Pembe ve Takım Mavi, tahmin oyunları ve gizli oylar.",
+ "vote_body": [
+  [
+   "Kız mı erkek mi oylaması neden eğlenceli?",
+   "Bebeğin cinsiyeti açıklanmadan önce hemen herkesin bir sezgisi vardır. Kimi rüyasına, kimi \"içimden bir ses\" dediği hisse güvenir; aile büyüklerinin kuşaktan kuşağa aktardığı yorumlar da sohbete renk katar. Bunlar yalnızca eğlence içindir; bebeğin cinsiyeti hakkında güvenilir bilgi için doktorunuza danışın. Bir oylama, bu tahminleri partinin bir parçasına dönüştürür. Herkes <b>bir taraf seçer</b>, bekleme süresi bir yarışa döner ve açılış anı yalnız sonucun değil, kimin bildiğinin de ortaya çıktığı ana dönüşür."
+  ],
+  [
+   "Takım Pembe mi, Takım Mavi mi?",
+   "En sevilen oylama biçimi misafirleri iki takıma ayırmaktır. PinkOrBlue'da misafir linke dokunur, adını yazar ve Kız ya da Erkek seçer; seçimine göre <b>Takım Pembe</b> ya da Takım Mavi'ye katılır. Fikrini değiştiren misafir açılışa kadar oyunu yeniden seçebilir. Bekleme salonunda her misafir bir balon olarak görünür; oy verenle henüz vermeyen ayırt edilir, böylece kimi beklediğinizi bilirsiniz. Açılıştan sonra sonuç ekranında iki takım yan yana durur ve kaç kişinin doğru bildiği yazar. Takımlar bazen ailenin iki yanını da ortaya çıkarır."
+  ],
+  [
+   "Tahmin oyunları: doğum tarihi, kilo ve ismin baş harfi",
+   "Kız mı erkek mi sorusunun yanına küçük tahmin oyunları eklemek eğlenceyi uzatır. PinkOrBlue misafire isteğe bağlı üç ek tahmin sorar: <b>doğum tarihi</b>, gram cinsinden doğum kilosu ve bebeğin isminin baş harfi. Sonucu bilen anne-baba ya da sır tutucu Kız-Erkek oyu vermez ama bu üç tahmini o da yapabilir; sonuç ekranında herkesinkiyle yan yana görünür. Tahminleri PDF olarak kaydedebilirsiniz. Doğumdan sonra listeyi açıp tarihe ve kiloya en çok kimin yaklaştığına bakmak, partinin aylar sonra gelen ikinci eğlencesi olur."
+  ],
+  [
+   "Oyların açılışa kadar gizli kalması",
+   "Bir oylamanın tadı, kimin neye oy verdiğinin son ana kadar bilinmemesindedir. Oylar açık olursa misafirler çoğunluğa uymaya başlar, ilk oy verenler sonrakileri etkiler. PinkOrBlue'da <b>kimin neye oy verdiği açılışa kadar gizlidir</b>: açılış başlatılana kadar herkes yalnızca kendi oyunu görür. Salonda yalnızca kimin oy verdiği ve kimin henüz vermediği isimleriyle görünür, verilen oyun kendisi görünmez. Sonuç da aynı şekilde korunur; açılış başlatılana kadar misafirlerin ekranında görünmez. Böylece herkes kendi sezgisiyle oy verir ve sürpriz büyük ana kadar bozulmaz."
+  ],
+  [
+   "Açılışta kim bildi?",
+   "Balon patladığında sonuç ekrana gelir ve ardından doğru bilenler isim isim sıralanır. Bilen misafir kendi ekranında \"Sen bildin!\" yazısını görür; kimse bilemediyse bu da ayrıca belirtilir. Sonuç ekranında misafirler aileye bir mesaj bırakabilir ve artık cinsiyeti bilerek <b>isim önerebilir</b>. İsterseniz doğru bilenlere küçük, sembolik bir ödül sözü verebilirsiniz; bir sonraki aile buluşmasında tatlı ısmarlamak gibi. Oylamayı bir yarıştan çok paylaşılan bir oyun olarak sunmak, bilemeyenlerin de sürprizin tadını çıkarmasını sağlar."
+  ]
+ ],
+ "vote_steps": [
+  [
+   "Oylama odasını açın",
+   "Anne ya da baba adını, açılış tarihini ve saatini yazarak parti odasını açın; sonucu gizlice girin ya da bir sır tutucuya bırakın."
+  ],
+  [
+   "Linki paylaşın",
+   "Davet linkini aile ve arkadaş grubunuza gönderin. Misafirler de unutulan birini aynı linkle davet edebilir."
+  ],
+  [
+   "Oylar ve tahminler toplansın",
+   "Misafirler Kız ya da Erkek seçer; isterse bebeğin doğum tarihini, kilosunu ve adının baş harfini tahmin eder. Oylar açılışa kadar gizli kalır."
+  ],
+  [
+   "Açılışta kimin bildiğini görün",
+   "Açılışı başlatın. Balon patlayınca sonuç, doğru bilenler, takımlar ve tüm tahminler herkesin ekranında görünür."
+  ]
+ ],
+ "vote_faq": [
+  [
+   "Oy verdikten sonra fikrimi değiştirebilir miyim?",
+   "Evet. Açılış başlatılana kadar Kız ya da Erkek seçiminizi ve ek tahminlerinizi değiştirebilirsiniz. Açılış başladığında oylar kesinleşir; sonuç ekranında doğru bilenlerin adları, takımların oy sayıları ve ek tahmin bırakanların tahminleri görünür."
+  ],
+  [
+   "Başkalarının ne oy verdiğini görebilir miyim?",
+   "Hayır. Açılış başlatılana kadar her misafir yalnızca kendi oyunu görür. Bekleme salonunda kimin oy verdiği ve kimin henüz vermediği görünür; açılışta ise doğru bilenlerin adları ve takımların oy sayıları ortaya çıkar."
+  ],
+  [
+   "Anne ve baba da oy verebilir mi?",
+   "Sonucu bilen kişi, yani kurucu ya da sır tutucu, Kız-Erkek oyu vermez; doğum tarihi, kilo ve ismin baş harfi için tahmin yapabilir. Sonucu bir sır tutucuya bırakan anne-baba ise herkes gibi oy verebilir."
+  ],
+  [
+   "Kız mı erkek mi olduğunu tahmin etmenin güvenilir bir yolu var mı?",
+   "Aile arasında anlatılan tahmin yöntemleri eğlence içindir ve sonucu belirlemez. Bebeğin cinsiyetini öğrenme yolları ve zamanı hakkında doktorunuza danışın; oylamayı da tahminlerin keyfini çıkarmak için kullanın."
+  ],
+  [
+   "Kaç kişinin oy verdiğini nasıl görürüm?",
+   "Bekleme salonunda kaç kişinin oy verdiği ve kaç kişinin şu an sayfada olduğu yazar. Her misafir bir balon olarak görünür; balona dokunduğunuzda o kişinin oy verip vermediğini görürsünüz."
+  ]
+ ],
+ "far_slug": "uzaktan-cinsiyet-partisi",
+ "far_name": "Uzaktan cinsiyet partisi",
+ "far_title": "Uzaktaki Aileyle Online Cinsiyet Partisi | PinkOrBlue",
+ "far_desc": "Başka şehirde ya da ülkede yaşayan aileyle cinsiyet partisi: saat farkına göre tarih seçimi, aynı anda canlı açılış, büyükler için kolay katılım.",
+ "far_h1": "Uzaktaki aileyle cinsiyet partisi nasıl yapılır?",
+ "far_lead": "Babaanne başka şehirde, kuzen başka ülkede olabilir. Uzaktaki herkesin büyük anı sizinle aynı anda yaşaması için neleri planlamanız gerektiğini anlatıyoruz.",
+ "far_card": "Saat farkı, aynı anda canlı açılış ve büyükler için kolay katılım.",
+ "far_body": [
+  [
+   "Uzaktaki aileyi büyük ana dahil etmek",
+   "Pek çok ailede sevdiklerimiz farklı şehirlere, hatta farklı ülkelere dağılmıştır. Böyle olunca bebeğin cinsiyeti çoğu zaman bir telefonla ya da gruba düşen bir fotoğrafla öğrenilir; heyecan paylaşılsa da an kaçmış olur. Online bir cinsiyet partisi bu mesafeyi kısaltır: herkes kendi ekranından aynı odaya girer, aynı geri sayımı izler ve sonucu <b>aynı anda</b> öğrenir. PinkOrBlue zaten bunun için var. Başka şehirde ya da başka ülkede olan herkes linke dokunarak aynı odaya katılır; yol, bilet ya da ortak bir mekân gerekmez."
+  ],
+  [
+   "Saat farkı ve tarih seçimi",
+   "Aile farklı saat dilimlerinde yaşıyorsa açılış saati herkese uygun olmayabilir. Önce en önemli gördüğünüz kişilerin nerede olduğunu not edin ve her biri için yerel saati hesaplayın. Birinin gece yarısına, diğerinin iş saatine denk gelmeyen bir aralık arayın; hafta sonları genellikle esneklik sağlar. PinkOrBlue'da açılış saati her misafirin ekranında <b>kendi cihazının saatine göre</b> gösterilir ve geri sayım herkes için aynı ana sayar. Yine de davet mesajında saat farkını hatırlatmak, kimsenin yanlış saate hazırlanmamasını sağlar."
+  ],
+  [
+   "Aynı anda canlı açılış",
+   "Uzaktan yapılan bir partide en değerli şey ortak andır. PinkOrBlue'da açılışı başlattığınızda o an sayfası açık olan herkes aynı akışı izler: misafirler ekrana dokunarak dev balonu <b>birlikte şişirir</b> ve balon patladığında sonuç herkesin ekranında birlikte açılır; bağlantıya göre küçük gecikmeler olabilir. Kurucu önce \"Son şarkı\"yı başlatırsa şarkı, sesi açık cihazlarda birlikte çalar ve misafirler açılışın yaklaştığını anlar. Açılış tamamlandıktan sonra linke dokunan misafir de sonucu görür ve açılışı tekrar izleyebilir."
+  ],
+  [
+   "Yaşlı akrabalar için kolaylık",
+   "Büyükanne ve büyükbabalar çoğu zaman partinin en heyecanlı misafirleridir, ama yeni bir uygulama kurmak onlar için zor olabilir. PinkOrBlue'da <b>uygulama ve üyelik yoktur</b>; e-posta ya da telefon numarası istenmez. Linke dokunup adını yazmak yeterlidir; oda şifreliyse önce şifreyi girer. Linki birkaç gün önce gönderip büyüklerinizle birlikte bir kez açmak iyi bir provadır: geri sayım ekranını görür, \"Takvime ekle\" ile takvim dosyasını indirip takvimlerine eklerler. Açılış günü yanlarında bir yakın varsa sesin açık olduğunu ve telefonun sessiz modda olmadığını kontrol etsin."
+  ],
+  [
+   "Görüntülü görüşmeyle birlikte kullanmak",
+   "PinkOrBlue'nun kendi görüntülü görüşme özelliği yoktur, ama bir görüntülü görüşme uygulamasıyla birlikte rahatça kullanılabilir. Bir yöntem, görüşmeyi bilgisayarda ya da tablette açık tutup PinkOrBlue'yu telefonda açmaktır; böylece herkes hem açılışı izler hem de birbirinin tepkisini görür. Aynı cihazda iki şeyi birden açmak ekranı küçültür ve sesler karışabilir. Görüşmede müzik yankılanıyorsa bir taraf mikrofonunu kısabilir. Açılıştan sonra sonucu <b>hikâyede paylaşma</b> kartıyla, görüşmeye katılamayan yakınlarınıza da gönderebilirsiniz."
+  ]
+ ],
+ "far_steps": [
+  [
+   "Herkese uygun saati seçin",
+   "Misafirlerin saat dilimlerine bakıp herkese uygun bir zaman bulun; odayı açarken bu tarihi ve saati girin."
+  ],
+  [
+   "Linki erkenden paylaşın",
+   "Davet linkini birkaç gün önce gönderin. Misafirler geri sayımı görür, \"Takvime ekle\" ile takvim dosyasını indirip takvimine ekler."
+  ],
+  [
+   "Misafirler uzaktan oy verir",
+   "Salon açılışa 30 dakika kala açılır. Misafirler adını yazıp Kız ya da Erkek seçer ve tahminlerini bırakır."
+  ],
+  [
+   "Açılışı aynı anda yaşayın",
+   "Herkes salondayken açılışı başlatın; sonuç herkesin ekranında birlikte açılır. İsterseniz görüntülü görüşmeyi de açık tutun."
+  ]
+ ],
+ "far_faq": [
+  [
+   "Farklı ülkedeki misafir açılış saatini nasıl görür?",
+   "Açılış tarihi ve saati misafirin ekranında kendi cihazının saatine göre gösterilir. Geri sayım herkes için aynı ana sayar; bu yüzden farklı saat dilimlerindeki misafirler açılışı sizinle aynı anda izler."
+  ],
+  [
+   "Yurt dışındaki akrabaların bir şey kurması gerekir mi?",
+   "Hayır. İnternet bağlantısı olan bir telefon, tablet ya da bilgisayar ve tarayıcı yeterlidir. Misafir linke dokunur, adını yazar ve odaya katılır; oda şifreliyse önce şifreyi girer. Uygulama indirmek ya da üye olmak gerekmez."
+  ],
+  [
+   "Teknolojiyle arası iyi olmayan büyükler katılabilir mi?",
+   "Evet. Katılım tarayıcıdan yapılır: salon açıldığında misafir adını yazar, oda şifreliyse önce şifreyi girer. Linki önceden birlikte bir kez açmak ve açılış günü yanında bir yakının bulunması işi daha da kolaylaştırır."
+  ],
+  [
+   "PinkOrBlue görüntülü görüşmeyle birlikte nasıl kullanılır?",
+   "Görüntülü görüşmeyi bir cihazda, PinkOrBlue'yu başka bir cihazda açmak en rahat yoldur. Böylece hem açılışı izler hem de birbirinizin tepkisini görürsünüz. Sesler karışırsa bir taraf mikrofonunu kısabilir."
+  ],
+  [
+   "Açılış sırasında internet bağlantısı koparsa ne olur?",
+   "Bağlantı gelince linke yeniden dokunun; aynı tarayıcıdan girdiğinizde adınız ve oyunuz korunur, açılış sürüyorsa akışa kaldığı yerden değil, o anki noktadan katılırsınız. Açılış tamamlandıysa sonucu ve tahminleri görür, \"Açılışı tekrar izle\" ile yeniden izlersiniz."
+  ]
+ ]
+}
