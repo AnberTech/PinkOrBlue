@@ -55,7 +55,7 @@
             ".validate": false
           },
           "musicAt": {
-            ".write": "auth != null && data.parent().child('hostUid').val() == auth.uid && data.parent().child('status').val() == 'open'",
+            ".write": "auth != null && (data.parent().child('hostUid').val() == auth.uid || data.parent().child('revealerUid').val() == auth.uid) && data.parent().child('status').val() == 'open'",
             ".validate": "newData.isNumber() && newData.val() == now"
           }
         },
